@@ -1,0 +1,40 @@
+----------------------------------------------------------------------------------------
+Index
+-------
+Navbar (Nome utente, settings, NEW POST, Logout)
+Serie di Post consigliati : Titolo, immagine, rating, Commento
+-------------------------------
+Login
+-------
+Login: con nome utente o anche e-mail (nel caso esista la mail nel profilo)
+Puoi anche registrarti con signup
+-----------
+Signup
+-------
+Utente
+Password
+Confirm Password
+Send
+--------------
+Settings
+-----------
+Nome
+Avatar
+La friend list (sarebbe piu una ban list. L'idea è che vedi e puoi comunicare solo con chi addi)
+Change Pw
+Delete account
+------------------
+New Post
+-------------
+Titolo film
+immagine
+rating personale
+un tuo commento
+A chi inviarlo (di default comparirà a tutti gli amici)
+---------------
+Profilo
+--------------
+Vedi immagine
+nome
+puoi aggiungerlo
+

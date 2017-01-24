@@ -1,0 +1,14 @@
+{% extends 'skeleton.html' %}
+{% block title %}
+    <title>Login</title>
+{% endblock %}
+{% block body %}
+<div class="main">
+    <form role="form" action="#" method="post">
+        {% csrf_token %}
+        <input placeholder="Username" id="username_input" type="text" name="username">
+        <input placeholder="Password" id="password_input" type="password" name="password">
+        <button type="submit">Submit</button>
+    </form>
+</div>
+{% endblock %}
