@@ -8,7 +8,8 @@
         {% csrf_token %}
         <input placeholder="Username" id="username_input" type="text" name="username">
         <input placeholder="Password" id="password_input" type="password" name="password">
-        <button type="submit">Submit</button>
+        <button type="submit" id="login_button">Login</button>
+        <a href="/signup" id="sign_in_url">SignUp</a>
     </form>
 </div>
 {% endblock %}
