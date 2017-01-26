@@ -3,4 +3,8 @@
 <title>Homepage</title>
 {% endblock %}
 {% block body %}
+<p id="username">{{request.user}}</p>
+<a href="/send_post" id="send_post">Send Post</a>
+<a href="/logout" id="logout_url">Logout</a>
+
 {% endblock %}

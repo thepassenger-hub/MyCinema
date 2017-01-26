@@ -76,10 +76,14 @@ WSGI_APPLICATION = 'movieapp_backend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.10/ref/settings/#databases
 
+
 DATABASES = {
 	'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'movie_app',
+        'TEST': {
+                    'NAME': 'test_movie_app',
+                },
     }
 }
 
