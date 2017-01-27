@@ -1,0 +1,20 @@
+{% extends 'skeleton.html' %}
+{% block title %}
+<title>New Post</title>
+{% endblock %}
+{% block body %}
+<div class="main">
+    <form role="form" action="#" method="post">
+        {% csrf_token %}
+        <input placeholder="Title" id="title_input" type="text" name="title">
+        <input placeholder="Image Link" id="img_input" type="text" name="img">
+        <input placeholder="Insert the movie link" id="url_input" type="text" name="url">
+        <input placeholder="Your Personal rating." id="rating_input" type="text" name="rating">
+        <textarea rows="5" placeholder="Comment" id="comment_textarea" name="comment"></textarea>
+        <buton type="button" id="send_to_button">Send to</buton>
+        <button type="submit" id="send_post_button">Post</button>
+    </form>
+    {{ error }}
+    {{ success }}
+</div>
+{% endblock %}

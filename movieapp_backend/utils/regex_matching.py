@@ -11,3 +11,9 @@ def are_params_invalid(username,password, email):
         return('Invalid Password')
     if not EMAIL_REGEX.match(email):
         return('Invalid Email')
+
+def are_fields_invalid(title, rating):
+    if not title or not rating:
+        return ('This field is required.')
+    if not 1 <= int(rating) <= 10:
+        return ('Invalid rating. Must be 1-10')

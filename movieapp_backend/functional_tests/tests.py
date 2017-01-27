@@ -65,14 +65,23 @@ class NewVisitorTest(LiveServerTestCase):
         send_post.click()
         import time
         time.sleep(1)
-        self.assertIn('Send Post', self.browser.title)
-        title = self.browser.find_element_by_id('title')
-        img = self.browser.find_element_by_id('img')
-        url = self.browser.find_element_by_id('url')
-        rating = self.browser.find_element_by_id('rating')
-        comment = self.browser.find_element_by_id('comment')
-        send_to = self.browser.find_element_by_id('send_to')
-        send_post = self.browser.find_element_by_id('send_post')
+        self.assertIn('New Post', self.browser.title)
+        title = self.browser.find_element_by_id('title_input')
+        img = self.browser.find_element_by_id('img_input')
+        url = self.browser.find_element_by_id('url_input')
+        rating = self.browser.find_element_by_id('rating_input')
+        comment = self.browser.find_element_by_id('comment_textarea')
+        send_to = self.browser.find_element_by_id('send_to_button')
+        send_post = self.browser.find_element_by_id('send_post_button')
+        title.send_keys('Ip Man')
+        img.send_keys('url to image')
+        url.send_keys('http://www.imdb.com/title/tt1220719/')
+        rating.send_keys('8')
+        comment.send_keys('One of the best fighting movies I have ever seen.')
+        send_to.click()
+        send_post.click()
+
+
 
 
 

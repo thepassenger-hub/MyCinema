@@ -6,11 +6,47 @@ from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import IntegrityError  # create_user postgres custom exception
 
-from utils.regex_matching import are_params_invalid
+from movie_app.models import MoviePost, Friends, Friendship
+from utils.regex_matching import are_params_invalid, are_fields_invalid
 
 @login_required()
 def home_page(request):
     return render(request, 'movieapp_frontend/index.html')
+
+@login_required()
+def new_post_page(request):
+    if request.method == 'GET':
+        return render(request, 'movieapp_frontend/newpost.html')
+    if request.method == 'POST':
+        title = request.POST.get('title')
+        image_url = request.POST.get('image_url')
+        rating = request.POST.get('rating')
+        content = request.POST.get('content')
+        send_to = request.POST.get('send_to')
+        user = request.user
+
+        error = are_fields_invalid(title, rating)
+        if error:
+            return render(request, 'movieapp_frontend/newpost.html', {'error': error})
+
+
+        movie_post = MoviePost()
+        movie_post.title = title
+        movie_post.rating = int(rating)
+        movie_post.image_url = image_url
+        movie_post.content = content
+        movie_post.user = user
+        movie_post.save()
+        if send_to:
+            send_to = send_to.split(',')
+            for username in send_to:
+                try:
+                    movie_post.send_to.add(User.objects.get(username=username))
+                except:
+                    pass
+
+        return render(request, 'movieapp_frontend/newpost.html', {'success': 'Post Sent'})
+
 
 
 def login_page(request):
@@ -62,9 +98,10 @@ def signup(request):
                           {'error': error})
 
         try:
-            User.objects.create_user(username=username,
+            create_user = User.objects.create_user(username=username,
                                             email=email,
                                             password=password)
+            Friends(user=create_user).save()
         except IntegrityError:
             error = "Username already exists"
             return render(request, 'movieapp_frontend/signup.html',

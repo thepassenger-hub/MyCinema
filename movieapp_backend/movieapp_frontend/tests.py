@@ -6,7 +6,8 @@ from importlib import import_module
 
 from django.http import HttpRequest
 from django.template.loader import render_to_string
-from movieapp_frontend.views import home_page, signup, login_page
+from movieapp_frontend.views import home_page, signup, login_page, new_post_page
+from movie_app.models import MoviePost, Friends, Friendship
 # Create your tests here.
 import re
 import os
@@ -14,6 +15,9 @@ import os
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "movieapp_backend.settings") # or whatever
 import django
 django.setup()
+
+
+
 class HomePageTest(TestCase):
 
     @staticmethod
@@ -45,7 +49,6 @@ class HomePageTest(TestCase):
         self.assertTrue(response.content.startswith(b'<!DOCTYPE html>'))
         self.assertIn(b'<title>Homepage</title>', response.content)
         self.assertTrue(response.content.endswith(b'</html>'))
-        self.assertEqual(response.content.decode(), expected_html)
 
     def test_logout_link_logs_user_out_and_redirects_to_login(self):
         User.objects.create_user('aaaa', 'asd', 'asd')
@@ -99,6 +102,9 @@ class SignUpPageTest(TransactionTestCase):
         user = User.objects.all()[0]
         self.assertEqual(user.username, 'testusername')
         self.assertEqual(user.email, 'testemail@email.com')
+        friend = Friends.objects.get(user=user)
+        self.assertEqual(0, len(friend.get_all()))
+        self.assertEqual(0, len(user.friends.get_all()))
         # response.client = Client()
 
         self.assertRedirects(response, '/', status_code=302, target_status_code=200)
@@ -143,6 +149,7 @@ class SignUpPageTest(TransactionTestCase):
         self.assertEqual(1, len(users))
 
 class LoginPageTest(TestCase):
+
     @staticmethod
     def remove_csrf(html_code):
         csrf_regex = r'<input[^>]+csrfmiddlewaretoken[^>]+>'
@@ -180,6 +187,102 @@ class LoginPageTest(TestCase):
         User.objects.create_user('test', password='testpw')
         response = c.post('/login', {'username': 'test', 'password': 'testpw2'}, follow=True)
         self.assertIn("Wrong Password. Try again", response.content.decode())
+
+class SendPostPageTest(TestCase):
+
+    def create_three_friends(self):
+        aaa = User.objects.create_user('aaa', password='aaa')
+        Friends(user=aaa).save()
+        bbb = User.objects.create_user('bbb', password='aaa')
+        Friends(user=bbb).save()
+        ccc = User.objects.create_user('ccc', password='aaa')
+        Friends(user=ccc).save()
+        friendship = Friendship()
+        friendship.creator = aaa
+        friendship.friend = bbb
+        friendship.save()
+        friendship = Friendship()
+        friendship.creator = aaa
+        friendship.friend = ccc
+        friendship.save()
+        friendship = Friendship()
+        friendship.creator = bbb
+        friendship.friend = ccc
+        friendship.save()
+
+    @staticmethod
+    def remove_csrf(html_code):
+        csrf_regex = r'<input[^>]+csrfmiddlewaretoken[^>]+>'
+        return re.sub(csrf_regex, '', html_code)
+
+    def test_new_post_url_resolves_to_new_post_page_view(self):
+        found = resolve('/newpost')
+        self.assertEqual(found.func, new_post_page)
+
+    def test_new_post_url_returns_correct_template(self):
+        c = Client()
+        User.objects.create_user('aaa', password='aaa')
+        c.login(username='aaa', password='aaa')
+        response = c.get('/newpost')
+        expected_html = render_to_string('movieapp_frontend/newpost.html')
+        self.assertEqual(self.remove_csrf(response.content.decode()), expected_html)
+
+    def test_sending_post_to_view_creates_post_in_db(self):
+
+        self.create_three_friends()
+        c = Client()
+        aaa = User.objects.get(username='aaa')
+        bbb = User.objects.get(username='bbb')
+        ccc = User.objects.get(username='ccc')
+
+        c.login(username='aaa', password='aaa')
+        movie_post = {
+            'title': 'Ip Man',
+            'image_url': 'url to image',
+            'url': 'http://www.imdb.com/title/tt1220719/',
+            'rating': 8,
+            'content': 'One of the best fighting movies I have ever seen.',
+            'send_to': 'bbb,ccc',
+        }
+        response = c.post('/newpost', movie_post)
+
+        movie = MoviePost.objects.all()
+        self.assertEqual(1, len(movie))
+        self.assertEqual('Ip Man', movie[0].title)
+        self.assertEqual('url to image', movie[0].image_url)
+        self.assertEqual('One of the best fighting movies I have ever seen.', movie[0].content)
+        self.assertEqual(aaa, movie[0].user)
+        self.assertEqual(movie[0], aaa.posts.all()[0])
+
+        self.assertEqual(bbb.received_posts.all()[0], movie[0])
+        self.assertEqual(ccc.received_posts.all()[0], movie[0])
+        self.assertIn('Post Sent', response.content.decode())
+        User.objects.get(username='aaa').delete()
+        self.assertEqual(0, len(MoviePost.objects.all()))
+
+    def test_cannot_send_post_with_wrong_inputs(self):
+        c = Client()
+        User.objects.create_user('aaa', password='aaa')
+        c.login(username='aaa', password='aaa')
+        response = c.post('/newpost', {'title': ''})
+        self.assertIn('This field is required', response.content.decode())
+        response = c.post('/newpost', {'title': 't', 'rating': ''})
+        self.assertIn('This field is required', response.content.decode())
+
+    def test_user_friendship_is_working(self):
+        self.create_three_friends()
+        aaa = User.objects.get(username='aaa')
+        bbb = User.objects.get(username='bbb')
+        ccc = User.objects.get(username='ccc')
+        self.assertEqual(aaa.friends.get_all(), [bbb, ccc])
+        self.assertEqual(bbb.friends.get_all(), [aaa, ccc])
+        self.assertEqual(ccc.friends.get_all(), [aaa, bbb])
+
+
+
+
+
+
 
 
 
