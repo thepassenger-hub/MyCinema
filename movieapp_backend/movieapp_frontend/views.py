@@ -6,7 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import IntegrityError  # create_user postgres custom exception
 
-from movie_app.models import MoviePost, Friends, Friendship
+from movie_app.models import MoviePost, Profile, Friendship
 from utils.regex_matching import are_params_invalid, are_fields_invalid
 
 @login_required()
@@ -37,11 +37,22 @@ def new_post_page(request):
         movie_post.content = content
         movie_post.user = user
         movie_post.save()
+
+        friends_of_user = user.profile.get_friends()
+
         if send_to:
             send_to = send_to.split(',')
             for username in send_to:
                 try:
-                    movie_post.send_to.add(User.objects.get(username=username))
+                    out = User.objects.get(username=username)
+                    if out in friends_of_user:
+                        movie_post.send_to.add(out)
+                except:
+                    pass
+        else:
+            for friend in friends_of_user:
+                try:
+                    movie_post.send_to.add(friend)
                 except:
                     pass
 
@@ -101,7 +112,7 @@ def signup(request):
             create_user = User.objects.create_user(username=username,
                                             email=email,
                                             password=password)
-            Friends(user=create_user).save()
+            Profile(user=create_user).save()
         except IntegrityError:
             error = "Username already exists"
             return render(request, 'movieapp_frontend/signup.html',
@@ -114,3 +125,14 @@ def signup(request):
         user = authenticate(username=username, password=password)
         login(request, user)
         return redirect(home_page)
+
+@login_required()
+def settings_page(request):
+    if request.method == 'GET':
+        return render(request, 'movieapp_frontend/settings.html')
+    if request.method == 'POST':
+        new_name = request.POST.get('new_name')
+        profile = request.user.profile
+        profile.name = new_name
+        profile.save()
+        return redirect(settings_page)

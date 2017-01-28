@@ -22,10 +22,11 @@ class Friendship(models.Model):
     creator = models.ForeignKey(User, related_name="friendship_creator_set")
     friend = models.ForeignKey(User, related_name="friend_set")
 
-class Friends(models.Model):
+class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-
-    def get_all(self):
+    name = models.CharField(max_length=50, blank=True)
+    avatar = models.ImageField(upload_to='avatar_images/', blank=True)
+    def get_friends(self):
         user = self.user
         friendships = Friendship.objects.filter(models.Q(creator=user)|models.Q(friend=user))
         friends = []

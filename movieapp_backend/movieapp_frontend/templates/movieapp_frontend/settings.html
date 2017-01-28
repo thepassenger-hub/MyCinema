@@ -1,0 +1,20 @@
+{% extends 'skeleton.html' %}
+{% block title %}
+<title>Settings</title>
+{% endblock %}
+{% block body %}
+<div class="main">
+    {% csrf_token %}
+    <form id="change_name_form" method="POST">
+        <input type="text" name="new_name" id="change_name_input" placeholder="Insert your name">
+        <button type="submit" id="submit_change_name_button">Submit</button>
+    </form>
+    <p id="name_tag">MY NAME</p>
+    <button id="change_name_button" type="button">Change Name</button>
+    <p id="avatar">MY AVATAR</p>
+    <button type="button" id="change_avatar_button">Change Avatar</button>
+    <p id="friends_list">MY FRIENDS LIST</p>
+    <button type="button" id="change_password_button">Change Password</button>
+    <button type="button" id="delete_account_button">Delete Account</button>
+</div>
+{% endblock %}

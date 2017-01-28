@@ -63,7 +63,6 @@ class NewVisitorTest(LiveServerTestCase):
         self.browser.find_element_by_id('logout_url')
         send_post = self.browser.find_element_by_id('send_post')
         send_post.click()
-        import time
         time.sleep(1)
         self.assertIn('New Post', self.browser.title)
         title = self.browser.find_element_by_id('title_input')
@@ -80,10 +79,24 @@ class NewVisitorTest(LiveServerTestCase):
         comment.send_keys('One of the best fighting movies I have ever seen.')
         send_to.click()
         send_post.click()
-
-
-
-
+        # Check Settings page. No redirects because I'm still logged in.
+        settings = self.browser.find_element_by_id('settings_link')
+        settings.click()
+        time.sleep(1)
+        self.assertIn('Settings', self.browser.title)
+        self.browser.find_element_by_id('change_name_form')
+        change_name = self.browser.find_element_by_id('change_name_input')
+        change_name.send_keys('My new cool name')
+        submit_change = self.browser.find_element_by_id('submit_change_name_button')
+        submit_change.click()
+        time.sleep(1)
+        self.browser.find_element_by_id('name_tag')
+        self.browser.find_element_by_id('change_name_button')
+        self.browser.find_element_by_id('avatar')
+        self.browser.find_element_by_id('change_avatar_button')
+        self.browser.find_element_by_id('friends_list')
+        self.browser.find_element_by_id('change_password_button')
+        self.browser.find_element_by_id('delete_account_button')
 
 
         self.fail("finish the test")
