@@ -7,4 +7,6 @@ urlpatterns = [
     url(r'^signup/?$', views.signup, name='signup'),
     url(r'^newpost/?$', views.new_post_page, name='new_post'),
     url(r'^settings/?$', views.settings_page, name='settings'),
+    url(r'^change_name/?$', views.change_name, name='change_name'),
+    url(r'^change_password/$', views.change_password, name='change_password'),
 ]

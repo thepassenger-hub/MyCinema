@@ -8,11 +8,11 @@ from django.contrib.auth.models import User
 class MoviePost(models.Model):
     post_id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=100)
-    image_url = models.CharField(max_length=255, blank=True)
+    image_url = models.CharField(max_length=255, blank=True, null=True)
     rating = models.IntegerField()
     user = models.ForeignKey(User, related_name='posts')
     send_to = models.ManyToManyField(User, related_name='received_posts')
-    content = models.TextField(blank=True)
+    content = models.TextField(blank=True, null=True)
 
     class Meta:
         db_table = 'movie_post'
@@ -24,8 +24,8 @@ class Friendship(models.Model):
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    name = models.CharField(max_length=50, blank=True)
-    avatar = models.ImageField(upload_to='avatar_images/', blank=True)
+    name = models.CharField(max_length=50, blank=True, null=True)
+    avatar = models.ImageField(upload_to='avatar_images/', blank=True, null=True)
     def get_friends(self):
         user = self.user
         friendships = Friendship.objects.filter(models.Q(creator=user)|models.Q(friend=user))

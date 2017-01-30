@@ -1,12 +1,13 @@
 from django.test import TestCase, TransactionTestCase, Client
 from django.contrib.auth.models import User
+from django.contrib.auth import get_user
 from django.core.urlresolvers import resolve
 from django.conf import settings
 from importlib import import_module
 
 from django.http import HttpRequest
 from django.template.loader import render_to_string
-from movieapp_frontend.views import home_page, signup, login_page, new_post_page, settings_page
+from movieapp_frontend.views import home_page, signup, login_page, new_post_page, settings_page, change_name, change_password
 from movie_app.models import MoviePost, Profile, Friendship
 # Create your tests here.
 import re
@@ -345,22 +346,67 @@ class SettingsPageTest(TestCase):
         response = c.get('/settings')
         self.assertEqual(200, response.status_code)
         self.assertIn('Settings', response.content.decode())
-        rendered_template = render_to_string('movieapp_frontend/settings.html')
-        self.assertEqual(rendered_template, self.remove_csrf(response.content.decode()))
+        # rendered_template = render_to_string('movieapp_frontend/settings.html')
+        # self.assertEqual(self.remove_csrf(response.content.decode()), rendered_template)
 
     def test_user_change_name_updates_name_in_db(self):
         c,aaa = self.create_logged_in_client()
-        self.assertEqual(aaa.profile.name, '')
+        self.assertEqual(aaa.profile.name, None)
         request = HttpRequest()
         request.method = 'POST'
         request.user = aaa
-        request.POST['new_name'] = 'My new cool name'
-        response = settings_page(request)
-
+        request.POST['name'] = ''
+        response = change_name(request)
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, '/settings')
+        request.POST['name'] = 'My new cool name'
+        response = change_name(request)
         self.assertEqual(aaa.profile.name, 'My new cool name')
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.url, '/settings')
-  
+        request = HttpRequest()
+        request.method = 'GET'
+        request.user = aaa
+        response = settings_page(request)
+        self.assertIn('My new cool name', response.content.decode())
+
+    def test_user_change_password_updates_pw_in_db_and_current_session_cookie(self):
+        c,aaa = self.create_logged_in_client()
+        old_password = aaa.password
+        request = HttpRequest()
+        engine = import_module(settings.SESSION_ENGINE)
+        session_key = None
+        response = c.post('/change_password/',
+                          {'new_password': '',}, follow=True)
+        # request.session = engine.SessionStore(session_key)
+        # request.method = 'POST'
+        # request.user = aaa
+        # request.POST['new_password'] = ''
+        # response = change_password(request)
+        # self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, '/settings')
+        # print (response.url)
+        self.assertIn('This field is required.', response.content.decode())
+        response = c.post('/change_password/',
+                          {'new_password': 'mynewpassword', }, follow=True)
+        self.assertRedirects(response, '/settings')
+        self.assertIn('This field is required.', response.content.decode())
+        response = c.post('/change_password/',
+                          {'new_password': 'aa',
+                           'verify_new_password': 'aa'}, follow=True)
+        self.assertRedirects(response, '/settings')
+        self.assertIn('between 3 and 20', response.content.decode())
+        response = c.post('/change_password/',
+                          {'new_password': 'mynewpassword',
+                           'verify_new_password': 'mynewpassword'}, follow=True)
+        aaa = User.objects.get(username='aaa')
+        self.assertNotEqual(old_password, aaa.password)
+        self.assertNotEqual(aaa.password, 'mynewpassword')
+        self.assertIn('pbkdf2_sha256', aaa.password)
+        self.assertRedirects(response, '/settings')
+        self.assertIn('Password change successful', response.content.decode())
+        user = get_user(c)
+        self.assertTrue(user.is_authenticated)
 
 
 

@@ -7,6 +7,7 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "movieapp_backend.settings") # o
 import django
 django.setup()
 from django.contrib.auth.models import User
+from movie_app.models import Friendship, Profile
 
 
 class NewVisitorTest(LiveServerTestCase):
@@ -48,6 +49,7 @@ class NewVisitorTest(LiveServerTestCase):
 
     def test_home_page_when_logged(self):
         User.objects.create_user('aaaa', password='asdasdasd')
+        Profile(user=User.objects.get(username='aaaa')).save()
         # print (User.objects.all())
         self.browser.get(self.live_server_url)
         username = self.browser.find_element_by_id('username_input')
@@ -89,7 +91,14 @@ class NewVisitorTest(LiveServerTestCase):
         change_name.send_keys('My new cool name')
         submit_change = self.browser.find_element_by_id('submit_change_name_button')
         submit_change.click()
-        time.sleep(1)
+        time.sleep(3)
+        change_password = self.browser.find_element_by_id('change_password_input')
+        change_password.send_keys('mynewcoolpassword')
+        verify_change_password = self.browser.find_element_by_id('verify_password_input')
+        verify_change_password.send_keys('mynewcoolpassword')
+        submit_change = self.browser.find_element_by_id('submit_change_password_button')
+        submit_change.click()
+        time.sleep(3)
         self.browser.find_element_by_id('name_tag')
         self.browser.find_element_by_id('change_name_button')
         self.browser.find_element_by_id('avatar')

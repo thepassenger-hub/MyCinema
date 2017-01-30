@@ -17,3 +17,13 @@ def are_fields_invalid(title, rating):
         return ('This field is required.')
     if not 1 <= int(rating) <= 10:
         return ('Invalid rating. Must be 1-10')
+
+
+def are_passwords_invalid(password, verify_password):
+    if password == '' or verify_password == '' or (password == None and verify_password) \
+        or (password and verify_password == None):
+        return ('You must fill both fields')
+    if password != verify_password:
+        return ("Passwords don't match")
+    if not PASSWORD_REGEX.match(password):
+        return ("Password must be between 3 and 20 characters.")

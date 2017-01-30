@@ -1,13 +1,18 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import IntegrityError  # create_user postgres custom exception
 
 from movie_app.models import MoviePost, Profile, Friendship
 from utils.regex_matching import are_params_invalid, are_fields_invalid
+from .forms import ChangeNameForm, ChangePasswordForm
+import re
+
+PASSWORD_REGEX = re.compile(r'^.{3,20}$')
 
 @login_required()
 def home_page(request):
@@ -129,10 +134,52 @@ def signup(request):
 @login_required()
 def settings_page(request):
     if request.method == 'GET':
-        return render(request, 'movieapp_frontend/settings.html')
+        change_name_form = ChangeNameForm()
+        change_password_form = ChangePasswordForm()
+        return render(request, 'movieapp_frontend/settings.html', {'change_name_form': change_name_form,
+                                                                   'change_password_form': change_password_form})
+    # if request.method == 'POST':
+        # new_name_form = ChangeNameForm(request.POST)
+        # if new_name_form.is_valid():
+        # if new_name != None:
+        #     if new_name.strip() == '':
+        #         error = 'Invalid name'
+        #         return render(request, 'movieapp_frontend/settings.html', {'error': error})
+        #     profile = request.user.profile
+        #     profile.name = new_name
+        #     profile.save()
+        #     return redirect(settings_page)
+
+        # new_password = request.POST.get('new_password')
+        # verify_new_password = request.POST.get('verify_new_password')
+        # if new_password or verify_new_password:
+        #     error = are_passwords_invalid(new_password, verify_new_password)
+        #     if error:
+        #         return render(request, 'movieapp_frontend/settings.html', {'error': error})
+        #     request.user.set_password(new_password)
+        #     request.user.save()
+        #     update_session_auth_hash(request, request.user)
+        #     return redirect(settings_page)
+
+@login_required()
+def change_name(request):
     if request.method == 'POST':
-        new_name = request.POST.get('new_name')
-        profile = request.user.profile
-        profile.name = new_name
-        profile.save()
+        new_name_form = ChangeNameForm(request.POST, instance=request.user.profile)
+        if new_name_form.is_valid():
+            new_name_form.save()
+            return redirect(settings_page)
+
+@login_required()
+def change_password(request):
+    if request.method == 'POST':
+        change_password_form = ChangePasswordForm(request.POST)
+        if change_password_form.is_valid():
+            request.user.set_password(request.POST['new_password'])
+            request.user.save()
+            update_session_auth_hash(request, request.user)
+            messages.add_message(request, messages.SUCCESS, 'Password change successful')
+        else:
+            # Print error message
+            for error in change_password_form.errors:
+                messages.add_message(request, messages.ERROR, change_password_form.errors[error] )
         return redirect(settings_page)

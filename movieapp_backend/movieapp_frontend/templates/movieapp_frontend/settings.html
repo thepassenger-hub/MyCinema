@@ -4,16 +4,31 @@
 {% endblock %}
 {% block body %}
 <div class="main">
-    {% csrf_token %}
-    <form id="change_name_form" method="POST">
-        <input type="text" name="new_name" id="change_name_input" placeholder="Insert your name">
+    <form id="change_name_form" method="POST" action="/change_name/">
+        {% csrf_token %}
+        {{change_name_form}}
+        <!--<input type="text" name="new_name" id="change_name_input" placeholder="Insert your name">-->
+
         <button type="submit" id="submit_change_name_button">Submit</button>
     </form>
-    <p id="name_tag">MY NAME</p>
+    <!--{{ error }}-->
+    <p id="name_tag">{{request.user.profile.name}}</p>
     <button id="change_name_button" type="button">Change Name</button>
     <p id="avatar">MY AVATAR</p>
     <button type="button" id="change_avatar_button">Change Avatar</button>
     <p id="friends_list">MY FRIENDS LIST</p>
+    <form id="change_password_form" action='/change_password/' method="POST">
+        {% csrf_token %}
+        {{change_password_form}}
+        <!--<input type="password" name="new_password" id="change_password_input" placeholder="New password">-->
+        <!--<input type="password" name="verify_new_password" id="verify_password_input" placeholder="Confirm new password">-->
+        <button type="submit" id="submit_change_password_button">Submit</button>
+    </form>
+    {% if messages %}
+        {% for message in messages %}
+            {{ message }}
+        {% endfor %}
+    {% endif %}
     <button type="button" id="change_password_button">Change Password</button>
     <button type="button" id="delete_account_button">Delete Account</button>
 </div>
