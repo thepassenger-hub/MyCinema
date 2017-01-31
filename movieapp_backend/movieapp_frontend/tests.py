@@ -318,6 +318,28 @@ class SendPostPageTest(TestCase):
 
 
 class SettingsPageTest(TestCase):
+    def create_three_friends(self):
+        aaa = User.objects.create_user('aaa', password='aaa')
+        Profile(user=aaa).save()
+        bbb = User.objects.create_user('bbb', password='aaa')
+        Profile(user=bbb).save()
+        ccc = User.objects.create_user('ccc', password='aaa')
+        Profile(user=ccc).save()
+        friendship = Friendship()
+        friendship.creator = aaa
+        friendship.friend = bbb
+        friendship.save()
+        friendship = Friendship()
+        friendship.creator = aaa
+        friendship.friend = ccc
+        friendship.save()
+        friendship = Friendship()
+        friendship.creator = bbb
+        friendship.friend = ccc
+        friendship.save()
+
+        return aaa,bbb,ccc
+
     @staticmethod
     def remove_csrf(html_code):
         csrf_regex = r'<input[^>]+csrfmiddlewaretoken[^>]+>'
@@ -373,10 +395,10 @@ class SettingsPageTest(TestCase):
     def test_user_change_password_updates_pw_in_db_and_current_session_cookie(self):
         c,aaa = self.create_logged_in_client()
         old_password = aaa.password
-        request = HttpRequest()
-        engine = import_module(settings.SESSION_ENGINE)
-        session_key = None
-        response = c.post('/change_password/',
+        # request = HttpRequest()
+        # engine = import_module(settings.SESSION_ENGINE)
+        # session_key = None
+        response = c.post('/settings/change_password/',
                           {'new_password': '',}, follow=True)
         # request.session = engine.SessionStore(session_key)
         # request.method = 'POST'
@@ -387,16 +409,16 @@ class SettingsPageTest(TestCase):
         self.assertRedirects(response, '/settings')
         # print (response.url)
         self.assertIn('This field is required.', response.content.decode())
-        response = c.post('/change_password/',
+        response = c.post('/settings/change_password/',
                           {'new_password': 'mynewpassword', }, follow=True)
         self.assertRedirects(response, '/settings')
         self.assertIn('This field is required.', response.content.decode())
-        response = c.post('/change_password/',
+        response = c.post('/settings/change_password/',
                           {'new_password': 'aa',
                            'verify_new_password': 'aa'}, follow=True)
         self.assertRedirects(response, '/settings')
         self.assertIn('between 3 and 20', response.content.decode())
-        response = c.post('/change_password/',
+        response = c.post('/settings/change_password/',
                           {'new_password': 'mynewpassword',
                            'verify_new_password': 'mynewpassword'}, follow=True)
         aaa = User.objects.get(username='aaa')
@@ -408,7 +430,50 @@ class SettingsPageTest(TestCase):
         user = get_user(c)
         self.assertTrue(user.is_authenticated)
 
+    def test_can_upload_new_avatar(self):
+        c,aaa = self.create_logged_in_client()
+        self.assertFalse(aaa.profile.avatar)
 
+        with open('utils/avatar.png', 'rb') as fp:
+
+            response = c.post('/settings/change_avatar/', {
+                'avatar': fp,
+            }, follow=True, format='multipart')
+        self.assertRedirects(response, '/settings')
+        aaa = User.objects.get(username='aaa')
+        self.assertTrue(aaa.profile.avatar)
+        with open('utils/avatar_600.png', 'rb') as fp:
+            response = c.post('/settings/change_avatar/', {
+                'avatar': fp,
+            }, follow=True)
+        self.assertRedirects(response, '/settings')
+        self.assertIn('max 500px', response.content.decode())
+        with open('utils/avatar_600.bitmap', 'rb') as fp:
+            response = c.post('/settings/change_avatar/', {
+                'avatar': fp,
+            }, follow=True)
+        self.assertRedirects(response, '/settings')
+        self.assertIn('Only *.gif', response.content.decode())
+
+    def test_can_see_all_friends(self):
+        aaa,bbb,ccc = self.create_three_friends()
+        c = Client()
+        c.login(username='aaa', password='aaa')
+        response = c.get('/settings')
+        self.assertIn('bbb', response.content.decode())
+        self.assertIn('ccc', response.content.decode())
+        f = Friendship.objects.get(creator=aaa, friend=ccc)
+        f.delete()
+        response = c.get('/settings')
+        self.assertIn('bbb', response.content.decode())
+        self.assertNotIn('ccc', response.content.decode())
+
+    def test_can_delete_account(self):
+        c,aaa = self.create_logged_in_client()
+        self.assertTrue(aaa.is_active)
+        response = c.get('/settings/delete_account/', follow=True)
+        self.assertFalse(User.objects.get(username='aaa').is_active)
+        self.assertRedirects(response, '/login?next=/')
 
 
 

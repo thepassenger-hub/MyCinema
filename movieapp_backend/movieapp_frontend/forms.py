@@ -1,11 +1,12 @@
 from django import forms
-from django.forms import TextInput
+from django.forms import TextInput, FileInput
 from django.utils.translation import ugettext as _
 from movie_app.models import Profile
 from django.core.exceptions import ValidationError
+
 import re
 PASSWORD_REGEX = re.compile(r'^.{3,20}$')
-
+ALLOWED_EXTENSIONS = ['image/jpeg', 'image/gif', 'image/png']
 def validate_password(password):
     if not PASSWORD_REGEX.match(password):
         raise ValidationError(_(
@@ -43,3 +44,32 @@ class ChangePasswordForm(forms.Form):
         if new_password != verify_new_password:
             raise forms.ValidationError("Passwords don't match")
 
+
+class ChangeAvatarForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ['avatar']
+        widgets = {
+            'name': FileInput(attrs={'id': 'select_avatar_button'}),
+        }
+
+    def clean_avatar(self):
+        avatar = self.cleaned_data.get('avatar', False)
+        if avatar:
+            if avatar._size > 4 * 1024 * 1024:
+                raise ValidationError("Image file too large ( > 4mb )")
+            from django.core.files.images import get_image_dimensions
+            w, h = get_image_dimensions(avatar)
+            if w > 500 or h > 500:
+                raise ValidationError("Image file too big (max 500px)")
+            if avatar.content_type not in ALLOWED_EXTENSIONS:
+                raise forms.ValidationError(u'Only *.gif, *.jpg and *.png images are allowed.')
+            return avatar
+        else:
+            raise ValidationError("Couldn't read uploaded image")
+
+    def __init__(self, *args, **kwargs):
+        super(ChangeAvatarForm, self).__init__(*args, **kwargs)
+
+        for key in self.fields:
+            self.fields[key].required = True

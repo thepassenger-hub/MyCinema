@@ -4,7 +4,7 @@
 {% endblock %}
 {% block body %}
 <div class="main">
-    <form id="change_name_form" method="POST" action="/change_name/">
+    <form id="change_name_form" method="POST" action="{% url 'change_name' %}">
         {% csrf_token %}
         {{change_name_form}}
         <!--<input type="text" name="new_name" id="change_name_input" placeholder="Insert your name">-->
@@ -14,10 +14,20 @@
     <!--{{ error }}-->
     <p id="name_tag">{{request.user.profile.name}}</p>
     <button id="change_name_button" type="button">Change Name</button>
-    <p id="avatar">MY AVATAR</p>
-    <button type="button" id="change_avatar_button">Change Avatar</button>
-    <p id="friends_list">MY FRIENDS LIST</p>
-    <form id="change_password_form" action='/change_password/' method="POST">
+    <img id="avatar" src="avatar_images/{{user_avatar}}">
+    <form action="{% url 'change_avatar' %}" method="POST" id="change_avatar_form" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{change_avatar_form}}
+        <button type="submit" id="change_avatar_button">Change Avatar</button>
+    </form>
+
+    <div id="friends_list">
+        <h6>MY FRIENDS LIST</h6>
+        {% for friend in request.user.profile.get_friends %}
+        {{friend}}
+        {% endfor %}
+    </div>
+    <form id="change_password_form" action="{% url 'change_password' %}" method="POST">
         {% csrf_token %}
         {{change_password_form}}
         <!--<input type="password" name="new_password" id="change_password_input" placeholder="New password">-->
@@ -30,6 +40,6 @@
         {% endfor %}
     {% endif %}
     <button type="button" id="change_password_button">Change Password</button>
-    <button type="button" id="delete_account_button">Delete Account</button>
+    <a href="{% url 'delete_account' %}" id="delete_account_button">Delete Account</a>
 </div>
 {% endblock %}

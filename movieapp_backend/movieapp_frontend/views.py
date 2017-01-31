@@ -9,7 +9,7 @@ from django.db import IntegrityError  # create_user postgres custom exception
 
 from movie_app.models import MoviePost, Profile, Friendship
 from utils.regex_matching import are_params_invalid, are_fields_invalid
-from .forms import ChangeNameForm, ChangePasswordForm
+from .forms import ChangeNameForm, ChangePasswordForm, ChangeAvatarForm
 import re
 
 PASSWORD_REGEX = re.compile(r'^.{3,20}$')
@@ -136,30 +136,13 @@ def settings_page(request):
     if request.method == 'GET':
         change_name_form = ChangeNameForm()
         change_password_form = ChangePasswordForm()
+        change_avatar_form = ChangeAvatarForm()
+        user_avatar = request.user.profile.avatar
         return render(request, 'movieapp_frontend/settings.html', {'change_name_form': change_name_form,
-                                                                   'change_password_form': change_password_form})
-    # if request.method == 'POST':
-        # new_name_form = ChangeNameForm(request.POST)
-        # if new_name_form.is_valid():
-        # if new_name != None:
-        #     if new_name.strip() == '':
-        #         error = 'Invalid name'
-        #         return render(request, 'movieapp_frontend/settings.html', {'error': error})
-        #     profile = request.user.profile
-        #     profile.name = new_name
-        #     profile.save()
-        #     return redirect(settings_page)
+                                                                   'change_password_form': change_password_form,
+                                                                   'change_avatar_form': change_avatar_form,
+                                                                   'user_avatar': user_avatar,})
 
-        # new_password = request.POST.get('new_password')
-        # verify_new_password = request.POST.get('verify_new_password')
-        # if new_password or verify_new_password:
-        #     error = are_passwords_invalid(new_password, verify_new_password)
-        #     if error:
-        #         return render(request, 'movieapp_frontend/settings.html', {'error': error})
-        #     request.user.set_password(new_password)
-        #     request.user.save()
-        #     update_session_auth_hash(request, request.user)
-        #     return redirect(settings_page)
 
 @login_required()
 def change_name(request):
@@ -174,7 +157,7 @@ def change_password(request):
     if request.method == 'POST':
         change_password_form = ChangePasswordForm(request.POST)
         if change_password_form.is_valid():
-            request.user.set_password(request.POST['new_password'])
+            request.user.set_password(change_password_form.cleaned_data.get('new_password'))
             request.user.save()
             update_session_auth_hash(request, request.user)
             messages.add_message(request, messages.SUCCESS, 'Password change successful')
@@ -183,3 +166,23 @@ def change_password(request):
             for error in change_password_form.errors:
                 messages.add_message(request, messages.ERROR, change_password_form.errors[error] )
         return redirect(settings_page)
+
+@login_required()
+def change_avatar(request):
+    if request.method == 'POST':
+        change_avatar_form = ChangeAvatarForm(request.POST, request.FILES, instance=request.user.profile)
+        if change_avatar_form.is_valid():
+            change_avatar_form.save()
+            messages.add_message(request, messages.SUCCESS, 'Avatar change successful')
+        else:
+            for error in change_avatar_form.errors:
+                messages.add_message(request, messages.ERROR, change_avatar_form.errors[error])
+        return redirect(settings_page)
+
+@login_required()
+def delete_account(request):
+    if request.method == 'GET':
+        user = request.user
+        user.is_active = False
+        user.save()
+        return redirect(home_page)

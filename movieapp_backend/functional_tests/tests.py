@@ -101,11 +101,20 @@ class NewVisitorTest(LiveServerTestCase):
         time.sleep(3)
         self.browser.find_element_by_id('name_tag')
         self.browser.find_element_by_id('change_name_button')
+        select_avatar = self.browser.find_element_by_id('id_avatar')
+        select_avatar.send_keys('/home/giulio/Desktop/Projects/movieapp/movieapp_backend/utils/avatar.png')
+        # /home/giulio/Desktop/Projects/movieapp/movieapp_backend/utils/avatar.png
+        change_avatar = self.browser.find_element_by_id('change_avatar_button')
+        change_avatar.click()
+        time.sleep(3)
         self.browser.find_element_by_id('avatar')
-        self.browser.find_element_by_id('change_avatar_button')
         self.browser.find_element_by_id('friends_list')
         self.browser.find_element_by_id('change_password_button')
-        self.browser.find_element_by_id('delete_account_button')
+        delete_button = self.browser.find_element_by_id('delete_account_button')
+        delete_button.click()
+        time.sleep(1)
+        self.assertIn('Login', self.browser.title)
+
 
 
         self.fail("finish the test")
