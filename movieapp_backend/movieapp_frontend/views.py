@@ -3,6 +3,7 @@ from django.contrib.auth import authenticate, login, logout, update_session_auth
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.shortcuts import get_object_or_404
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import IntegrityError  # create_user postgres custom exception
@@ -186,3 +187,21 @@ def delete_account(request):
         user.is_active = False
         user.save()
         return redirect(home_page)
+
+@login_required()
+def search_friends_page(request):
+    if request.method == 'GET':
+        user_id = request.GET.get('username')
+        if user_id:
+            search_results = User.objects.filter(username__icontains=user_id)
+            return render(request, 'movieapp_frontend/search_friends.html', {
+                'search_results': search_results,
+            })
+@login_required()
+def profile_page(request, user_id):
+    if request.method == 'GET':
+        profile_user = get_object_or_404(User, username=user_id)
+        return render(request, 'movieapp_frontend/profile.html', {
+            'profile_user': profile_user,
+        })
+

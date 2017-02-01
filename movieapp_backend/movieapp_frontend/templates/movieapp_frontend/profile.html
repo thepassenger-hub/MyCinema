@@ -1,0 +1,17 @@
+{% extends 'skeleton.html' %}
+{% block title %}
+<title>Profile of {{profile_user.username}}</title>
+{% endblock %}
+{% block body %}
+    {% for post in profile_user.received_posts.all %}
+        <span>{{post.title}}</span>
+        <span>{{post.image_url}}</span>
+        <span>{{post.rating}}</span>
+        <span>{{post.user}}</span>
+        <p>{{post.content}}</p>
+    {% endfor %}
+    <h2>{{profile_user.username}}</h2>
+    <p>{{profile_user.profile.name}}</p>
+    <img id="avatar" src="/avatar_images/{{profile_user.profile.avatar}}">
+    <button type="button">MAYBE ADD FRIEND?</button>
+{% endblock %}

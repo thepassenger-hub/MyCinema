@@ -6,5 +6,8 @@
 <p id="username">{{request.user}}</p>
 <a href="/newpost" id="send_post">Send Post</a>
 <a href="/logout" id="logout_url">Logout</a>
-
+<form action="/search_friends/" method="get" id="search_friends_form">
+    <input name="username" placeholder="Search friends" id="search_friends_bar">
+    <button type="submit" id="search_friends_button">Search!</button>
+</form>
 {% endblock %}

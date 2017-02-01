@@ -1,0 +1,16 @@
+{% extends 'skeleton.html' %}
+{% block title %}
+<title>Search Results</title>
+{% endblock %}
+{% block body %}
+    {% if search_results %}
+        {% for user in search_results %}
+            <a href="{% url 'profile_page' user_id=user.username %}" class="search_results">{{user.username}}</a>
+            <p>{{user.profile.name}}</p>
+            <img id="avatar" src="/avatar_images/{{user.profile.avatar}}">
+            <button type="button">MAYBE ADD FRIEND?</button>
+        {% endfor %}
+    {% else %}
+        <h6> There were no results!</h6>
+    {% endif %}
+{% endblock %}

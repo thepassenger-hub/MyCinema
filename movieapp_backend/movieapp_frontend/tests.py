@@ -3,11 +3,13 @@ from django.contrib.auth.models import User
 from django.contrib.auth import get_user
 from django.core.urlresolvers import resolve
 from django.conf import settings
+from django.core.files import File
 from importlib import import_module
 
 from django.http import HttpRequest
 from django.template.loader import render_to_string
-from movieapp_frontend.views import home_page, signup, login_page, new_post_page, settings_page, change_name, change_password
+from movieapp_frontend.views import home_page, signup, login_page, \
+    new_post_page, settings_page, change_name, change_password, profile_page, search_friends_page
 from movie_app.models import MoviePost, Profile, Friendship
 # Create your tests here.
 import re
@@ -434,7 +436,7 @@ class SettingsPageTest(TestCase):
         c,aaa = self.create_logged_in_client()
         self.assertFalse(aaa.profile.avatar)
 
-        with open('utils/avatar.png', 'rb') as fp:
+        with open('utils/avatar_2.png', 'rb') as fp:
 
             response = c.post('/settings/change_avatar/', {
                 'avatar': fp,
@@ -475,6 +477,52 @@ class SettingsPageTest(TestCase):
         self.assertFalse(User.objects.get(username='aaa').is_active)
         self.assertRedirects(response, '/login?next=/')
 
+class SearchFriendsPageTest(TestCase):
+    def create_logged_in_client(self):
+        aaa = User.objects.create_user('aaa', password='aaa')
+        Profile(user=aaa).save()
+        c = Client()
+        c.login(username='aaa', password='aaa')
+        return c,aaa
+
+    def test_search_friends_page_url_resolves_correct_view(self):
+        found = resolve('/search_friends/')
+        self.assertEqual(found.func, search_friends_page)
+
+    def test_search_friends_in_home_page_calls_view_and_result_is_shown(self):
+        c, aaa = self.create_logged_in_client()
+        bbb = User.objects.create_user(username='bbb', password='bbb')
+        p = Profile(user=bbb)
+        p.name = 'Test Name'
+        p.avatar = File(open('utils/avatar_2.png', 'rb'))
+        p.save()
+        response = c.get('/search_friends/?username=bbb')
+        self.assertIn('bbb', response.content.decode())
+        self.assertIn('Test Name', response.content.decode())
+        self.assertIn('avatar_2', response.content.decode())
+
+class ProfilePageTest(TestCase):
+
+    def create_logged_in_client(self):
+        aaa = User.objects.create_user('aaa', password='aaa')
+        Profile(user=aaa).save()
+        c = Client()
+        c.login(username='aaa', password='aaa')
+        return c,aaa
+
+    def test_profile_page_url_resolves_correct_view(self):
+        found = resolve('/profile/randomuser/')
+        self.assertEqual(found.func, profile_page)
+
+    def test_can_view_other_user_profile(self):
+        c, aaa = self.create_logged_in_client()
+        bbb = User.objects.create_user(username='bbb', password='bbb')
+        p = Profile(user=bbb)
+        p.name = 'Test Name'
+        p.avatar = File(open('utils/avatar_2.png', 'rb'))
+        p.save()
+        response = c.get('/profile/bbb/')
+        self.assertEqual(200, response.status_code)
 
 
 

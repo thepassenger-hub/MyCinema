@@ -11,4 +11,6 @@ urlpatterns = [
     url(r'^settings/change_password/$', views.change_password, name='change_password'),
     url(r'^settings/change_avatar/$', views.change_avatar, name='change_avatar'),
     url(r'^settings/delete_account/$', views.delete_account, name='delete_account'),
+    url(r'^profile/(?P<user_id>\w+)/$', views.profile_page, name='profile_page'),
+    url(r'^search_friends/$', views.search_friends_page, name='search_friends_page'),
 ]

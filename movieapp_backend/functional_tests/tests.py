@@ -1,5 +1,6 @@
 from selenium import webdriver
 from django.test import LiveServerTestCase
+from django.core.files import File
 import unittest
 import os, sys
 sys.path.append(os.getcwd())
@@ -50,6 +51,12 @@ class NewVisitorTest(LiveServerTestCase):
     def test_home_page_when_logged(self):
         User.objects.create_user('aaaa', password='asdasdasd')
         Profile(user=User.objects.get(username='aaaa')).save()
+        bbbb = User.objects.create_user('bbbb', password='bbbb')
+        Profile(user=User.objects.get(username='bbbb')).save()
+        bbbb.profile.avatar = File(open('utils/avatar.png', 'rb'))
+        bbbb.profile.name = 'Test name'
+        bbbb.profile.save()
+
         # print (User.objects.all())
         self.browser.get(self.live_server_url)
         username = self.browser.find_element_by_id('username_input')
@@ -110,10 +117,22 @@ class NewVisitorTest(LiveServerTestCase):
         self.browser.find_element_by_id('avatar')
         self.browser.find_element_by_id('friends_list')
         self.browser.find_element_by_id('change_password_button')
-        delete_button = self.browser.find_element_by_id('delete_account_button')
-        delete_button.click()
+
+        self.browser.get(self.live_server_url)
+        friend_search = self.browser.find_element_by_id('search_friends_bar')
+        friend_search.send_keys('bbbb')
+        search_friend_button = self.browser.find_element_by_id('search_friends_button')
+        search_friend_button.click()
         time.sleep(1)
-        self.assertIn('Login', self.browser.title)
+        self.assertIn('Search Results', self.browser.title)
+        result = self.browser.find_element_by_link_text('bbbb')
+        result.click()
+        time.sleep(1)
+        self.assertIn('Profile of bbbb', self.browser.title)
+        # delete_button = self.browser.find_element_by_id('delete_account_button')
+        # delete_button.click()
+        # time.sleep(1)
+        # self.assertIn('Login', self.browser.title)
 
 
 

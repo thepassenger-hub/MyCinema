@@ -14,7 +14,7 @@
     <!--{{ error }}-->
     <p id="name_tag">{{request.user.profile.name}}</p>
     <button id="change_name_button" type="button">Change Name</button>
-    <img id="avatar" src="avatar_images/{{user_avatar}}">
+    <img id="avatar" src="/avatar_images/{{user_avatar}}">
     <form action="{% url 'change_avatar' %}" method="POST" id="change_avatar_form" enctype="multipart/form-data">
         {% csrf_token %}
         {{change_avatar_form}}
