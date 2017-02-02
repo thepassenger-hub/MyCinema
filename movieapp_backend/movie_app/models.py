@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-
+from django.utils import timezone
 
 # Create your models here.
 
@@ -37,6 +37,41 @@ class Profile(models.Model):
                 friends.append(x.creator)
         return friends
 
+class FriendshipRequest(models.Model):
+    from_user = models.ForeignKey(User, related_name="friendship_requests_sent")
+    to_user = models.ForeignKey(User, related_name="friendship_requests_received")
+    created = models.DateTimeField(auto_now_add=True)
+    rejected = models.DateTimeField(blank=True, null=True)
+    viewed = models.DateTimeField(blank=True, null=True)
 
+    def accept(self):
+        f = Friendship()
+        f.creator = self.from_user
+        f.friend = self.to_user
+        f.save()
+
+        self.delete()
+
+        FriendshipRequest.objects.filter(
+            from_user=self.to_user,
+            to_user=self.from_user
+        ).delete()
+
+        return True
+
+    def reject(self):
+        """ reject this friendship request """
+        self.rejected = timezone.now()
+        self.save()
+
+    def cancel(self):
+        """ cancel this friendship request """
+        self.delete()
+        return True
+
+    def mark_viewed(self):
+        self.viewed = timezone.now()
+        self.save()
+        return True
 
 

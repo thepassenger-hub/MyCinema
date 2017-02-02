@@ -27,6 +27,23 @@
         {{friend}}
         {% endfor %}
     </div>
+    {% if friend_requests %}
+        <div id="friend_requests">
+        {% for f_request in friend_requests %}
+            <p class="friend_request_message">{{f_request.from_user}} wants to be your friend.</p>
+            <form method="post" action="{% url 'friendship_accept' f_request.pk %}">
+                {% csrf_token %}
+                <button type="submit" class="accept_request_button">Accept</button>
+            </form>
+
+            <form method="post" action="{% url 'friendship_reject' f_request.pk %}">
+                {% csrf_token %}
+                <button type="submit" class="reject_request_button">Reject</button>
+            </form>
+        {% endfor %}
+        </div>
+    {% endif %}
+
     <form id="change_password_form" action="{% url 'change_password' %}" method="POST">
         {% csrf_token %}
         {{change_password_form}}

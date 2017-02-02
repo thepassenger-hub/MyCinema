@@ -13,4 +13,8 @@ urlpatterns = [
     url(r'^settings/delete_account/$', views.delete_account, name='delete_account'),
     url(r'^profile/(?P<user_id>\w+)/$', views.profile_page, name='profile_page'),
     url(r'^search_friends/$', views.search_friends_page, name='search_friends_page'),
+    url(r'^friend/add/(?P<friend_user_id>\w+)/$', views.add_friend, name='add_friend'),
+    url(r'^friend/accept/(?P<friend_request_id>\d+)/$', views.accept_friendship, name='friendship_accept'),
+    url(r'^friend/reject/(?P<friend_request_id>\d+)/$', views.reject_friendship, name='friendship_reject'),
+
 ]

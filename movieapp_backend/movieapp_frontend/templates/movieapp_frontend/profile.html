@@ -13,5 +13,14 @@
     <h2>{{profile_user.username}}</h2>
     <p>{{profile_user.profile.name}}</p>
     <img id="avatar" src="/avatar_images/{{profile_user.profile.avatar}}">
-    <button type="button">MAYBE ADD FRIEND?</button>
+    <form id="add_friend_post" action="{% url 'add_friend' friend_user_id=profile_user.username %}" method="post">
+        {% csrf_token %}
+        <!--<input type="hidden" name="to_username" value="{{ to_username }}" />-->
+        <button type="submit" id="add_friend_button">ADD AS FRIEND</button>
+    </form>
+    {% if messages %}
+        {% for message in messages %}
+            {{ message }}
+        {% endfor %}
+    {% endif %}
 {% endblock %}

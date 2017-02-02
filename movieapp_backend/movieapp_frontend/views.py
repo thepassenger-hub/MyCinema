@@ -8,7 +8,7 @@ from django.shortcuts import get_object_or_404
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import IntegrityError  # create_user postgres custom exception
 
-from movie_app.models import MoviePost, Profile, Friendship
+from movie_app.models import MoviePost, Profile, Friendship, FriendshipRequest
 from utils.regex_matching import are_params_invalid, are_fields_invalid
 from .forms import ChangeNameForm, ChangePasswordForm, ChangeAvatarForm
 import re
@@ -139,10 +139,13 @@ def settings_page(request):
         change_password_form = ChangePasswordForm()
         change_avatar_form = ChangeAvatarForm()
         user_avatar = request.user.profile.avatar
+        # Show only the friend requests not rejected
+        friend_requests = request.user.friendship_requests_received.filter(rejected__isnull=True)
         return render(request, 'movieapp_frontend/settings.html', {'change_name_form': change_name_form,
                                                                    'change_password_form': change_password_form,
                                                                    'change_avatar_form': change_avatar_form,
-                                                                   'user_avatar': user_avatar,})
+                                                                   'user_avatar': user_avatar,
+                                                                   'friend_requests': friend_requests})
 
 
 @login_required()
@@ -204,4 +207,33 @@ def profile_page(request, user_id):
         return render(request, 'movieapp_frontend/profile.html', {
             'profile_user': profile_user,
         })
+
+@login_required()
+def add_friend(request, friend_user_id):
+    if request.method == 'POST':
+        friend_user = get_object_or_404(User, username=friend_user_id)
+        friendship_request = FriendshipRequest()
+        friendship_request.from_user = request.user
+        friendship_request.to_user = friend_user
+        friendship_request.save()
+        messages.add_message(request, messages.SUCCESS, 'Friend Request Sent')
+        return redirect(profile_page, user_id=friend_user_id)
+
+@login_required()
+def accept_friendship(request, friend_request_id):
+    if request.method == 'POST':
+        friendship_request = get_object_or_404(FriendshipRequest, pk=friend_request_id)
+        friendship_request.accept()
+        messages.add_message(request, messages.SUCCESS, 'Friendship Accepted')
+        return redirect(settings_page)
+
+@login_required()
+def reject_friendship(request, friend_request_id):
+    if request.method == 'POST':
+        friendship_request = get_object_or_404(FriendshipRequest, pk=friend_request_id)
+        friendship_request.reject()
+        messages.add_message(request, messages.SUCCESS, 'Friendship Rejected')
+        return redirect(settings_page)
+
+
 

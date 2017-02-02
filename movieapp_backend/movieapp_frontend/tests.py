@@ -10,7 +10,7 @@ from django.http import HttpRequest
 from django.template.loader import render_to_string
 from movieapp_frontend.views import home_page, signup, login_page, \
     new_post_page, settings_page, change_name, change_password, profile_page, search_friends_page
-from movie_app.models import MoviePost, Profile, Friendship
+from movie_app.models import MoviePost, Profile, Friendship, FriendshipRequest
 # Create your tests here.
 import re
 import os
@@ -503,26 +503,64 @@ class SearchFriendsPageTest(TestCase):
 
 class ProfilePageTest(TestCase):
 
+    def setUp(self):
+        self.aaa = User.objects.create_user('aaa', password='aaa')
+        Profile(user=self.aaa).save()
+        self.bbb = User.objects.create_user(username='bbb', password='bbb')
+        Profile(user=self.bbb).save()
+        self.c = Client()
+        self.c.login(username='aaa', password='aaa')
+
+
     def create_logged_in_client(self):
         aaa = User.objects.create_user('aaa', password='aaa')
         Profile(user=aaa).save()
+        bbb = User.objects.create_user(username='bbb', password='bbb')
+        Profile(user=bbb).save()
         c = Client()
         c.login(username='aaa', password='aaa')
-        return c,aaa
+        return c,aaa, bbb
 
     def test_profile_page_url_resolves_correct_view(self):
         found = resolve('/profile/randomuser/')
         self.assertEqual(found.func, profile_page)
 
     def test_can_view_other_user_profile(self):
-        c, aaa = self.create_logged_in_client()
-        bbb = User.objects.create_user(username='bbb', password='bbb')
-        p = Profile(user=bbb)
-        p.name = 'Test Name'
-        p.avatar = File(open('utils/avatar_2.png', 'rb'))
-        p.save()
-        response = c.get('/profile/bbb/')
+        # c, aaa, bbb = self.create_logged_in_client()
+
+        response = self.c.get('/profile/bbb/')
         self.assertEqual(200, response.status_code)
+
+    def test_can_send_friend_request(self):
+        # c, aaa, bbb = self.create_logged_in_client()
+        self.assertEqual(0, len(FriendshipRequest.objects.all()))
+        response = self.c.post('/friend/add/bbb/', follow=True)
+        self.assertEqual(1, len(FriendshipRequest.objects.all()))
+        friend_request = FriendshipRequest.objects.all()[0]
+        self.assertEqual(self.aaa, friend_request.from_user)
+        self.assertEqual(self.bbb, friend_request.to_user)
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('Friend Request Sent', response.content.decode())
+
+    def test_can_accept_friend_request(self):
+        self.assertNotIn(self.aaa, self.bbb.profile.get_friends())
+        f1 = FriendshipRequest.objects.create(from_user=self.aaa, to_user=self.bbb)
+        ccc = User.objects.create_user(username='ccc', password='ccc')
+        f2 = FriendshipRequest.objects.create(from_user=ccc, to_user=self.bbb)
+        self.c.logout()
+        self.c.login(username='bbb', password='bbb')
+        response = self.c.post('/friend/accept/%d/' % f1.pk, follow=True)
+        self.assertEqual(1, len(self.bbb.profile.get_friends()))
+        self.assertIn(self.aaa, self.bbb.profile.get_friends())
+        self.assertTrue(Friendship.objects.filter(creator=self.aaa, friend=self.bbb))
+        self.assertIn('aaa', response.content.decode())
+        response = self.c.post('/friend/reject/%d/' % f2.pk)
+        self.assertEqual(1, len(self.bbb.profile.get_friends()))
+        self.assertNotIn(ccc, self.bbb.profile.get_friends())
+        self.assertFalse(Friendship.objects.filter(creator=ccc, friend=self.bbb))
+
+
+
 
 
 
