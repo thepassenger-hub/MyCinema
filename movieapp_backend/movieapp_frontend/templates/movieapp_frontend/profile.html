@@ -3,6 +3,7 @@
 <title>Profile of {{profile_user.username}}</title>
 {% endblock %}
 {% block body %}
+<div class="main">
     {% for post in profile_user.received_posts.all %}
         <span>{{post.title}}</span>
         <span>{{post.image_url}}</span>
@@ -15,7 +16,6 @@
     <img id="avatar" src="/avatar_images/{{profile_user.profile.avatar}}">
     <form id="add_friend_post" action="{% url 'add_friend' friend_user_id=profile_user.username %}" method="post">
         {% csrf_token %}
-        <!--<input type="hidden" name="to_username" value="{{ to_username }}" />-->
         <button type="submit" id="add_friend_button">ADD AS FRIEND</button>
     </form>
     {% if messages %}
@@ -23,4 +23,5 @@
             {{ message }}
         {% endfor %}
     {% endif %}
+</div>
 {% endblock %}

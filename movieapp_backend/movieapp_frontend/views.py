@@ -1,9 +1,9 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.shortcuts import get_object_or_404
+from django.db.models import Q
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import IntegrityError  # create_user postgres custom exception
@@ -17,7 +17,9 @@ PASSWORD_REGEX = re.compile(r'^.{3,20}$')
 
 @login_required()
 def home_page(request):
-    return render(request, 'movieapp_frontend/index.html')
+    if request.method == 'GET':
+        my_movies = request.user.received_posts.all()
+        return render(request, 'movieapp_frontend/index.html', {'my_movies': my_movies})
 
 @login_required()
 def new_post_page(request):
@@ -45,6 +47,9 @@ def new_post_page(request):
         movie_post.save()
 
         friends_of_user = user.profile.get_friends()
+        if not friends_of_user:
+            error = 'You must add some friends first.'
+            return render(request, 'movieapp_frontend/newpost.html', {'error': error})
 
         if send_to:
             send_to = send_to.split(',')
@@ -84,9 +89,9 @@ def login_page(request):
         except ObjectDoesNotExist:
             error = "Username doesn't exist"
             return render(request, 'movieapp_frontend/login.html', {'error': error})
-
         user = authenticate(username=username, password=password)
         if user:
+            # logout(request)
             login(request, user)
             return redirect(home_page)
         else:
@@ -212,6 +217,18 @@ def profile_page(request, user_id):
 def add_friend(request, friend_user_id):
     if request.method == 'POST':
         friend_user = get_object_or_404(User, username=friend_user_id)
+
+        # They must not be friends already
+        if request.user in friend_user.profile.get_friends():
+            messages.add_message(request, messages.ERROR, 'You are already friends.')
+            return redirect(profile_page, user_id=friend_user_id)
+
+        # There must be no request from the two users already
+        already_sent = FriendshipRequest.objects.filter(Q(from_user=request.user)&Q(to_user=friend_user)|Q(from_user=friend_user)&Q(to_user=friend_user))
+        if already_sent:
+            messages.add_message(request, messages.ERROR, 'A friend request is already pending.')
+            return redirect(profile_page, user_id=friend_user_id)
+
         friendship_request = FriendshipRequest()
         friendship_request.from_user = request.user
         friendship_request.to_user = friend_user

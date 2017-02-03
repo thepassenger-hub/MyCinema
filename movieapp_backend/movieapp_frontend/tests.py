@@ -19,9 +19,53 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "movieapp_backend.settings") # o
 import django
 django.setup()
 
+def inherit_test_case(base_class):
 
+    class BaseTestCase(base_class):
+        def setUp(self):
+            self.all_users = []
+            self.aaa = User.objects.create_user('aaa', password='aaa')
+            Profile(user=self.aaa).save()
+            self.bbb = User.objects.create_user(username='bbb', password='bbb')
+            Profile(user=self.bbb).save()
+            self.all_users.append(self.aaa)
+            self.all_users.append(self.bbb)
+            self.c = Client()
+            self.c.login(username='aaa', password='aaa')
 
-class HomePageTest(TestCase):
+        def create_third_user(self):
+            self.ccc = User.objects.create_user('ccc', password='ccc')
+            Profile(user=self.ccc).save()
+            self.all_users.append(self.ccc)
+
+        def make_all_users_friends(self):
+
+            Friendship.objects.create(creator=self.aaa, friend=self.bbb)
+
+            try:
+                Friendship.objects.create(creator=self.bbb, friend=self.ccc)
+            except:
+                pass
+
+            try:
+                Friendship.objects.create(creator=self.aaa, friend=self.ccc)
+            except:
+                pass
+
+        def tearDown(self):
+            self.c.logout()
+
+        def create_friendship_request(self, user1, user2):
+            f = FriendshipRequest.objects.create(from_user=user1, to_user=user2)
+            return f
+
+        def create_friendship(self, user1, user2):
+            f = Friendship.objects.create(creator=user1, friend=user2)
+            return f
+
+    return BaseTestCase
+
+class HomePageTest(inherit_test_case(TestCase)):
 
     @staticmethod
     def remove_csrf(html_code):
@@ -44,9 +88,7 @@ class HomePageTest(TestCase):
         self.assertTrue(response.content.endswith(b'</html>'))
         self.assertEqual(self.remove_csrf(response.content.decode()), expected_html)
 
-        User.objects.create_user('test','test','test')
-        c.login(username='test', password='test')
-        response = c.get('/')
+        response = self.c.get('/')
 
         expected_html = render_to_string('movieapp_frontend/index.html')
         self.assertTrue(response.content.startswith(b'<!DOCTYPE html>'))
@@ -54,17 +96,14 @@ class HomePageTest(TestCase):
         self.assertTrue(response.content.endswith(b'</html>'))
 
     def test_logout_link_logs_user_out_and_redirects_to_login(self):
-        User.objects.create_user('aaaa', 'asd', 'asd')
-        c = Client()
-        c.login(username='aaaa', password='asd')
-        response = c.get('/')
+        response = self.c.get('/')
         self.assertEqual(200, response.status_code)
-        response = c.get('/logout', follow=True)
+        response = self.c.get('/logout', follow=True)
         self.assertRedirects(response, '/login?next=/')
-        response = c.get('/')
+        response = self.c.get('/')
         self.assertEqual(302, response.status_code)
 
-class SignUpPageTest(TransactionTestCase):
+class SignUpPageTest(inherit_test_case(TransactionTestCase)):
     @staticmethod
     def remove_csrf(html_code):
         csrf_regex = r'<input[^>]+csrfmiddlewaretoken[^>]+>'
@@ -75,9 +114,7 @@ class SignUpPageTest(TransactionTestCase):
         self.assertEqual(found.func, signup)
 
     def test_sign_up_page_returns_correct_html(self):
-        request = HttpRequest()
-        request.method = 'GET'
-        response = signup(request)
+        response = self.c.get('/signup')
         expected_html = render_to_string('movieapp_frontend/signup.html')
         self.assertTrue(response.content.startswith(b'<!DOCTYPE html>'))
         self.assertIn(b'<title>Signup</title>', response.content)
@@ -85,36 +122,20 @@ class SignUpPageTest(TransactionTestCase):
         self.assertEqual(self.remove_csrf(response.content.decode()), expected_html)
 
     def test_sign_up_page_can_post_new_users_and_redirects(self):
-        # request = HttpRequest()
-        c = Client()
-        response = c.post('/signup/',
+
+        response = self.c.post('/signup/',
                           {'username': 'testusername',
                            'password': 'testpassword',
                            'verify_password': 'testpassword',
                            'email': 'testemail@email.com'}, follow=True)
 
-        # engine = import_module(settings.SESSION_ENGINE)
-        # session_key = None
-        # request.session = engine.SessionStore(session_key)
-        # request.method = 'POST'
-        # request.POST['username'] = 'testusername'
-        # request.POST['password'] = 'testpassword'
-        # request.POST['verify_password'] = 'testpassword'
-        # request.POST['email'] = 'testemail@email.com'
-        # response = signup(request)
-        user = User.objects.all()[0]
+        user = User.objects.get(username='testusername')
         self.assertEqual(user.username, 'testusername')
         self.assertEqual(user.email, 'testemail@email.com')
-        friend = Profile.objects.get(user=user)
-        self.assertEqual(0, len(friend.get_friends()))
         self.assertEqual(0, len(user.profile.get_friends()))
-        # response.client = Client()
 
         self.assertRedirects(response, '/', status_code=302, target_status_code=200)
         self.assertIn(b'<title>Homepage</title>', response.content)
-
-
-
 
     def test_sign_up_not_accepting_empty_values(self):
         request = HttpRequest()
@@ -149,9 +170,9 @@ class SignUpPageTest(TransactionTestCase):
         response = signup(request)
         self.assertIn('Username already exists', response.content.decode())
         users = User.objects.all()
-        self.assertEqual(1, len(users))
+        self.assertEqual(3, len(users))
 
-class LoginPageTest(TestCase):
+class LoginPageTest(inherit_test_case(TestCase)):
 
     @staticmethod
     def remove_csrf(html_code):
@@ -163,8 +184,7 @@ class LoginPageTest(TestCase):
         self.assertEqual(found.func, login_page)
 
     def test_login_page_returns_correct_html(self):
-        c = Client()
-        response = c.get('/login', follow=True)
+        response = self.c.get('/login', follow=True)
         expected_html = render_to_string('movieapp_frontend/login.html')
 
         self.assertTrue(response.content.startswith(b'<!DOCTYPE html>'))
@@ -173,9 +193,8 @@ class LoginPageTest(TestCase):
         self.assertEqual(self.remove_csrf(response.content.decode()), expected_html)
 
     def test_login_correctly_logs_user_in(self):
-        User.objects.create_user('test', password='testpw')
-        c = Client()
-        response = c.post('/login', {'username': 'test', 'password': 'testpw' }, follow=True)
+        self.c.logout()
+        response = self.c.post('/login', {'username': 'aaa', 'password': 'aaa' }, follow=True)
         self.assertRedirects(response, '/', status_code=302, target_status_code=200)
         self.assertIn(b'<title>Homepage</title>', response.content)
 
@@ -187,37 +206,18 @@ class LoginPageTest(TestCase):
         self.assertIn('Invalid Password', response.content.decode())
         response = c.post('/login', {'username': 'asd', 'password': 'testpw'}, follow=True)
         self.assertIn("Username doesn&#39;t exist", response.content.decode())
-        User.objects.create_user('test', password='testpw')
-        response = c.post('/login', {'username': 'test', 'password': 'testpw2'}, follow=True)
+        response = c.post('/login', {'username': 'aaa', 'password': 'testpw2'}, follow=True)
         self.assertIn("Wrong Password. Try again", response.content.decode())
 
-class SendPostPageTest(TestCase):
+class SendPostPageTest(inherit_test_case(TestCase)):
 
     def create_three_friends(self):
-        aaa = User.objects.create_user('aaa', password='aaa')
-        Profile(user=aaa).save()
-        bbb = User.objects.create_user('bbb', password='aaa')
-        Profile(user=bbb).save()
-        ccc = User.objects.create_user('ccc', password='aaa')
-        Profile(user=ccc).save()
-        friendship = Friendship()
-        friendship.creator = aaa
-        friendship.friend = bbb
-        friendship.save()
-        friendship = Friendship()
-        friendship.creator = aaa
-        friendship.friend = ccc
-        friendship.save()
-        friendship = Friendship()
-        friendship.creator = bbb
-        friendship.friend = ccc
-        friendship.save()
+        self.create_third_user()
+        self.make_all_users_friends()
 
-        return aaa,bbb,ccc
+        return self.aaa, self.bbb, self.ccc
 
     def aaa_sends_movie_post(self, send_to='bbb,ccc'):
-        c = Client()
-        c.login(username='aaa', password='aaa')
         movie_post = {
             'title': 'Ip Man',
             'image_url': 'url to image',
@@ -227,7 +227,7 @@ class SendPostPageTest(TestCase):
             'send_to': send_to,
         }
 
-        response = c.post('/newpost', movie_post)
+        response = self.c.post('/newpost', movie_post)
         return response
 
 
@@ -241,15 +241,14 @@ class SendPostPageTest(TestCase):
         self.assertEqual(found.func, new_post_page)
 
     def test_new_post_url_returns_correct_template(self):
-        c = Client()
-        User.objects.create_user('aaa', password='aaa')
-        c.login(username='aaa', password='aaa')
-        response = c.get('/newpost')
+        # c = Client()
+        # User.objects.create_user('aaa', password='aaa')
+        # c.login(username='aaa', password='aaa')
+        response = self.c.get('/newpost')
         expected_html = render_to_string('movieapp_frontend/newpost.html')
         self.assertEqual(self.remove_csrf(response.content.decode()), expected_html)
 
     def test_sending_post_to_view_creates_post_in_db_and_is_received(self):
-
         aaa,bbb,ccc = self.create_three_friends()
         response = self.aaa_sends_movie_post()
 
@@ -265,11 +264,12 @@ class SendPostPageTest(TestCase):
         self.assertIn('Post Sent', response.content.decode())
 
     def test_user_friendship_is_working(self):
+
         aaa,bbb,ccc = self.create_three_friends()
 
         self.assertEqual(aaa.profile.get_friends(), [bbb, ccc])
         self.assertEqual(bbb.profile.get_friends(), [aaa, ccc])
-        self.assertEqual(ccc.profile.get_friends(), [aaa, bbb])
+        self.assertEqual(ccc.profile.get_friends(), [bbb, aaa])
         Friendship.objects.get(creator=bbb).delete()
         self.assertEqual(ccc.profile.get_friends(), [aaa])
         User.objects.get(username='aaa').delete()
@@ -279,7 +279,6 @@ class SendPostPageTest(TestCase):
     def test_deleting_users_and_post_working_correctly(self):
         aaa,bbb,ccc = self.create_three_friends()
         self.aaa_sends_movie_post()
-
         bbb.delete()
         movie = MoviePost.objects.all()
         self.assertEqual(1, len(movie))
@@ -292,12 +291,9 @@ class SendPostPageTest(TestCase):
         self.assertEqual(0, len(MoviePost.objects.all()))
 
     def test_cannot_send_post_with_wrong_inputs(self):
-        c = Client()
-        User.objects.create_user('aaa', password='aaa')
-        c.login(username='aaa', password='aaa')
-        response = c.post('/newpost', {'title': ''})
+        response = self.c.post('/newpost', {'title': ''})
         self.assertIn('This field is required', response.content.decode())
-        response = c.post('/newpost', {'title': 't', 'rating': ''})
+        response = self.c.post('/newpost', {'title': 't', 'rating': ''})
         self.assertIn('This field is required', response.content.decode())
 
     def test_cannot_send_to_user_that_isnt_my_friend(self):
@@ -319,33 +315,7 @@ class SendPostPageTest(TestCase):
         self.assertEqual(0, len(ddd.received_posts.all()))
 
 
-class SettingsPageTest(TestCase):
-    def create_three_friends(self):
-        aaa = User.objects.create_user('aaa', password='aaa')
-        Profile(user=aaa).save()
-        bbb = User.objects.create_user('bbb', password='aaa')
-        Profile(user=bbb).save()
-        ccc = User.objects.create_user('ccc', password='aaa')
-        Profile(user=ccc).save()
-        friendship = Friendship()
-        friendship.creator = aaa
-        friendship.friend = bbb
-        friendship.save()
-        friendship = Friendship()
-        friendship.creator = aaa
-        friendship.friend = ccc
-        friendship.save()
-        friendship = Friendship()
-        friendship.creator = bbb
-        friendship.friend = ccc
-        friendship.save()
-
-        return aaa,bbb,ccc
-
-    @staticmethod
-    def remove_csrf(html_code):
-        csrf_regex = r'<input[^>]+csrfmiddlewaretoken[^>]+>'
-        return re.sub(csrf_regex, '', html_code)
+class SettingsPageTest(inherit_test_case(TestCase)):
 
     def create_logged_in_client(self):
         aaa = User.objects.create_user('aaa', password='aaa')
@@ -359,68 +329,51 @@ class SettingsPageTest(TestCase):
         self.assertEqual(found.func, settings_page)
 
     def test_settings_page_cannot_enter_if_not_logged_in(self):
-        c = Client()
-        response = c.get('/settings')
-        self.assertEqual(response.status_code, 302)
-        response = c.get('/settings', follow=True)
+        self.c.logout()
+        response = self.c.get('/settings', follow=True)
         self.assertRedirects(response, '/login?next=/settings', status_code=302, target_status_code=200)
 
     def test_authenticated_user_can_view_correct_html(self):
-        c,aaa = self.create_logged_in_client()
-        response = c.get('/settings')
+        response = self.c.get('/settings')
         self.assertEqual(200, response.status_code)
         self.assertIn('Settings', response.content.decode())
-        # rendered_template = render_to_string('movieapp_frontend/settings.html')
-        # self.assertEqual(self.remove_csrf(response.content.decode()), rendered_template)
 
     def test_user_change_name_updates_name_in_db(self):
-        c,aaa = self.create_logged_in_client()
-        self.assertEqual(aaa.profile.name, None)
+        self.assertEqual(self.aaa.profile.name, None)
         request = HttpRequest()
         request.method = 'POST'
-        request.user = aaa
+        request.user = self.aaa
         request.POST['name'] = ''
         response = change_name(request)
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.url, '/settings')
         request.POST['name'] = 'My new cool name'
         response = change_name(request)
-        self.assertEqual(aaa.profile.name, 'My new cool name')
+        self.assertEqual(self.aaa.profile.name, 'My new cool name')
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.url, '/settings')
         request = HttpRequest()
         request.method = 'GET'
-        request.user = aaa
+        request.user = self.aaa
         response = settings_page(request)
         self.assertIn('My new cool name', response.content.decode())
 
     def test_user_change_password_updates_pw_in_db_and_current_session_cookie(self):
-        c,aaa = self.create_logged_in_client()
-        old_password = aaa.password
-        # request = HttpRequest()
-        # engine = import_module(settings.SESSION_ENGINE)
-        # session_key = None
-        response = c.post('/settings/change_password/',
+        old_password = self.aaa.password
+        response = self.c.post('/settings/change_password/',
                           {'new_password': '',}, follow=True)
-        # request.session = engine.SessionStore(session_key)
-        # request.method = 'POST'
-        # request.user = aaa
-        # request.POST['new_password'] = ''
-        # response = change_password(request)
-        # self.assertEqual(response.status_code, 302)
         self.assertRedirects(response, '/settings')
-        # print (response.url)
         self.assertIn('This field is required.', response.content.decode())
-        response = c.post('/settings/change_password/',
+        response = self.c.post('/settings/change_password/',
                           {'new_password': 'mynewpassword', }, follow=True)
         self.assertRedirects(response, '/settings')
         self.assertIn('This field is required.', response.content.decode())
-        response = c.post('/settings/change_password/',
+        response = self.c.post('/settings/change_password/',
                           {'new_password': 'aa',
                            'verify_new_password': 'aa'}, follow=True)
         self.assertRedirects(response, '/settings')
         self.assertIn('between 3 and 20', response.content.decode())
-        response = c.post('/settings/change_password/',
+        response = self.c.post('/settings/change_password/',
                           {'new_password': 'mynewpassword',
                            'verify_new_password': 'mynewpassword'}, follow=True)
         aaa = User.objects.get(username='aaa')
@@ -429,110 +382,78 @@ class SettingsPageTest(TestCase):
         self.assertIn('pbkdf2_sha256', aaa.password)
         self.assertRedirects(response, '/settings')
         self.assertIn('Password change successful', response.content.decode())
-        user = get_user(c)
+        user = get_user(self.c)
         self.assertTrue(user.is_authenticated)
 
     def test_can_upload_new_avatar(self):
-        c,aaa = self.create_logged_in_client()
-        self.assertFalse(aaa.profile.avatar)
+        self.assertFalse(self.aaa.profile.avatar)
 
         with open('utils/avatar_2.png', 'rb') as fp:
 
-            response = c.post('/settings/change_avatar/', {
+            response = self.c.post('/settings/change_avatar/', {
                 'avatar': fp,
             }, follow=True, format='multipart')
         self.assertRedirects(response, '/settings')
         aaa = User.objects.get(username='aaa')
         self.assertTrue(aaa.profile.avatar)
         with open('utils/avatar_600.png', 'rb') as fp:
-            response = c.post('/settings/change_avatar/', {
+            response = self.c.post('/settings/change_avatar/', {
                 'avatar': fp,
             }, follow=True)
         self.assertRedirects(response, '/settings')
         self.assertIn('max 500px', response.content.decode())
         with open('utils/avatar_600.bitmap', 'rb') as fp:
-            response = c.post('/settings/change_avatar/', {
+            response = self.c.post('/settings/change_avatar/', {
                 'avatar': fp,
             }, follow=True)
         self.assertRedirects(response, '/settings')
         self.assertIn('Only *.gif', response.content.decode())
 
     def test_can_see_all_friends(self):
-        aaa,bbb,ccc = self.create_three_friends()
-        c = Client()
-        c.login(username='aaa', password='aaa')
-        response = c.get('/settings')
+        self.create_third_user()
+        self.make_all_users_friends()
+        response = self.c.get('/settings')
         self.assertIn('bbb', response.content.decode())
         self.assertIn('ccc', response.content.decode())
-        f = Friendship.objects.get(creator=aaa, friend=ccc)
+        f = Friendship.objects.get(creator=self.aaa, friend=self.ccc)
         f.delete()
-        response = c.get('/settings')
+        response = self.c.get('/settings')
         self.assertIn('bbb', response.content.decode())
         self.assertNotIn('ccc', response.content.decode())
 
     def test_can_delete_account(self):
-        c,aaa = self.create_logged_in_client()
-        self.assertTrue(aaa.is_active)
-        response = c.get('/settings/delete_account/', follow=True)
+        self.assertTrue(self.aaa.is_active)
+        response = self.c.get('/settings/delete_account/', follow=True)
         self.assertFalse(User.objects.get(username='aaa').is_active)
         self.assertRedirects(response, '/login?next=/')
 
-class SearchFriendsPageTest(TestCase):
-    def create_logged_in_client(self):
-        aaa = User.objects.create_user('aaa', password='aaa')
-        Profile(user=aaa).save()
-        c = Client()
-        c.login(username='aaa', password='aaa')
-        return c,aaa
+class SearchFriendsPageTest(inherit_test_case(TestCase)):
 
     def test_search_friends_page_url_resolves_correct_view(self):
         found = resolve('/search_friends/')
         self.assertEqual(found.func, search_friends_page)
 
     def test_search_friends_in_home_page_calls_view_and_result_is_shown(self):
-        c, aaa = self.create_logged_in_client()
-        bbb = User.objects.create_user(username='bbb', password='bbb')
-        p = Profile(user=bbb)
+        p = self.bbb.profile
         p.name = 'Test Name'
         p.avatar = File(open('utils/avatar_2.png', 'rb'))
         p.save()
-        response = c.get('/search_friends/?username=bbb')
+        response = self.c.get('/search_friends/?username=bbb')
         self.assertIn('bbb', response.content.decode())
         self.assertIn('Test Name', response.content.decode())
         self.assertIn('avatar_2', response.content.decode())
 
-class ProfilePageTest(TestCase):
-
-    def setUp(self):
-        self.aaa = User.objects.create_user('aaa', password='aaa')
-        Profile(user=self.aaa).save()
-        self.bbb = User.objects.create_user(username='bbb', password='bbb')
-        Profile(user=self.bbb).save()
-        self.c = Client()
-        self.c.login(username='aaa', password='aaa')
-
-
-    def create_logged_in_client(self):
-        aaa = User.objects.create_user('aaa', password='aaa')
-        Profile(user=aaa).save()
-        bbb = User.objects.create_user(username='bbb', password='bbb')
-        Profile(user=bbb).save()
-        c = Client()
-        c.login(username='aaa', password='aaa')
-        return c,aaa, bbb
+class ProfilePageTest(inherit_test_case(TestCase)):
 
     def test_profile_page_url_resolves_correct_view(self):
         found = resolve('/profile/randomuser/')
         self.assertEqual(found.func, profile_page)
 
     def test_can_view_other_user_profile(self):
-        # c, aaa, bbb = self.create_logged_in_client()
-
         response = self.c.get('/profile/bbb/')
         self.assertEqual(200, response.status_code)
 
     def test_can_send_friend_request(self):
-        # c, aaa, bbb = self.create_logged_in_client()
         self.assertEqual(0, len(FriendshipRequest.objects.all()))
         response = self.c.post('/friend/add/bbb/', follow=True)
         self.assertEqual(1, len(FriendshipRequest.objects.all()))
@@ -544,9 +465,9 @@ class ProfilePageTest(TestCase):
 
     def test_can_accept_friend_request(self):
         self.assertNotIn(self.aaa, self.bbb.profile.get_friends())
-        f1 = FriendshipRequest.objects.create(from_user=self.aaa, to_user=self.bbb)
-        ccc = User.objects.create_user(username='ccc', password='ccc')
-        f2 = FriendshipRequest.objects.create(from_user=ccc, to_user=self.bbb)
+        f1 = self.create_friendship_request(self.aaa, self.bbb)
+        self.create_third_user()
+        f2 = self.create_friendship_request(self.ccc, self.bbb)
         self.c.logout()
         self.c.login(username='bbb', password='bbb')
         response = self.c.post('/friend/accept/%d/' % f1.pk, follow=True)
@@ -556,8 +477,27 @@ class ProfilePageTest(TestCase):
         self.assertIn('aaa', response.content.decode())
         response = self.c.post('/friend/reject/%d/' % f2.pk)
         self.assertEqual(1, len(self.bbb.profile.get_friends()))
-        self.assertNotIn(ccc, self.bbb.profile.get_friends())
-        self.assertFalse(Friendship.objects.filter(creator=ccc, friend=self.bbb))
+        self.assertNotIn(self.ccc, self.bbb.profile.get_friends())
+        self.assertFalse(Friendship.objects.filter(creator=self.ccc, friend=self.bbb))
+
+    def test_cannot_send_send_more_than_one_request_to_same_user(self):
+        response = self.c.post('/friend/add/bbb/', follow=True)
+        response = self.c.post('/friend/add/bbb/', follow=True)
+        self.assertIn('A friend request is already pending.', response.content.decode())
+        self.assertEqual(1, len(FriendshipRequest.objects.all()))
+
+    def test_cannot_send_friend_request_if_already_friends(self):
+        self.create_third_user()
+        self.create_friendship(self.aaa, self.ccc)
+        response = self.c.post('/friend/add/ccc/', follow=True)
+        self.assertIn('You are already friends.', response.content.decode())
+        self.assertFalse(FriendshipRequest.objects.all())
+
+
+
+
+
+
 
 
 

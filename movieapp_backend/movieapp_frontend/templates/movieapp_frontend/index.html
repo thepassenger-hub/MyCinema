@@ -10,4 +10,13 @@
     <input name="username" placeholder="Search friends" id="search_friends_bar">
     <button type="submit" id="search_friends_button">Search!</button>
 </form>
+<div class="main">
+    {% for movie in my_movies %}
+        <h6>{{movie.title}}</h6>
+        <h6>{{movie.user}}</h6>
+        <h6>{{movie.image_url}}</h6>
+        <h6>{{movie.rating}}</h6>
+        <h6>{{movie.content}}</h6>
+    {% endfor %}
+</div>
 {% endblock %}
