@@ -13,7 +13,8 @@ class MoviePost(models.Model):
     user = models.ForeignKey(User, related_name='posts')
     send_to = models.ManyToManyField(User, related_name='received_posts')
     content = models.TextField(blank=True, null=True)
-
+    created = models.DateTimeField(auto_now_add=True)
+    modified = models.DateTimeField(null=True, blank=True)
     class Meta:
         db_table = 'movie_post'
 

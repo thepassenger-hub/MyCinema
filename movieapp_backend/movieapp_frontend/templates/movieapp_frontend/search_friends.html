@@ -1,16 +1,33 @@
 {% extends 'skeleton.html' %}
+{% block imports %}
+{% load static %}
+<link type="text/css" rel="stylesheet" href="{% static 'css/search_friends.css' %}" />
+{% endblock %}
 {% block title %}
 <title>Search Results</title>
 {% endblock %}
 {% block body %}
+    <div class="main">
     {% if search_results %}
         {% for user in search_results %}
-            <a href="{% url 'profile_page' user_id=user.username %}" class="search_results">{{user.username}}</a>
-            <p>{{user.profile.name}}</p>
-            <img id="avatar" src="/avatar_images/{{user.profile.avatar}}">
-            <button type="button">MAYBE ADD FRIEND?</button>
+        <div class="user_profile">
+            <img class="avatar" src="/avatar_images/{{user.profile.avatar}}">
+            <h4 class="user_profile_accountname">User: <a href="{% url 'profile_page' user_id=user.username %}" class="search_results">{{user.username}}</a></h4>
+            <h4 class="user_profile_name">Name: {{user.profile.name}}</h4>
+            <a href="{% url 'add_friend' friend_user_id=user.username %}" class="btn btn-default add_friend_button" type="button">ADD FRIEND</a>
+        </div>
         {% endfor %}
     {% else %}
-        <h6> There were no results!</h6>
+
+        <div class="errors">
+            <h4><strong>There were no results!</strong></h4>
+        </div>
+        <form action="/search_friends/" method="get" id="search_friends_form">
+            <div class="form-group">
+                <input class="form-control" name="username" placeholder="Search friends" id="search_friends_bar">
+            </div>
+            <button type="submit" class="btn btn-default" id="search_friends_button">Search!</button>
+        </form>
     {% endif %}
+    </div>
 {% endblock %}

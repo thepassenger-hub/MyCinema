@@ -1,14 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/skeleton.css' %}" />
     {% block imports %}{% endblock %}
-
     <meta charset="UTF-8">
     {% block title %}{% endblock %}
 </head>
 <body>
-    <a id="settings_link" href="/settings">Settings</a>
+<nav class="navbar navbar-default">
+      <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Brand</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          <ul class="nav navbar-nav">
+            <li class="active"><a class="navbar_item" id="home_link" href="/">Home<span class="sr-only">(current)</span></a></li>
+            <li><a href="{% url 'new_post' %}" class="navbar_item" id="send_post">Send Post</a></li>
+          </ul>
+          <form action="/search_friends/" method="get" id="search_friends_form" class="navbar-form navbar-left">
+            <div class="form-group">
+                <input class="form-control" name="username" placeholder="Search friends" id="search_friends_bar">
+            </div>
+            <button type="submit" class="btn btn-default" id="search_friends_button">Search!</button>
+          </form>
+          <ul class="nav navbar-nav navbar-right">
+            {% if request.user.is_authenticated %}
+                <li><a id="dropdown_settings_link" href="/settings">Settings</a></li>
+                <li><a href="{% url 'logout' %}" id="dropdown_logout_url">Logout</a></li>
+            {% else %}
+                <li><a href="{% url 'login' %}">Login</a></li>
+            {% endif %}
+          </ul>
+        </div><!-- /.navbar-collapse -->
+      </div><!-- /.container-fluid -->
+    </nav>
+
     {% block body %}
     {% endblock %}
+    <footer>
+        <h4>This site is under development.</h4>
+        <h4>Contact me at sendtosgdev@gmail.com</h4>
+        {% block footer %}
+        {% endblock %}
+    </footer>
 </body>
 </html>

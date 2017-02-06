@@ -1,0 +1,41 @@
+.user_profile {
+    border-style: solid;
+    border-width: 5px;
+}
+/********************************
+Small devices - Tablets (<768px)
+********************************/
+@media screen and (max-width: 767px){
+    .main {
+        width: 100%;
+        min-height: calc(100vh - 172px);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        text-align: center;
+    }
+
+    .user_profile {
+        text-align: initial;
+        border-radius: 10px;
+        margin-bottom: 20px;
+    }
+
+    .user_profile h4 {
+        margin-left: 10px;
+    }
+
+    .avatar{
+        float: right;
+        top: 0;
+    }
+    .add_friend_button {
+        background-color: #ffcc00;
+        width: 100%;
+        font-size: 18px;
+        border: none;
+    }
+    #search_friends_button{
+        margin-top: 20px;
+    }
+}

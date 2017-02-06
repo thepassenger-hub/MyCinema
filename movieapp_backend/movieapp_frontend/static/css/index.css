@@ -1,0 +1,59 @@
+/******************
+  Movie Posts
+******************/
+.movie_post{
+    border-style: solid;
+    border-width: 5px;
+}
+#hr_rating_mobile {
+    display: none;
+}
+#movie_rating_int{
+    display: none;
+}
+/********************************
+Small devices - Tablets (<768px)
+********************************/
+@media screen and (max-width: 767px){
+
+    /******************
+      Movie Posts
+    ******************/
+    .main {
+        width: 100%;
+        min-height: calc(100vh - 172px);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+    .movie_post {
+        border-radius: 10px;
+        margin-bottom: 20px;
+    }
+    #movie_image {
+        display: none;
+    }
+    .movie_post h4 {
+        margin-left: 5px;
+        margin-right: 5px;
+    }
+    #hr_rating_mobile {
+        display: block;
+    }
+    hr {
+        border-top: 2px solid black;
+    }
+    #movie_datetime {
+        float: right;
+        margin-bottom: 0;
+        margin-top: 1px;
+        margin-right: 1px;
+    }
+    .glyphicon{
+        font-size: 18px;
+    }
+    #movie_content {
+        margin-bottom: 20px;
+    }
+
+}

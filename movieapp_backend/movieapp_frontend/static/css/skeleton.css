@@ -1,0 +1,143 @@
+html, body {
+    min-height: 100vh;
+}
+
+body {
+    display: flex;
+    flex-wrap: wrap;
+}
+/********************
+        Navbar
+********************/
+
+.navbar-default {
+  width: 100%;
+  background-color: #ffcc00;
+  border-color: #e7800c;
+}
+.navbar-default .navbar-brand {
+  color: #090909;
+}
+.navbar-default .navbar-brand:hover,
+.navbar-default .navbar-brand:focus {
+  color: #000000;
+}
+.navbar-default .navbar-text {
+  color: #090909;
+}
+.navbar-default .navbar-nav > li > a {
+  color: #090909;
+}
+.navbar-default .navbar-nav > li > a:hover,
+.navbar-default .navbar-nav > li > a:focus {
+  color: #000000;
+}
+.navbar-default .navbar-nav > li > .dropdown-menu {
+  background-color: #ffcc00;
+}
+.navbar-default .navbar-nav > li > .dropdown-menu > li > a {
+  color: #090909;
+}
+.navbar-default .navbar-nav > li > .dropdown-menu > li > a:hover,
+.navbar-default .navbar-nav > li > .dropdown-menu > li > a:focus {
+  color: #000000;
+  background-color: #e7800c;
+}
+.navbar-default .navbar-nav > li > .dropdown-menu > li > .divider {
+  background-color: #e7800c;
+}
+.navbar-default .navbar-nav .open .dropdown-menu > .active > a,
+.navbar-default .navbar-nav .open .dropdown-menu > .active > a:hover,
+.navbar-default .navbar-nav .open .dropdown-menu > .active > a:focus {
+  color: #000000;
+  background-color: #e7800c;
+}
+.navbar-default .navbar-nav > .active > a,
+.navbar-default .navbar-nav > .active > a:hover,
+.navbar-default .navbar-nav > .active > a:focus {
+  color: #000000;
+  background-color: #e7800c;
+}
+.navbar-default .navbar-nav > .open > a,
+.navbar-default .navbar-nav > .open > a:hover,
+.navbar-default .navbar-nav > .open > a:focus {
+  color: #000000;
+  background-color: #e7800c;
+}
+.navbar-default .navbar-toggle {
+  border-color: #e7800c;
+}
+.navbar-default .navbar-toggle:hover,
+.navbar-default .navbar-toggle:focus {
+  background-color: #e7800c;
+}
+.navbar-default .navbar-toggle .icon-bar {
+  background-color: #090909;
+}
+.navbar-default .navbar-collapse,
+.navbar-default .navbar-form {
+  border-color: #090909;
+}
+.navbar-default .navbar-link {
+  color: #090909;
+}
+.navbar-default .navbar-link:hover {
+  color: #000000;
+}
+
+/*******
+Footer
+********/
+footer {
+    background-color: #333;
+    color: white;
+    width: 100%;
+}
+/********************************
+Small devices - Tablets (<768px)
+********************************/
+@media screen and (max-width: 767px){
+
+    body {
+        background-color: #e6e6e6;
+    }
+    /******************
+           Navbar
+    ******************/
+    nav {
+        border-radius: 0 0 5px 5px;
+    }
+     .navbar-default .navbar-nav .open .dropdown-menu > li > a {
+        color: #090909;
+     }
+    .navbar-default .navbar-nav .open .dropdown-menu > li > a:hover,
+    .navbar-default .navbar-nav .open .dropdown-menu > li > a:focus {
+        color: #000000;
+    }
+    .navbar-default .navbar-nav .open .dropdown-menu > .active > a,
+    .navbar-default .navbar-nav .open .dropdown-menu > .active > a:hover,
+    .navbar-default .navbar-nav .open .dropdown-menu > .active > a:focus {
+        color: #000000;
+        background-color: #e7800c;
+    }
+
+    .errors {
+        margin-top: 20px;
+        margin-bottom: 20px;
+        color: darkorange;
+    }
+    /************
+        Footer
+    ************/
+    footer {
+        height: 100px;
+        text-align: center;
+        display: flex;
+          flex-direction: column;
+          justify-content: center;
+    }
+    footer h4 {
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+}

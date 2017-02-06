@@ -200,11 +200,13 @@ def delete_account(request):
 def search_friends_page(request):
     if request.method == 'GET':
         user_id = request.GET.get('username')
+        search_results = None
         if user_id:
             search_results = User.objects.filter(username__icontains=user_id)
-            return render(request, 'movieapp_frontend/search_friends.html', {
-                'search_results': search_results,
-            })
+        return render(request, 'movieapp_frontend/search_friends.html', {
+            'search_results': search_results,
+        })
+
 @login_required()
 def profile_page(request, user_id):
     if request.method == 'GET':

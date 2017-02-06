@@ -1,4 +1,8 @@
 {% extends 'skeleton.html' %}
+{% block imports %}
+    {% load static %}
+    <link href="{% static 'css/login.css' %}" rel="stylesheet" type="text/css" />
+{% endblock %}
 {% block title %}
     <title>Login</title>
 {% endblock %}
@@ -6,11 +10,13 @@
 <div class="main">
     <form role="form" action="#" method="post">
         {% csrf_token %}
-        <input placeholder="Username" id="username_input" type="text" name="username">
-        <input placeholder="Password" id="password_input" type="password" name="password">
-        <button type="submit" id="login_button">Login</button>
+        <input class="form-control" placeholder="Username" id="username_input" type="text" name="username">
+        <input class="form-control" placeholder="Password" id="password_input" type="password" name="password">
+        <button class="btn btn-default" type="submit" id="login_button">Login</button>
         <a href="/signup" id="sign_in_url">SignUp</a>
     </form>
-    {{ error }}
+    <div class="errors">
+        <h4><strong>{{ error }}</strong></h4>
+    </div>
 </div>
 {% endblock %}
