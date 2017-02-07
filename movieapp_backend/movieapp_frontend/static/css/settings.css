@@ -1,0 +1,35 @@
+/********************************
+Small devices - Tablets (<768px)
+********************************/
+@media screen and (max-width: 767px){
+    .main {
+        width: 100%;
+        min-height: calc(100vh - 172px);
+        display: flex;
+        flex-wrap: wrap;
+        font-size: 18px;
+    }
+    .sub_settings {
+        width: 100%;
+    }
+    #name_tag{
+        width: 100%;
+        order: -1;
+        text-align: center;
+    }
+    .btn {
+        font-size: 18px;
+    }
+
+    img {
+        width: 30vw;
+        height: 30vw;
+        order: 0;
+    }
+    #show_change_avatar_form{
+        width: 50vw;
+        height: 32px;
+        padding: 1px 0 1px 0;
+        order:1
+    }
+}

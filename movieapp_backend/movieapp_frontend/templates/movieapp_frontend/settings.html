@@ -1,60 +1,74 @@
 {% extends 'skeleton.html' %}
+{% block imports %}
+    {% load static %}
+    <link href="{% static 'css/settings.css' %}" rel="stylesheet" type="text/css" />
+{% endblock %}
 {% block title %}
 <title>Settings</title>
 {% endblock %}
 {% block body %}
 <div class="main">
-    <form id="change_name_form" method="POST" action="{% url 'change_name' %}">
-        {% csrf_token %}
-        {{change_name_form}}
-        <!--<input type="text" name="new_name" id="change_name_input" placeholder="Insert your name">-->
+    <div class="sub_settings" id="settings_avatar">
+        <img id="avatar" src="/avatar_images/{{user_avatar}}">
+        <button class="btn btn-default" id="show_change_avatar_form" type="button">Change Avatar</button>
+        <form action="{% url 'change_avatar' %}" method="POST" id="change_avatar_form" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{change_avatar_form}}
+            <button type="submit" id="change_avatar_button">Change Avatar</button>
+        </form>
+    </div>
+    <div class="sub_settings" id="settings_name">
+        <h4 id="name_tag">{{request.user.profile.name}}</h4>
+        <button type="button" class="btn btn-default" id="toggle_change_name_form">Change Name</button>
+        <form id="change_name_form" method="POST" action="{% url 'change_name' %}">
+            {% csrf_token %}
+            {{change_name_form}}
+            <!--<input type="text" name="new_name" id="change_name_input" placeholder="Insert your name">-->
 
-        <button type="submit" id="submit_change_name_button">Submit</button>
-    </form>
-    <!--{{ error }}-->
-    <p id="name_tag">{{request.user.profile.name}}</p>
-    <button id="change_name_button" type="button">Change Name</button>
-    <img id="avatar" src="/avatar_images/{{user_avatar}}">
-    <form action="{% url 'change_avatar' %}" method="POST" id="change_avatar_form" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{change_avatar_form}}
-        <button type="submit" id="change_avatar_button">Change Avatar</button>
-    </form>
-
-    <div id="friends_list">
-        <h6>MY FRIENDS LIST</h6>
+            <button type="submit" id="submit_change_name_button">Submit</button>
+        </form>
+    </div>
+    <div class="sub_settings" id="friends_list">
+        <h4>MY FRIENDS LIST</h4>
         {% for friend in request.user.profile.get_friends %}
-        {{friend}}
+            <img class="friends_avatars" src="/avatar_images/{{friend.profile.avatar}}" />
+            <a href="{% url 'profile_page' user_id=friend.username %}">{{friend}}</a>
         {% endfor %}
     </div>
     {% if friend_requests %}
-        <div id="friend_requests">
-        {% for f_request in friend_requests %}
-            <p class="friend_request_message">{{f_request.from_user}} wants to be your friend.</p>
-            <form method="post" action="{% url 'friendship_accept' f_request.pk %}">
-                {% csrf_token %}
-                <button type="submit" class="accept_request_button">Accept</button>
-            </form>
+        <div class="sub_settings" id="friend_requests">
+            <h4> You have {{friend_requests|length}} friend{{friend_requests|length|pluralize}} request{{friend_requests|length|pluralize}}.</h4>
+            {% for f_request in friend_requests %}
+            <div class="friend_request_dialog">
+                <p class="friend_request_message">{{f_request.from_user}} wants to be your friend.</p>
+                <form method="post" action="{% url 'friendship_accept' f_request.pk %}">
+                    {% csrf_token %}
+                    <button type="submit" class="accept_request_button">Accept</button>
+                </form>
 
-            <form method="post" action="{% url 'friendship_reject' f_request.pk %}">
-                {% csrf_token %}
-                <button type="submit" class="reject_request_button">Reject</button>
-            </form>
+                <form method="post" action="{% url 'friendship_reject' f_request.pk %}">
+                    {% csrf_token %}
+                    <button type="submit" class="reject_request_button">Reject</button>
+                </form>
+            </div>
         {% endfor %}
         </div>
     {% endif %}
-
-    <form id="change_password_form" action="{% url 'change_password' %}" method="POST">
-        {% csrf_token %}
-        {{change_password_form}}
-        <!--<input type="password" name="new_password" id="change_password_input" placeholder="New password">-->
-        <!--<input type="password" name="verify_new_password" id="verify_password_input" placeholder="Confirm new password">-->
-        <button type="submit" id="submit_change_password_button">Submit</button>
-    </form>
+    <div class="sub_settings" id="change_password">
+        <form id="change_password_form" action="{% url 'change_password' %}" method="POST">
+            {% csrf_token %}
+            {{change_password_form}}
+            <!--<input type="password" name="new_password" id="change_password_input" placeholder="New password">-->
+            <!--<input type="password" name="verify_new_password" id="verify_password_input" placeholder="Confirm new password">-->
+            <button type="submit" id="submit_change_password_button">Submit</button>
+        </form>
+    </div>
     {% if messages %}
+        <div class="errors">
         {% for message in messages %}
-            {{ message }}
+            <h4><strong>{{ message }}</strong></h4>
         {% endfor %}
+        </div>
     {% endif %}
     <button type="button" id="change_password_button">Change Password</button>
     <a href="{% url 'delete_account' %}" id="delete_account_button">Delete Account</a>

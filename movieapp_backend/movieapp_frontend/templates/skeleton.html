@@ -39,6 +39,7 @@
           </form>
           <ul class="nav navbar-nav navbar-right">
             {% if request.user.is_authenticated %}
+                <li><a id="username" href="{% url 'profile_page' user_id=request.user %}">{{request.user}}</a></li>
                 <li><a id="dropdown_settings_link" href="/settings">Settings</a></li>
                 <li><a href="{% url 'logout' %}" id="dropdown_logout_url">Logout</a></li>
             {% else %}

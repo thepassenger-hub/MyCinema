@@ -55,10 +55,10 @@ class NewVisitorTest(LiveServerTestCase):
         password.send_keys('asdasdasd')
         login = self.browser.find_element_by_id('login_button')
         login.click()
-        time.sleep(1)
+        time.sleep(2)
         self.assertIn('Homepage', self.browser.title)
         self.browser.find_element_by_id('username')
-        self.browser.find_element_by_id('logout_url')
+        self.browser.find_element_by_id('dropdown_logout_url')
         friend_search = self.browser.find_element_by_id('search_friends_bar')
         friend_search.send_keys('bbbb')
         search_friend_button = self.browser.find_element_by_id('search_friends_button')
@@ -112,13 +112,13 @@ class NewVisitorTest(LiveServerTestCase):
         url.send_keys('http://www.imdb.com/title/tt1220719/')
         rating.send_keys('8')
         comment.send_keys('One of the best fighting movies I have ever seen.')
-        send_to.click()
+        # send_to.click()
         send_post.click()
 
         # Check Settings page. No redirects because I'm still logged in.
-        settings = self.browser.find_element_by_id('settings_link')
+        settings = self.browser.find_element_by_id('dropdown_settings_link')
         settings.click()
-        time.sleep(1)
+        time.sleep(2)
         self.assertIn('Settings', self.browser.title)
         self.browser.find_element_by_id('change_name_form')
         change_name = self.browser.find_element_by_id('change_name_input')
@@ -148,19 +148,18 @@ class NewVisitorTest(LiveServerTestCase):
 
 
 
-        time.sleep(1)
+        time.sleep(2)
 
         self.assertIn('Login', self.browser.title)
         self.browser.find_element_by_id('username_input').send_keys('aaaa')
         self.browser.find_element_by_id('password_input').send_keys('asdasdasd')
 
         self.browser.find_element_by_id('login_button').click()
-        time.sleep(1)
+        time.sleep(4)
         self.assertIn('Ip Man', self.browser.find_element_by_class_name("main").get_attribute("innerHTML"))
         self.browser.get('/settings')
         delete_button = self.browser.find_element_by_id('delete_account_button')
         delete_button.click()
-        time.sleep(1)
 
         self.fail("finish the test")
 

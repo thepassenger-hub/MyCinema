@@ -24,7 +24,8 @@ def home_page(request):
 @login_required()
 def new_post_page(request):
     if request.method == 'GET':
-        return render(request, 'movieapp_frontend/newpost.html')
+        friends = request.user.profile.get_friends()
+        return render(request, 'movieapp_frontend/newpost.html', {'friends': friends,})
     if request.method == 'POST':
         title = request.POST.get('title')
         image_url = request.POST.get('image_url')
@@ -37,6 +38,10 @@ def new_post_page(request):
         if error:
             return render(request, 'movieapp_frontend/newpost.html', {'error': error})
 
+        friends_of_user = user.profile.get_friends()
+        if not friends_of_user:
+            error = 'You must add some friends first.'
+            return render(request, 'movieapp_frontend/newpost.html', {'error': error})
 
         movie_post = MoviePost()
         movie_post.title = title
@@ -45,11 +50,6 @@ def new_post_page(request):
         movie_post.content = content
         movie_post.user = user
         movie_post.save()
-
-        friends_of_user = user.profile.get_friends()
-        if not friends_of_user:
-            error = 'You must add some friends first.'
-            return render(request, 'movieapp_frontend/newpost.html', {'error': error})
 
         if send_to:
             send_to = send_to.split(',')
@@ -226,8 +226,9 @@ def add_friend(request, friend_user_id):
             return redirect(profile_page, user_id=friend_user_id)
 
         # There must be no request from the two users already
-        already_sent = FriendshipRequest.objects.filter(Q(from_user=request.user)&Q(to_user=friend_user)|Q(from_user=friend_user)&Q(to_user=friend_user))
-        if already_sent:
+        already_sent = FriendshipRequest.objects.filter(Q(from_user=request.user)&Q(to_user=friend_user))
+        already_received = FriendshipRequest.objects.filter(Q(from_user=friend_user)&Q(to_user=request.user))
+        if already_sent or already_received:
             messages.add_message(request, messages.ERROR, 'A friend request is already pending.')
             return redirect(profile_page, user_id=friend_user_id)
 

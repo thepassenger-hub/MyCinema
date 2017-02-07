@@ -1,22 +1,47 @@
 {% extends 'skeleton.html' %}
+{% block imports %}
+{% load static %}
+<link type="text/css" rel="stylesheet" href="{% static 'css/newpost.css' %}" />
+<script src="{% static 'js/newpost.js' %}"></script>
+{% endblock %}
 {% block title %}
 <title>New Post</title>
 {% endblock %}
 {% block body %}
 <div class="main">
-    <form role="form" action="#" method="post">
+    <h4 id="movie_post_info">Send a post to your friends.</h4>
+    <form role="form" action="#" method="post" id="newpost_form">
         {% csrf_token %}
-        <input placeholder="Title" id="title_input" type="text" name="title">
-        <input placeholder="Image Link" id="img_input" type="text" name="img">
-        <input placeholder="Insert the movie link" id="url_input" type="text" name="url">
-        <input placeholder="Your Personal rating." id="rating_input" type="text" name="rating">
+        <input class="form-control" placeholder="Title" id="title_input" type="text" name="title">
+        <input class="form-control" placeholder="Image Link" id="img_input" type="text" name="img">
+        <input class="form-control" placeholder="Insert the movie link" id="url_input" type="text" name="url">
+        <input class="form-control" placeholder="Your Personal rating." id="rating_input" type="text" name="rating">
         <!-- Atm there is no friends showing in this page. we will default send to all until we can add friends display -->
-        <input type="hidden" name="send_to" value="">
-        <textarea rows="5" placeholder="Comment" id="comment_textarea" name="comment"></textarea>
-        <button type="button" id="send_to_button">Send to</button>
-        <button type="submit" id="send_post_button">Post</button>
+        <input type="hidden" name="send_to" id="send_to_input" value="">
+        <textarea class="form-control" rows="5" placeholder="Comment" id="comment_textarea" name="comment"></textarea>
+        <div class="dropdown">
+            <button type="button" class="btn btn-default" id="send_to_button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Choose Friends <span class="caret"></button>
+            <ul class="dropdown-menu">
+                {% if friends %}
+                    {% for friend in friends %}
+                        <li><a href="#" data-value="{{friend}}" tabIndex="-1">{{friend}}<input type="checkbox"/></a></li>
+                    {% endfor %}
+                {% else %}
+                    <li>You have no friends at the moment. Why don't you add someone?</li>
+                {% endif %}
+            </ul>
+        </div>
+        <button class="btn btn-default" type="submit" id="send_post_button">Post</button>
     </form>
-    {{ error }}
-    {{ success }}
+    {% if error %}
+    <div class="errors">
+        <h4><strong>{{ error }}</strong></h4>
+    </div>
+    {% endif %}
+    {% if success %}
+    <div class="messages">
+        <h4><strong>{{ success }}</strong></h4>
+    </div>
+    {% endif %}
 </div>
 {% endblock %}

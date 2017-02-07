@@ -14,7 +14,10 @@
             <img class="avatar" src="/avatar_images/{{user.profile.avatar}}">
             <h4 class="user_profile_accountname">User: <a href="{% url 'profile_page' user_id=user.username %}" class="search_results">{{user.username}}</a></h4>
             <h4 class="user_profile_name">Name: {{user.profile.name}}</h4>
-            <a href="{% url 'add_friend' friend_user_id=user.username %}" class="btn btn-default add_friend_button" type="button">ADD FRIEND</a>
+            <form action="{% url 'add_friend' user.username%}" method="post" id="add_friend_form">
+                {% csrf_token %}
+                <button class="btn btn-default add_friend_button" type="submit">ADD FRIEND</button>
+            </form>
         </div>
         {% endfor %}
     {% else %}
