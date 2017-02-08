@@ -1,17 +1,24 @@
 {% extends 'skeleton.html' %}
+{% block imports %}
+    {% load static %}
+    <link href="{% static 'css/signup.css' %}" rel="stylesheet" type="text/css" />
+{% endblock %}
 {% block title %}
     <title>Signup</title>
 {% endblock %}
 {% block body %}
     <div class="main">
-        <form role="form" action="#" method="post">
+        <h4 id="signup_form_info">Register your new account.</h4>
+        <form id="signup_form" role="form" action="#" method="post">
             {% csrf_token %}
-            <input placeholder="Username" id="username_input" type="text" name="username">
-            <input placeholder="Password" id="password_input" type="password" name="password">
-            <input placeholder="Verify password" id="verify_password_input" type="password" name="verify_password">
-            <input placeholder="email" id="email_input" type="email" name="email">
-            <button type="submit" id="signup_button">Signup</button>
+            <input class="form-control" placeholder="Username" id="username_input" type="text" name="username" required>
+            <input class="form-control" placeholder="Password" id="password_input" type="password" name="password" required>
+            <input class="form-control" placeholder="Verify password" id="verify_password_input" type="password" name="verify_password" required>
+            <input class="form-control" placeholder="email" id="email_input" type="email" name="email" required>
+            <button class="btn btn-default" type="submit" id="signup_button">Signup</button>
         </form>
-        {{ error }}
+        <div class="errors">
+            <h4><strong>{{ error }}</strong></h4>
+        </div>
     </div>
 {% endblock %}

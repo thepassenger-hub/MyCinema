@@ -1,0 +1,21 @@
+
+/********************************
+Small devices - Tablets (<768px)
+********************************/
+@media screen and (max-width: 767px){
+    .main {
+        width: 100%;
+        min-height: calc(100vh - 172px);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        text-align: center;
+        font-size: 18px;
+    }
+    #signup_form_info{
+        margin-bottom: 20px;
+    }
+    #signup_form input {
+        margin-bottom: 20px;
+    }
+}

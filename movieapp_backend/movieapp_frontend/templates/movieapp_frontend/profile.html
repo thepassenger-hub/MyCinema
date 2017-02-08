@@ -1,23 +1,52 @@
 {% extends 'skeleton.html' %}
+{% block imports %}
+    {% load static %}
+    <script src="{% static 'js/profile.js' %}"></script>
+    <link href="{% static 'css/profile.css' %}" rel="stylesheet" type="text/css" />
+{% endblock %}
 {% block title %}
 <title>Profile of {{profile_user.username}}</title>
 {% endblock %}
 {% block body %}
 <div class="main">
-    {% for post in profile_user.received_posts.all %}
-        <span>{{post.title}}</span>
-        <span>{{post.image_url}}</span>
-        <span>{{post.rating}}</span>
-        <span>{{post.user}}</span>
-        <p>{{post.content}}</p>
-    {% endfor %}
-    <h2>{{profile_user.username}}</h2>
-    <p>{{profile_user.profile.name}}</p>
-    <img id="avatar" src="/avatar_images/{{profile_user.profile.avatar}}">
-    <form id="add_friend_post" action="{% url 'add_friend' friend_user_id=profile_user.username %}" method="post">
-        {% csrf_token %}
-        <button type="submit" id="add_friend_button">ADD AS FRIEND</button>
-    </form>
+    <div class="sub_profile" id="sub_profile_header">
+        <img id="avatar" src="/avatar_images/{{profile_user.profile.avatar}}">
+        <h4 id="profile_username">Profile: {{profile_user.username}}</h4>
+        <h4 id="profile_name">Name:
+            {% if profile_user.profile.name %}
+                {{profile_user.profile.name}}
+            {% else %}
+                Not set yet.
+            {% endif %}
+        </h4>
+        <form id="add_friend_post" action="{% url 'add_friend' friend_user_id=profile_user.username %}" method="post">
+            {% csrf_token %}
+            <button class="btn btn-default" type="submit" id="add_friend_button">ADD AS FRIEND</button>
+        </form>
+    </div>
+    <div class="sub_profile" id="sub_profile_posts">
+        {% if profile_user.received_posts.all %}
+            {% for movie in profile_user.received_posts.all %}
+                <div class="movie_post">
+                    <h6 id="movie_datetime">{{movie.created}}</h6>
+                    <h4 id="from_user">From: {{movie.user}}</h4>
+                    <hr id="hr_from_user">
+                    <h4 id="movie_title">{{movie.title}}</h4>
+                    <hr id="hr_title">
+                    <h4 id="movie_image">{{movie.image_url}}</h4>
+                    <div id="movie_rating">
+                        <span id="movie_rating_int">{{movie.rating}}</span>
+                    </div>
+                    <hr id="hr_rating_mobile">
+                    <h4 id="movie_content">{{movie.content}}</h4>
+                </div>
+            {% endfor %}
+
+        {% else %}
+        <h4>This user never received a post.</h4>
+        {% endif %}
+    </div>
+
     {% if messages %}
         {% for message in messages %}
             {{ message }}

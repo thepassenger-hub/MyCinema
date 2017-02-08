@@ -21,7 +21,8 @@ class ChangeNameForm(forms.ModelForm):
         fields = ['name']
         widgets = {
             'name': TextInput(attrs={'placeholder': 'Insert your name',
-                                     'id': 'change_name_input'}),
+                                     'id': 'change_name_input',
+                                     'class': 'form-control'}),
         }
         labels = {
             'name': '',
@@ -30,11 +31,14 @@ class ChangeNameForm(forms.ModelForm):
 class ChangePasswordForm(forms.Form):
     new_password = forms.CharField(required=True, validators=[validate_password],
                                    widget=forms.PasswordInput(attrs={'placeholder': 'New Password',
-                                                                     'id': 'change_password_input'
+                                                                     'id': 'change_password_input',
+                                                                     'class': 'form-control'
                                                                      }))
     verify_new_password = forms.CharField(required=True, validators=[validate_password],
-                                          widget=forms.PasswordInput(attrs={'placeholder': 'New Password',
-                                                                            'id': 'verify_password_input'}))
+                                          widget=forms.PasswordInput(attrs={'placeholder': 'Verfy New Password',
+                                                                            'id': 'verify_password_input',
+                                                                            'class': 'form-control'
+                                                                            }))
 
     def clean(self):
         cleaned_data = super(ChangePasswordForm, self).clean()
@@ -49,8 +53,11 @@ class ChangeAvatarForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ['avatar']
+        labels = {
+            'avatar': _('Choose an image:'),
+        }
         widgets = {
-            'name': FileInput(attrs={'id': 'select_avatar_button'}),
+            'avatar': FileInput(attrs={'id': 'select_avatar_button'}),
         }
 
     def clean_avatar(self):

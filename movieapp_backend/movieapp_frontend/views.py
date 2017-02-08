@@ -142,15 +142,17 @@ def settings_page(request):
     if request.method == 'GET':
         change_name_form = ChangeNameForm()
         change_password_form = ChangePasswordForm()
-        change_avatar_form = ChangeAvatarForm()
+        change_avatar_form = ChangeAvatarForm(use_required_attribute=False)
         user_avatar = request.user.profile.avatar
         # Show only the friend requests not rejected
         friend_requests = request.user.friendship_requests_received.filter(rejected__isnull=True)
+        friends_list = request.user.profile.get_friends()
         return render(request, 'movieapp_frontend/settings.html', {'change_name_form': change_name_form,
                                                                    'change_password_form': change_password_form,
                                                                    'change_avatar_form': change_avatar_form,
                                                                    'user_avatar': user_avatar,
-                                                                   'friend_requests': friend_requests})
+                                                                   'friend_requests': friend_requests,
+                                                                   'friends_list': friends_list})
 
 
 @login_required()
@@ -172,8 +174,9 @@ def change_password(request):
             messages.add_message(request, messages.SUCCESS, 'Password change successful')
         else:
             # Print error message
-            for error in change_password_form.errors:
-                messages.add_message(request, messages.ERROR, change_password_form.errors[error] )
+            for errors in change_password_form.errors:
+                for error in change_password_form.errors[errors]:
+                    messages.add_message(request, messages.ERROR, error)
         return redirect(settings_page)
 
 @login_required()
@@ -184,8 +187,8 @@ def change_avatar(request):
             change_avatar_form.save()
             messages.add_message(request, messages.SUCCESS, 'Avatar change successful')
         else:
-            for error in change_avatar_form.errors:
-                messages.add_message(request, messages.ERROR, change_avatar_form.errors[error])
+            for error in change_avatar_form.errors['avatar']:
+                messages.add_message(request, messages.ERROR, error)
         return redirect(settings_page)
 
 @login_required()

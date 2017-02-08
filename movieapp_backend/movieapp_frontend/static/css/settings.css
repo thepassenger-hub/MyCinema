@@ -1,3 +1,15 @@
+#select_avatar_button {
+    display: none;
+}
+#change_avatar_form {
+    display:none;
+}
+#change_name_form {
+    display:none;
+}
+#change_password_form {
+    display:none;
+}
 /********************************
 Small devices - Tablets (<768px)
 ********************************/
@@ -8,6 +20,9 @@ Small devices - Tablets (<768px)
         display: flex;
         flex-wrap: wrap;
         font-size: 18px;
+        margin-left: 5px;
+        margin-right: 5px;
+
     }
     .sub_settings {
         width: 100%;
@@ -15,10 +30,13 @@ Small devices - Tablets (<768px)
     #name_tag{
         width: 100%;
         order: -1;
-        text-align: center;
+    }
+    input {
+        margin-bottom: 10px;
     }
     .btn {
         font-size: 18px;
+        margin-bottom: 10px;
     }
 
     img {
@@ -32,4 +50,65 @@ Small devices - Tablets (<768px)
         padding: 1px 0 1px 0;
         order:1
     }
+    #change_avatar_form {
+        margin-top: 10px;
+    }
+    .error {
+        border: 1px solid red;
+        -webkit-box-shadow: inset 0px 0px 6px 1px rgba(255,0,0,1);
+        -moz-box-shadow: inset 0px 0px 6px 1px rgba(255,0,0,1);
+        box-shadow: inset 0px 0px 6px 1px rgba(255,0,0,1);
+    }
+    .friend_profile{
+        margin-bottom: 2px;
+    }
+    .friends_avatars {
+        width: 15vw;
+        height: 15vw;
+    }
+    .friend_request_dialog {
+        border: 3px solid #0275d8;
+        border-radius: 10px;
+        margin-bottom: 20px;
+    }
+    .friend_request_dialog form {
+        width: 40%;
+        display: inline-block;
+
+    }
+    .reject_frequest_form {
+        float: right;
+    }
+    .friend_request_message{
+        text-align: center;
+    }
+    .friend_request_dialog .btn.btn-info {
+        float: right;
+    }
+    #selected_file_input {
+        height: 39px;
+        background-color: white;
+        border: none;
+    }
+    #change_name_input {
+        height: 39px;
+    }
+    #change_password_button {
+        margin-top: 20px;
+    }
+    #show_delete_account_modal {
+        margin-top: 30px;
+        margin-bottom: 20px;
+    }
+    #delete_account_button {
+        margin-right: 10px;
+        float: right;
+    }
+    #close_modal_button {
+        float: left;
+        margin-left: 10px;
+        margin-bottom: 0;
+    }
+
+
 }
