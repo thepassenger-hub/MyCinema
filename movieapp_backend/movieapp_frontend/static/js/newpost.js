@@ -38,7 +38,6 @@ $(document).ready(function(){
 
        $( event.target ).blur();
 
-       console.log( options );
        return false;
     });
 });

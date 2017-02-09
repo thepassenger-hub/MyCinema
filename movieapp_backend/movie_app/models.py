@@ -26,7 +26,7 @@ class Friendship(models.Model):
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=50, blank=True, null=True)
-    avatar = models.ImageField(blank=True, null=True)
+    avatar = models.ImageField(default="avatar.svg")
     def get_friends(self):
         user = self.user
         friendships = Friendship.objects.filter(models.Q(creator=user)|models.Q(friend=user))

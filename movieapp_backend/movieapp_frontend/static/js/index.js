@@ -1,18 +1,22 @@
 $(document).ready(function(){
-    movieRating = $('#movie_rating').text();
-    convertToStars(movieRating);
+      movieRating = $('.movie_rating_int').length;
+      for (i=0; i<movieRating; i++){
+        convertToStars(i);
+      }
 
 
 });
 
-var convertToStars = function(rating){
+var convertToStars = function(i){
+        section = $('.movie_rating')[i]
+        section = $('span.movie_rating_int', section)
+        rating = section.text()
         fullStar = parseInt(rating);
-        console.log(fullStar);
         emptyStar = 10 - fullStar
         for (i=0; i < fullStar; i++){
-            $('#movie_rating').append("<span class='glyphicon glyphicon-star'></span>")
+            section.parent().append("<span class='glyphicon glyphicon-star'></span>")
         }
         for (i=0; i < emptyStar; i++){
-            $('#movie_rating').append("<span class='glyphicon glyphicon-star-empty'></span>")
+            section.parent().append("<span class='glyphicon glyphicon-star-empty'></span>")
         }
-    }
+}
