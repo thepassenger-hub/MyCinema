@@ -106,7 +106,10 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" id="close_modal_button" data-dismiss="modal">No</button>
-            <a href="{% url 'delete_account' %}" class="btn btn-danger" id="delete_account_button">Yes, I am sure</a>
+            <form id="delete_account_form" method="post" action="{% url 'delete_account' %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger" id="delete_account_button">Yes, I am sure</button>
+            </form>
           </div>
         </div><!-- /.modal-content -->
       </div><!-- /.modal-dialog -->

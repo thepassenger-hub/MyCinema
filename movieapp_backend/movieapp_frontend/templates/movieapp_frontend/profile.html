@@ -24,6 +24,13 @@
             <button class="btn btn-default" type="submit" id="add_friend_button">ADD AS FRIEND</button>
         </form>
     </div>
+    {% if messages %}
+        <div class="errors">
+            {% for message in messages %}
+                <h4>{{ message }}</h4>
+            {% endfor %}
+        </div>
+    {% endif %}
     <div class="sub_profile" id="sub_profile_posts">
         {% if profile_user.received_posts.all %}
             {% for movie in profile_user.received_posts.all %}
@@ -46,11 +53,5 @@
         <h4>This user never received a post.</h4>
         {% endif %}
     </div>
-
-    {% if messages %}
-        {% for message in messages %}
-            {{ message }}
-        {% endfor %}
-    {% endif %}
 </div>
 {% endblock %}

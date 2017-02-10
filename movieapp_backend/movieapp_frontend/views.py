@@ -1,14 +1,14 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
-from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 from django.contrib import messages
 from django.db.models import Q
-
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import IntegrityError  # create_user postgres custom exception
 
-from movie_app.models import MoviePost, Profile, Friendship, FriendshipRequest
+from movie_app.models import MoviePost, Profile, FriendshipRequest
+from utils.scraper import get_image
 from utils.regex_matching import are_params_invalid, are_fields_invalid
 from .forms import ChangeNameForm, ChangePasswordForm, ChangeAvatarForm
 import re
@@ -46,10 +46,15 @@ def new_post_page(request):
         movie_post = MoviePost()
         movie_post.title = title
         movie_post.rating = int(rating)
+        if image_url is None:
+            image_url = get_image(title)
         movie_post.image_url = image_url
         movie_post.content = content
         movie_post.user = user
         movie_post.save()
+
+        # Choose which friends will receive the post.
+        # In not specified all friends will receive it.
 
         if send_to:
             send_to = send_to.split(',')
@@ -91,7 +96,6 @@ def login_page(request):
             return render(request, 'movieapp_frontend/login.html', {'error': error})
         user = authenticate(username=username, password=password)
         if user:
-            # logout(request)
             login(request, user)
             return redirect(home_page)
         else:
@@ -170,6 +174,7 @@ def change_password(request):
         if change_password_form.is_valid():
             request.user.set_password(change_password_form.cleaned_data.get('new_password'))
             request.user.save()
+            # Update auth hash so user is still logged in
             update_session_auth_hash(request, request.user)
             messages.add_message(request, messages.SUCCESS, 'Password change successful')
         else:
@@ -193,7 +198,7 @@ def change_avatar(request):
 
 @login_required()
 def delete_account(request):
-    if request.method == 'GET':
+    if request.method == 'POST':
         user = request.user
         user.is_active = False
         user.save()
@@ -222,7 +227,10 @@ def profile_page(request, user_id):
 def add_friend(request, friend_user_id):
     if request.method == 'POST':
         friend_user = get_object_or_404(User, username=friend_user_id)
-
+        # They can't add themselves as friend
+        if friend_user == request.user:
+            messages.add_message(request, messages.ERROR, "You can't add yourself.")
+            return redirect(profile_page, user_id=friend_user_id)
         # They must not be friends already
         if request.user in friend_user.profile.get_friends():
             messages.add_message(request, messages.ERROR, 'You are already friends.')

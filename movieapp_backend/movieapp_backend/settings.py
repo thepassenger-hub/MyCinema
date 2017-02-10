@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 """
 
 import os
+import json
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -23,7 +24,10 @@ STATIC_DIR = os.path.join(BASE_DIR, 'movieapp_frontend/static')
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'g%2twy8$e0xxg^)cl=s^0e%xu)k67j-4$=2x6nhs_(rbj))lh*'
-
+with open(os.path.join(BASE_DIR, 'utils/keys.json'), 'r') as f:
+    env = json.load(f)
+API_KEY = env.get('Google_Api_Key')
+ENGINE_CX = env.get('Engine_cx')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
