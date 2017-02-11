@@ -1,3 +1,4 @@
+
 /********************************
 Small devices - Tablets (<768px)
 ********************************/
@@ -16,7 +17,7 @@ Small devices - Tablets (<768px)
     form input, textarea {
         margin-bottom: 10px;
     }
-    span {
+    .main span {
         font-size: 22px;
         margin-left: 5px;
     }
@@ -42,5 +43,43 @@ Small devices - Tablets (<768px)
     }
     #send_post_button {
         margin-bottom: 20px;
+    }
+}
+
+/********************************
+Medium devices - Tablets (768px<=)
+********************************/
+@media screen and (min-width: 768px){
+    .main {
+        min-height: calc(100vh - 172px);
+        width: 70%;
+        margin-left: auto;
+        margin-right: auto;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        text-align: center;
+    }
+    .main input {
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+    .main button {
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+    #rating_container{
+        margin-bottom: 20px;
+    }
+    .dropdown-menu{
+        float: initial;
+        left: initial;
+        position: initial;
+        width: 40%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .dropdown-menu input {
+        margin-left: 20px;
     }
 }

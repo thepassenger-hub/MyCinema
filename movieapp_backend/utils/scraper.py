@@ -15,4 +15,7 @@ def get_image(title):
       num=1
     ).execute()
 
-  return res['items'][0]['link']
+  try:
+    return res['items'][0]['link']
+  except:
+    return None

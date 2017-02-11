@@ -386,7 +386,7 @@ class SettingsPageTest(inherit_test_case(TestCase)):
         self.assertTrue(user.is_authenticated)
 
     def test_can_upload_new_avatar(self):
-        self.assertFalse(self.aaa.profile.avatar)
+        self.assertEqual(self.aaa.profile.avatar.url, '/avatar_images/avatar.svg')
 
         with open('utils/avatar_2.png', 'rb') as fp:
 
@@ -423,7 +423,7 @@ class SettingsPageTest(inherit_test_case(TestCase)):
 
     def test_can_delete_account(self):
         self.assertTrue(self.aaa.is_active)
-        response = self.c.get('/settings/delete_account/', follow=True)
+        response = self.c.post('/settings/delete_account/', follow=True)
         self.assertFalse(User.objects.get(username='aaa').is_active)
         self.assertRedirects(response, '/login?next=/')
 

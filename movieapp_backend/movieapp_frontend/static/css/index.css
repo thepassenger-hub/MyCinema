@@ -11,6 +11,10 @@
 #movie_rating_int{
     display: none;
 }
+
+.main{
+    width: 100%;
+}
 /********************************
 Small devices - Tablets (<768px)
 ********************************/
@@ -56,4 +60,47 @@ Small devices - Tablets (<768px)
         margin-bottom: 20px;
     }
 
+}
+/********************************
+Medium devices - Tablets (768px<=)
+********************************/
+@media screen and (min-width: 768px){
+    .main{
+        min-height: calc(100vh - 172px);
+    }
+    /******Navbar*******/
+    #search_friends_bar{
+        width: 23vw;
+    }
+    /*****MoviePosts****/
+
+    .movie_post{
+        max-width: 70%;
+        margin-left: auto;
+        margin-right: auto;
+        margin-bottom: 30px;
+        display: block;
+        overflow: auto;
+    }
+    img {
+        float: right;
+        max-height: 350px;
+        max-width: 25%;
+    }
+    #movie_datetime{
+        float: right;
+    }
+    }
+    #hr_rating_mobile {
+        display: block;
+    }
+    hr {
+        border-top: 2px solid black;
+    }
+    #movie_rating{
+        text-align: center;
+    }
+    .glyphicon{
+        font-size: 18px;
+    }
 }

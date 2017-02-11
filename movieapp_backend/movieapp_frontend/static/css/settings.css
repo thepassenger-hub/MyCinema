@@ -56,6 +56,7 @@ Small devices - Tablets (<768px)
     #change_avatar_form {
         margin-top: 10px;
     }
+
     .error {
         border: 1px solid red;
         -webkit-box-shadow: inset 0px 0px 6px 1px rgba(255,0,0,1);
@@ -114,5 +115,122 @@ Small devices - Tablets (<768px)
         margin-bottom: 0;
     }
 
+}
+/********************************
+Medium devices - Tablets (768px<=)
+********************************/
+@media screen and (min-width: 768px){
+     .main {
+        width: 70%;
+        min-height: calc(100vh - 172px);
+        font-size: 18px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .sub_settings{
+        margin-bottom: 20px;
+    }
+    #avatar {
+        width: 20vw;
+        height: 20vw;
+    }
+    #show_change_avatar_form{
+        margin-left: 50px;
+    }
+    #change_avatar_form .input-group{
+        margin-top: 10px;
+    }
+    #change_avatar_button{
+        margin-top: 15px;
+    }
+    #change_name_form{
+        width: calc(100% - 136px);
+        float: right;
+    }
+    .friends_avatars{
+        width: 15vw;
+        height: 15vw;
+    }
+    .friend_profile a {
+        margin-left: 20px;
+    }
+    .friend_request_dialog {
+        border: 3px solid #0275d8;
+        border-radius: 10px;
+        margin-bottom: 20px;
+    }
+    .friend_request_dialog form {
+        width: 40%;
+        display: inline-block;
 
+    }
+    .reject_frequest_form {
+        float: right;
+    }
+    .friend_request_message{
+        text-align: center;
+    }
+    .friend_request_dialog .btn.btn-info {
+        float: right;
+    }
+    #selected_file_input {
+        height: 39px;
+        background-color: white;
+        border: none;
+    }
+    span.btn.btn-primary{
+        height: 39px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+    #change_name_input {
+        height: 39px;
+    }
+    #submit_change_name_button{
+        height: 39px;
+    }
+    #change_password_button {
+        margin-top: 20px;
+    }
+
+    #change_password_form{
+        margin-top: 20px;
+    }
+    #change_password_form input{
+        margin-bottom: 10px;
+    }
+    #show_delete_account_modal {
+        margin-top: 30px;
+        margin-bottom: 20px;
+        height: 39px;
+    }
+    #delete_account_button {
+        margin-right: 10px;
+        float: right;
+    }
+    #close_modal_button {
+        float: left;
+        margin-left: 10px;
+        margin-bottom: 0;
+    }
+
+    .modal {
+      text-align: center;
+      padding: 0!important;
+    }
+
+    .modal:before {
+      content: '';
+      display: inline-block;
+      height: 100%;
+      vertical-align: middle;
+      margin-right: -4px;
+    }
+
+    .modal-dialog {
+      display: inline-block;
+      text-align: left;
+      vertical-align: middle;
+    }
 }

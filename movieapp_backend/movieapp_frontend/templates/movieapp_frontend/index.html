@@ -12,12 +12,12 @@
     <div id="sidenav_left" class="sidenav"></div>
     {% for movie in my_movies %}
         <div class="movie_post">
+            <img src="{{movie.image_url}}" id="movie_image" />
             <h6 id="movie_datetime">{{movie.created}}</h6>
             <h4 id="from_user">From: {{movie.user}}</h4>
             <hr id="hr_from_user">
             <h4 id="movie_title">{{movie.title}}</h4>
             <hr id="hr_title">
-            <h4 id="movie_image">{{movie.image_url}}</h4>
             <div class='movie_rating' id="movie_rating">
                 <span class='movie_rating_int' id="movie_rating_int">{{movie.rating}}</span>
             </div>

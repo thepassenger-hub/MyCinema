@@ -28,9 +28,11 @@ Small devices - Tablets (<768px)
     .avatar{
         float: right;
         top: 0;
+        height: 30vw;
+        width: 30vw;
     }
     .add_friend_button {
-        background-color: #ffcc00;
+        background-color: #f0810f;
         width: 100%;
         font-size: 18px;
         border: none;

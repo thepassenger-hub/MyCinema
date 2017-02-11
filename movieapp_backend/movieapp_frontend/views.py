@@ -30,7 +30,7 @@ def new_post_page(request):
         title = request.POST.get('title')
         image_url = request.POST.get('image_url')
         rating = request.POST.get('rating')
-        content = request.POST.get('content')
+        content = request.POST.get('comment')
         send_to = request.POST.get('send_to')
         user = request.user
 
