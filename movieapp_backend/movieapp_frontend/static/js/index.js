@@ -3,6 +3,8 @@ $(document).ready(function(){
       for (i=0; i<movieRating; i++){
         convertToStars(i);
       }
+      $('.active').removeClass('active');
+      $('#home_link').parent().addClass('active');
 
 
 });

@@ -41,3 +41,64 @@ Small devices - Tablets (<768px)
         margin-top: 20px;
     }
 }
+
+/********************************
+Medium devices - Tablets (768px<=)
+********************************/
+@media screen and (min-width: 768px){
+    .main {
+        width: 60%;
+        min-height: calc(100vh - 172px);
+        font-size: 18px;
+        margin-left: auto;
+        margin-right: auto;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        text-align: center;
+    }
+    .user_profile {
+        text-align: initial;
+        border-radius: 10px;
+        margin-bottom: 40px;
+        font-size: 30px;
+    }
+
+    .user_profile h4 {
+        margin-left: 10px;
+        font-size: 1em;
+    }
+
+    .avatar{
+        float: right;
+        top: 0;
+        height: 30vw;
+        width: 30vw;
+    }
+    .add_friend_button {
+        background-color: #f0810f;
+        width: 100%;
+        font-size: 18px;
+        border: none;
+    }
+    .avatar {
+        width: 20vw;
+        height: 20vw;
+    }
+    .errors h4{
+        font-size: 30px;
+    }
+    #search_friends_form_2 input {
+        width: 100%;
+    }
+}
+
+/********************************
+Large devices  (1050px<=)
+********************************/
+@media screen and (min-width: 1050px){
+    img.avatar {
+        width: 10vw;
+        height: 10vw;
+    }
+}

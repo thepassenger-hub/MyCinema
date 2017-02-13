@@ -11,6 +11,8 @@ Small devices - Tablets (<768px)
         justify-content: center;
         text-align: center;
         font-size: 18px;
+        margin-left: 5px;
+        margin-right: 5px;
     }
 
     input {
@@ -29,5 +31,32 @@ Small devices - Tablets (<768px)
         margin-bottom: 2px;
 
     }
+}
 
+/********************************
+Medium devices - Tablets (768px<=)
+********************************/
+@media screen and (min-width: 768px){
+    .main {
+        width: 60%;
+        min-height: calc(100vh - 172px);
+        font-size: 18px;
+        margin-left: auto;
+        margin-right: auto;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        text-align: center;
+    }
+
+    .main input {
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+    .main button {
+        margin-right: 10%;
+    }
+    .main a {
+        margin-left: 10%;
+    }
 }

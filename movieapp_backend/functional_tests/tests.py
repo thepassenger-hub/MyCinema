@@ -1,15 +1,17 @@
 from selenium import webdriver
+import django
 from django.test import LiveServerTestCase
 from django.core.files import File
 import unittest
-import os, sys
+import os
+import sys
+import time
+
 sys.path.append(os.getcwd())
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "movieapp_backend.settings") # or whatever
-import django
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "movieapp_backend.settings")  # or whatever
 django.setup()
 from django.contrib.auth.models import User
-from movie_app.models import Friendship, Profile
-import time
+from movie_app.models import Profile
 
 
 class NewVisitorTest(LiveServerTestCase):
@@ -33,7 +35,6 @@ class NewVisitorTest(LiveServerTestCase):
         email.send_keys('testmail@mail.com')
         button = self.browser.find_element_by_id('signup_button')
         button.click()
-        import time
         time.sleep(2)
         self.assertIn('Homepage', self.browser.title)
 
@@ -105,7 +106,7 @@ class NewVisitorTest(LiveServerTestCase):
         url = self.browser.find_element_by_id('url_input')
         rating = self.browser.find_element_by_class_name('glyphicon')
         comment = self.browser.find_element_by_id('comment_textarea')
-        send_to = self.browser.find_element_by_id('send_to_button')
+        self.browser.find_element_by_id('send_to_button')
         send_post = self.browser.find_element_by_id('send_post_button')
         title.send_keys('Ip Man')
         img.send_keys('url to image')
@@ -135,20 +136,18 @@ class NewVisitorTest(LiveServerTestCase):
         time.sleep(3)
         self.browser.find_element_by_id('name_tag')
         self.browser.find_element_by_id('toggle_change_name_form').click()
-        self.browser.find_element_by_id('change_name_button')
-        self.browser.find_element_by_id('toggle_change_avatar_form').click()
+        self.browser.find_element_by_id('submit_change_name_button')
+        self.browser.find_element_by_id('show_change_avatar_form').click()
         select_avatar = self.browser.find_element_by_id('selected_file_input')
         select_avatar.send_keys('/home/giulio/Desktop/Projects/movieapp/movieapp_backend/utils/avatar.png')
         change_avatar = self.browser.find_element_by_id('change_avatar_button')
         change_avatar.click()
         time.sleep(3)
         self.browser.find_element_by_id('avatar')
-        friend_list = self.browser.find_element_by_id('friends_list')
+        self.browser.find_element_by_id('friends_list')
         self.browser.find_element_by_id('change_password_button')
 
         self.browser.get('/login')
-
-
 
         time.sleep(2)
 
@@ -164,6 +163,7 @@ class NewVisitorTest(LiveServerTestCase):
         delete_button.click()
 
         self.fail("finish the test")
+
 
 if __name__ == '__main__':
     unittest.main(warnings='ignore')

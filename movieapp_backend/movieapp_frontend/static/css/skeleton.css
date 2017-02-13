@@ -148,6 +148,11 @@ Small devices - Tablets (<768px)
 Medium devices - Tablets (768px<=)
 ********************************/
 @media screen and (min-width: 768px){
+    .errors {
+        margin-top: 20px;
+        margin-bottom: 20px;
+        color: darkorange;
+    }
     /******Navbar*******/
     #search_friends_bar{
         width: 20vw;
@@ -164,4 +169,13 @@ Medium devices - Tablets (768px<=)
         margin-right: 10px;
     }
 
+}
+/********************************
+Large devices  (1050px<=)
+********************************/
+@media screen and (min-width: 1050px){
+    #search_friends_bar {
+        width: 30vw;
+        margin-left: 100px;
+    }
 }

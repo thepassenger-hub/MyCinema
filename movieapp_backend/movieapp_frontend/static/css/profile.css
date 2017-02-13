@@ -76,3 +76,92 @@ Small devices - Tablets (<768px)
         margin-bottom: 20px;
     }
 }
+
+/********************************
+Medium devices - Tablets (768px<=)
+********************************/
+@media screen and (min-width: 768px){
+    .main {
+        width: 70%;
+        min-height: calc(100vh - 172px);
+        font-size: 18px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    #avatar {
+        width: 25vw;
+        height: 25vw;
+        float: left;
+    }
+    #sub_profile_header {
+        overflow: hidden;
+        margin-bottom: 50px;
+    }
+    #sub_profile_header h4{
+        width: calc(100% - 25vw - 30px);
+        display: inline-block;
+        float: right;
+        margin-left: 20px;
+    }
+    #add_friend_post{
+        width: calc(100% - 25vw - 30px);
+        float:right;
+    }
+    /*****MoviePosts****/
+
+    .movie_post{
+
+        border-radius: 10px;
+        margin-bottom: 30px;
+        display: block;
+        overflow: auto;
+    }
+    .movie_post img {
+        float: right;
+        max-height: 350px;
+        max-width: 25%;
+    }
+    #movie_datetime{
+        float: right;
+    }
+
+    #hr_rating_mobile {
+        display: block;
+    }
+    hr {
+        border-top: 2px solid black;
+    }
+    #movie_rating{
+        text-align: center;
+    }
+    .glyphicon{
+        font-size: 18px;
+    }
+    .errors {
+        width: calc(100% - 25vw - 30px);
+        float: right;
+    }
+    .errors h4 {
+        width: initial !important;
+        display: initial !important;
+        float: initial !important;
+        margin-left: initial !important;
+    }
+}
+/********************************
+Large devices  (1050px<=)
+********************************/
+@media screen and (min-width: 1050px){
+    #avatar {
+        width: 15vw;
+        height: 15vw;
+    }
+
+    #sub_profile_header h4{
+        width: calc(100% - 15vw - 30px);
+    }
+    #add_friend_post{
+        width: calc(100% - 15vw - 30px);
+    }
+
+}

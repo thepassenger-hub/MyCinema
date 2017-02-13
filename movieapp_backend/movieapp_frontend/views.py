@@ -15,17 +15,19 @@ import re
 
 PASSWORD_REGEX = re.compile(r'^.{3,20}$')
 
+
 @login_required()
 def home_page(request):
     if request.method == 'GET':
-        my_movies = request.user.received_posts.all()
+        my_movies = request.user.received_posts.all().order_by('-created')
         return render(request, 'movieapp_frontend/index.html', {'my_movies': my_movies})
+
 
 @login_required()
 def new_post_page(request):
     if request.method == 'GET':
         friends = request.user.profile.get_friends()
-        return render(request, 'movieapp_frontend/newpost.html', {'friends': friends,})
+        return render(request, 'movieapp_frontend/newpost.html', {'friends': friends, })
     if request.method == 'POST':
         title = request.POST.get('title')
         image_url = request.POST.get('image_url')
@@ -75,7 +77,6 @@ def new_post_page(request):
         return render(request, 'movieapp_frontend/newpost.html', {'success': 'Post Sent'})
 
 
-
 def login_page(request):
     if request.method == 'GET':
         return render(request, 'movieapp_frontend/login.html')
@@ -102,9 +103,11 @@ def login_page(request):
             error = 'Wrong Password. Try again'
             return render(request, 'movieapp_frontend/login.html', {'error': error})
 
+
 def logout_page(request):
     logout(request)
     return redirect(home_page)
+
 
 def signup(request):
     if request.method == 'GET':
@@ -125,8 +128,8 @@ def signup(request):
 
         try:
             create_user = User.objects.create_user(username=username,
-                                            email=email,
-                                            password=password)
+                                                   email=email,
+                                                   password=password)
             Profile(user=create_user).save()
         except IntegrityError:
             error = "Username already exists"
@@ -140,6 +143,7 @@ def signup(request):
         user = authenticate(username=username, password=password)
         login(request, user)
         return redirect(home_page)
+
 
 @login_required()
 def settings_page(request):
@@ -167,6 +171,7 @@ def change_name(request):
             new_name_form.save()
             return redirect(settings_page)
 
+
 @login_required()
 def change_password(request):
     if request.method == 'POST':
@@ -184,6 +189,7 @@ def change_password(request):
                     messages.add_message(request, messages.ERROR, error)
         return redirect(settings_page)
 
+
 @login_required()
 def change_avatar(request):
     if request.method == 'POST':
@@ -196,6 +202,7 @@ def change_avatar(request):
                 messages.add_message(request, messages.ERROR, error)
         return redirect(settings_page)
 
+
 @login_required()
 def delete_account(request):
     if request.method == 'POST':
@@ -203,6 +210,7 @@ def delete_account(request):
         user.is_active = False
         user.save()
         return redirect(home_page)
+
 
 @login_required()
 def search_friends_page(request):
@@ -215,13 +223,17 @@ def search_friends_page(request):
             'search_results': search_results,
         })
 
+
 @login_required()
 def profile_page(request, user_id):
     if request.method == 'GET':
         profile_user = get_object_or_404(User, username=user_id)
+        profile_movies = profile_user.received_posts.all().order_by("-created")
         return render(request, 'movieapp_frontend/profile.html', {
             'profile_user': profile_user,
+            'profile_movies': profile_movies,
         })
+
 
 @login_required()
 def add_friend(request, friend_user_id):
@@ -237,8 +249,8 @@ def add_friend(request, friend_user_id):
             return redirect(profile_page, user_id=friend_user_id)
 
         # There must be no request from the two users already
-        already_sent = FriendshipRequest.objects.filter(Q(from_user=request.user)&Q(to_user=friend_user))
-        already_received = FriendshipRequest.objects.filter(Q(from_user=friend_user)&Q(to_user=request.user))
+        already_sent = FriendshipRequest.objects.filter(Q(from_user=request.user) & Q(to_user=friend_user))
+        already_received = FriendshipRequest.objects.filter(Q(from_user=friend_user) & Q(to_user=request.user))
         if already_sent or already_received:
             messages.add_message(request, messages.ERROR, 'A friend request is already pending.')
             return redirect(profile_page, user_id=friend_user_id)
@@ -250,6 +262,7 @@ def add_friend(request, friend_user_id):
         messages.add_message(request, messages.SUCCESS, 'Friend Request Sent')
         return redirect(profile_page, user_id=friend_user_id)
 
+
 @login_required()
 def accept_friendship(request, friend_request_id):
     if request.method == 'POST':
@@ -258,6 +271,7 @@ def accept_friendship(request, friend_request_id):
         messages.add_message(request, messages.SUCCESS, 'Friendship Accepted')
         return redirect(settings_page)
 
+
 @login_required()
 def reject_friendship(request, friend_request_id):
     if request.method == 'POST':
@@ -265,6 +279,3 @@ def reject_friendship(request, friend_request_id):
         friendship_request.reject()
         messages.add_message(request, messages.SUCCESS, 'Friendship Rejected')
         return redirect(settings_page)
-
-
-

@@ -5,14 +5,19 @@ from movie_app.models import Profile
 from django.core.exceptions import ValidationError
 
 import re
+
 PASSWORD_REGEX = re.compile(r'^.{3,20}$')
 ALLOWED_EXTENSIONS = ['image/jpeg', 'image/gif', 'image/png']
+
+
 def validate_password(password):
     if not PASSWORD_REGEX.match(password):
         raise ValidationError(_(
             'Password must be between 3 and 20 characters.'
-            )
         )
+        )
+
+
 class ChangeNameForm(forms.ModelForm):
     # new_name = forms.CharField(max_length=50, widget=forms.TextInput(attrs={'placeholder': 'Insert your name'}))
 
@@ -27,6 +32,7 @@ class ChangeNameForm(forms.ModelForm):
         labels = {
             'name': '',
         }
+
 
 class ChangePasswordForm(forms.Form):
     new_password = forms.CharField(required=True, validators=[validate_password],

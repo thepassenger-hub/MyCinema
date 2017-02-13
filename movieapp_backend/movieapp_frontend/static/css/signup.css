@@ -11,11 +11,37 @@ Small devices - Tablets (<768px)
         justify-content: center;
         text-align: center;
         font-size: 18px;
+        margin-left: 5px;
+        margin-right: 5px;
     }
     #signup_form_info{
         margin-bottom: 20px;
     }
     #signup_form input {
+        margin-bottom: 20px;
+    }
+}
+
+/********************************
+Medium devices - Tablets (768px<=)
+********************************/
+@media screen and (min-width: 768px){
+    .main {
+        width: 60%;
+        min-height: calc(100vh - 172px);
+        font-size: 18px;
+        margin-left: auto;
+        margin-right: auto;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        text-align: center;
+    }
+    .main h4 {
+        font-size: 30px;
+    }
+    #signup_form input{
+        margin-top: 20px;
         margin-bottom: 20px;
     }
 }

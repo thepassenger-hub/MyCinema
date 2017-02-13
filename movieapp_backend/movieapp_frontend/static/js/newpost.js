@@ -30,7 +30,7 @@ $(document).ready(function(){
         }
         else if ($('#rating_input').val().trim() === ''){
                 e.preventDefault(e);
-                $('#rating_input').addClass('error');
+                $('#rating_container').addClass('error');
         }
 
         $("#send_to_input").val(options);
@@ -57,6 +57,9 @@ $(document).ready(function(){
 
        return false;
     });
+
+    $('.active').removeClass('active');
+    $('#send_post').parent().addClass('active');
 });
 
 var rating_hover_in = function() {

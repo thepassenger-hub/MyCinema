@@ -234,3 +234,17 @@ Medium devices - Tablets (768px<=)
       vertical-align: middle;
     }
 }
+
+/********************************
+Large devices  (1050px<=)
+********************************/
+@media screen and (min-width: 1050px){
+    #avatar {
+        width: 15vw;
+        height: 15vw;
+    }
+    .friends_avatars{
+        width: 10vw;
+        height: 10vw;
+    }
+}

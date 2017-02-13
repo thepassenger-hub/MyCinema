@@ -1,26 +1,26 @@
-from django.test import TestCase, TransactionTestCase, Client
-from django.contrib.auth.models import User
-from django.contrib.auth import get_user
-from django.core.urlresolvers import resolve
-from django.conf import settings
-from django.core.files import File
+import os
+import re
 from importlib import import_module
-
+import django
+from django.conf import settings
+from django.contrib.auth import get_user
+from django.contrib.auth.models import User
+from django.core.files import File
+from django.core.urlresolvers import resolve
 from django.http import HttpRequest
 from django.template.loader import render_to_string
-from movieapp_frontend.views import home_page, signup, login_page, \
-    new_post_page, settings_page, change_name, change_password, profile_page, search_friends_page
+from django.test import TestCase, TransactionTestCase, Client
+
 from movie_app.models import MoviePost, Profile, Friendship, FriendshipRequest
-# Create your tests here.
-import re
-import os
+from movieapp_frontend.views import home_page, signup, login_page, \
+    new_post_page, settings_page, change_name, profile_page, search_friends_page
+
 # sys.path.append('/home/giulio/Desktop/Projects/movieapp/movieapp_backend')
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "movieapp_backend.settings") # or whatever
-import django
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "movieapp_backend.settings")  # or whatever
 django.setup()
 
-def inherit_test_case(base_class):
 
+def inherit_test_case(base_class):
     class BaseTestCase(base_class):
         def setUp(self):
             self.all_users = []
@@ -65,8 +65,8 @@ def inherit_test_case(base_class):
 
     return BaseTestCase
 
-class HomePageTest(inherit_test_case(TestCase)):
 
+class HomePageTest(inherit_test_case(TestCase)):
     @staticmethod
     def remove_csrf(html_code):
         csrf_regex = r'<input[^>]+csrfmiddlewaretoken[^>]+>'
@@ -90,7 +90,6 @@ class HomePageTest(inherit_test_case(TestCase)):
 
         response = self.c.get('/')
 
-        expected_html = render_to_string('movieapp_frontend/index.html')
         self.assertTrue(response.content.startswith(b'<!DOCTYPE html>'))
         self.assertIn(b'<title>Homepage</title>', response.content)
         self.assertTrue(response.content.endswith(b'</html>'))
@@ -102,6 +101,7 @@ class HomePageTest(inherit_test_case(TestCase)):
         self.assertRedirects(response, '/login?next=/')
         response = self.c.get('/')
         self.assertEqual(302, response.status_code)
+
 
 class SignUpPageTest(inherit_test_case(TransactionTestCase)):
     @staticmethod
@@ -122,12 +122,11 @@ class SignUpPageTest(inherit_test_case(TransactionTestCase)):
         # self.assertEqual(self.remove_csrf(response.content.decode()), expected_html)
 
     def test_sign_up_page_can_post_new_users_and_redirects(self):
-
         response = self.c.post('/signup/',
-                          {'username': 'testusername',
-                           'password': 'testpassword',
-                           'verify_password': 'testpassword',
-                           'email': 'testemail@email.com'}, follow=True)
+                               {'username': 'testusername',
+                                'password': 'testpassword',
+                                'verify_password': 'testpassword',
+                                'email': 'testemail@email.com'}, follow=True)
 
         user = User.objects.get(username='testusername')
         self.assertEqual(user.username, 'testusername')
@@ -172,8 +171,8 @@ class SignUpPageTest(inherit_test_case(TransactionTestCase)):
         users = User.objects.all()
         self.assertEqual(3, len(users))
 
-class LoginPageTest(inherit_test_case(TestCase)):
 
+class LoginPageTest(inherit_test_case(TestCase)):
     @staticmethod
     def remove_csrf(html_code):
         csrf_regex = r'<input[^>]+csrfmiddlewaretoken[^>]+>'
@@ -185,7 +184,6 @@ class LoginPageTest(inherit_test_case(TestCase)):
 
     def test_login_page_returns_correct_html(self):
         response = self.c.get('/login', follow=True)
-        expected_html = render_to_string('movieapp_frontend/login.html')
 
         self.assertTrue(response.content.startswith(b'<!DOCTYPE html>'))
         self.assertIn(b'<title>Login</title>', response.content)
@@ -194,23 +192,23 @@ class LoginPageTest(inherit_test_case(TestCase)):
 
     def test_login_correctly_logs_user_in(self):
         self.c.logout()
-        response = self.c.post('/login', {'username': 'aaa', 'password': 'aaa' }, follow=True)
+        response = self.c.post('/login', {'username': 'aaa', 'password': 'aaa'}, follow=True)
         self.assertRedirects(response, '/', status_code=302, target_status_code=200)
         self.assertIn(b'<title>Homepage</title>', response.content)
 
     def test_cannot_loging_with_invalid_input(self):
         c = Client()
-        response = c.post('/login', {'username': '', 'password': 'testpw' }, follow=True)
+        response = c.post('/login', {'username': '', 'password': 'testpw'}, follow=True)
         self.assertIn('Invalid Username', response.content.decode())
-        response = c.post('/login', {'username': 'test', 'password': '' }, follow=True)
+        response = c.post('/login', {'username': 'test', 'password': ''}, follow=True)
         self.assertIn('Invalid Password', response.content.decode())
         response = c.post('/login', {'username': 'asd', 'password': 'testpw'}, follow=True)
         self.assertIn("Username doesn&#39;t exist", response.content.decode())
         response = c.post('/login', {'username': 'aaa', 'password': 'testpw2'}, follow=True)
         self.assertIn("Wrong Password. Try again", response.content.decode())
 
-class SendPostPageTest(inherit_test_case(TestCase)):
 
+class SendPostPageTest(inherit_test_case(TestCase)):
     def create_three_friends(self):
         self.create_third_user()
         self.make_all_users_friends()
@@ -223,13 +221,12 @@ class SendPostPageTest(inherit_test_case(TestCase)):
             'image_url': 'url to image',
             'url': 'http://www.imdb.com/title/tt1220719/',
             'rating': 8,
-            'content': 'One of the best fighting movies I have ever seen.',
+            'comment': 'One of the best fighting movies I have ever seen.',
             'send_to': send_to,
         }
 
         response = self.c.post('/newpost', movie_post)
         return response
-
 
     @staticmethod
     def remove_csrf(html_code):
@@ -249,7 +246,7 @@ class SendPostPageTest(inherit_test_case(TestCase)):
     #     self.assertEqual(self.remove_csrf(response.content.decode()), expected_html)
 
     def test_sending_post_to_view_creates_post_in_db_and_is_received(self):
-        aaa,bbb,ccc = self.create_three_friends()
+        aaa, bbb, ccc = self.create_three_friends()
         response = self.aaa_sends_movie_post()
 
         movie = MoviePost.objects.all()
@@ -264,8 +261,7 @@ class SendPostPageTest(inherit_test_case(TestCase)):
         self.assertIn('Post Sent', response.content.decode())
 
     def test_user_friendship_is_working(self):
-
-        aaa,bbb,ccc = self.create_three_friends()
+        aaa, bbb, ccc = self.create_three_friends()
 
         self.assertEqual(aaa.profile.get_friends(), [bbb, ccc])
         self.assertEqual(bbb.profile.get_friends(), [aaa, ccc])
@@ -277,7 +273,7 @@ class SendPostPageTest(inherit_test_case(TestCase)):
         self.assertEqual(0, len(Friendship.objects.all()))
 
     def test_deleting_users_and_post_working_correctly(self):
-        aaa,bbb,ccc = self.create_three_friends()
+        aaa, bbb, ccc = self.create_three_friends()
         self.aaa_sends_movie_post()
         bbb.delete()
         movie = MoviePost.objects.all()
@@ -297,7 +293,7 @@ class SendPostPageTest(inherit_test_case(TestCase)):
         self.assertIn('This field is required', response.content.decode())
 
     def test_cannot_send_to_user_that_isnt_my_friend(self):
-        aaa,bbb,ccc = self.create_three_friends()
+        aaa, bbb, ccc = self.create_three_friends()
         bbb.friend_set.all()[0].delete()
         self.assertNotIn(bbb, aaa.profile.get_friends())
         self.aaa_sends_movie_post()
@@ -305,7 +301,7 @@ class SendPostPageTest(inherit_test_case(TestCase)):
         self.assertEqual(1, len(ccc.received_posts.all()))
 
     def test_empty_send_to_sends_to_all_friends(self):
-        aaa,bbb,ccc = self.create_three_friends()
+        aaa, bbb, ccc = self.create_three_friends()
         ddd = User.objects.create_user(username='ddd', password='whocares')
         self.aaa_sends_movie_post(send_to='')
         movie = MoviePost.objects.all()[0]
@@ -316,13 +312,12 @@ class SendPostPageTest(inherit_test_case(TestCase)):
 
 
 class SettingsPageTest(inherit_test_case(TestCase)):
-
     def create_logged_in_client(self):
         aaa = User.objects.create_user('aaa', password='aaa')
         Profile(user=aaa).save()
         c = Client()
         c.login(username='aaa', password='aaa')
-        return c,aaa
+        return c, aaa
 
     def test_settings_url_resolves_to_correct_view(self):
         found = resolve('/settings')
@@ -361,21 +356,21 @@ class SettingsPageTest(inherit_test_case(TestCase)):
     def test_user_change_password_updates_pw_in_db_and_current_session_cookie(self):
         old_password = self.aaa.password
         response = self.c.post('/settings/change_password/',
-                          {'new_password': '',}, follow=True)
+                               {'new_password': '', }, follow=True)
         self.assertRedirects(response, '/settings')
         self.assertIn('This field is required.', response.content.decode())
         response = self.c.post('/settings/change_password/',
-                          {'new_password': 'mynewpassword', }, follow=True)
+                               {'new_password': 'mynewpassword', }, follow=True)
         self.assertRedirects(response, '/settings')
         self.assertIn('This field is required.', response.content.decode())
         response = self.c.post('/settings/change_password/',
-                          {'new_password': 'aa',
-                           'verify_new_password': 'aa'}, follow=True)
+                               {'new_password': 'aa',
+                                'verify_new_password': 'aa'}, follow=True)
         self.assertRedirects(response, '/settings')
         self.assertIn('between 3 and 20', response.content.decode())
         response = self.c.post('/settings/change_password/',
-                          {'new_password': 'mynewpassword',
-                           'verify_new_password': 'mynewpassword'}, follow=True)
+                               {'new_password': 'mynewpassword',
+                                'verify_new_password': 'mynewpassword'}, follow=True)
         aaa = User.objects.get(username='aaa')
         self.assertNotEqual(old_password, aaa.password)
         self.assertNotEqual(aaa.password, 'mynewpassword')
@@ -389,7 +384,6 @@ class SettingsPageTest(inherit_test_case(TestCase)):
         self.assertEqual(self.aaa.profile.avatar.url, '/avatar_images/avatar.svg')
 
         with open('utils/avatar_2.png', 'rb') as fp:
-
             response = self.c.post('/settings/change_avatar/', {
                 'avatar': fp,
             }, follow=True, format='multipart')
@@ -427,8 +421,8 @@ class SettingsPageTest(inherit_test_case(TestCase)):
         self.assertFalse(User.objects.get(username='aaa').is_active)
         self.assertRedirects(response, '/login?next=/')
 
-class SearchFriendsPageTest(inherit_test_case(TestCase)):
 
+class SearchFriendsPageTest(inherit_test_case(TestCase)):
     def test_search_friends_page_url_resolves_correct_view(self):
         found = resolve('/search_friends/')
         self.assertEqual(found.func, search_friends_page)
@@ -443,8 +437,8 @@ class SearchFriendsPageTest(inherit_test_case(TestCase)):
         self.assertIn('Test Name', response.content.decode())
         self.assertIn('avatar_2', response.content.decode())
 
-class ProfilePageTest(inherit_test_case(TestCase)):
 
+class ProfilePageTest(inherit_test_case(TestCase)):
     def test_profile_page_url_resolves_correct_view(self):
         found = resolve('/profile/randomuser/')
         self.assertEqual(found.func, profile_page)
@@ -475,13 +469,13 @@ class ProfilePageTest(inherit_test_case(TestCase)):
         self.assertIn(self.aaa, self.bbb.profile.get_friends())
         self.assertTrue(Friendship.objects.filter(creator=self.aaa, friend=self.bbb))
         self.assertIn('aaa', response.content.decode())
-        response = self.c.post('/friend/reject/%d/' % f2.pk)
+        self.c.post('/friend/reject/%d/' % f2.pk)
         self.assertEqual(1, len(self.bbb.profile.get_friends()))
         self.assertNotIn(self.ccc, self.bbb.profile.get_friends())
         self.assertFalse(Friendship.objects.filter(creator=self.ccc, friend=self.bbb))
 
     def test_cannot_send_send_more_than_one_request_to_same_user(self):
-        response = self.c.post('/friend/add/bbb/', follow=True)
+        self.c.post('/friend/add/bbb/', follow=True)
         response = self.c.post('/friend/add/bbb/', follow=True)
         self.assertIn('A friend request is already pending.', response.content.decode())
         self.assertEqual(1, len(FriendshipRequest.objects.all()))
@@ -492,20 +486,3 @@ class ProfilePageTest(inherit_test_case(TestCase)):
         response = self.c.post('/friend/add/ccc/', follow=True)
         self.assertIn('You are already friends.', response.content.decode())
         self.assertFalse(FriendshipRequest.objects.all())
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

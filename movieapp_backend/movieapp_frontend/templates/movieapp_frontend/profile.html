@@ -23,24 +23,24 @@
             {% csrf_token %}
             <button class="btn btn-default" type="submit" id="add_friend_button">ADD AS FRIEND</button>
         </form>
+        {% if messages %}
+            <div class="errors">
+                {% for message in messages %}
+                    <h4><strong>{{ message }}</strong></h4>
+                {% endfor %}
+            </div>
+        {% endif %}
     </div>
-    {% if messages %}
-        <div class="errors">
-            {% for message in messages %}
-                <h4>{{ message }}</h4>
-            {% endfor %}
-        </div>
-    {% endif %}
     <div class="sub_profile" id="sub_profile_posts">
-        {% if profile_user.received_posts.all %}
-            {% for movie in profile_user.received_posts.all %}
+        {% if profile_movies %}
+            {% for movie in profile_movies %}
                 <div class="movie_post">
+                    <img src="{{movie.image_url}}" id="movie_image" />
                     <h6 id="movie_datetime">{{movie.created}}</h6>
                     <h4 id="from_user">From: {{movie.user}}</h4>
                     <hr id="hr_from_user">
                     <h4 id="movie_title">{{movie.title}}</h4>
                     <hr id="hr_title">
-                    <h4 id="movie_image">{{movie.image_url}}</h4>
                     <div class='movie_rating' id="movie_rating">
                         <span class='movie_rating_int' id="movie_rating_int">{{movie.rating}}</span>
                     </div>

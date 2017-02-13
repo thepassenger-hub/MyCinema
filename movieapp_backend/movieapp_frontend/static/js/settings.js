@@ -27,4 +27,7 @@ $(document).ready(function(){
     $('#change_password_button').click(function(){
         $("#change_password_form").toggle();
     });
+
+    $('.active').removeClass('active');
+    $('#dropdown_settings_link').parent().addClass('active');
 });

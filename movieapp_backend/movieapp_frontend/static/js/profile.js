@@ -4,6 +4,8 @@ $(document).ready(function(){
         convertToStars(i);
       }
 
+    $('.active').removeClass('active');
+    $('#username').parent().addClass('active');
 
 });
 

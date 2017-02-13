@@ -15,21 +15,25 @@ class MoviePost(models.Model):
     content = models.TextField(blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(null=True, blank=True)
+
     class Meta:
         db_table = 'movie_post'
+
 
 class Friendship(models.Model):
     created = models.DateTimeField(auto_now_add=True, editable=False)
     creator = models.ForeignKey(User, related_name="friendship_creator_set")
     friend = models.ForeignKey(User, related_name="friend_set")
 
+
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=50, blank=True, null=True)
     avatar = models.ImageField(default="avatar.svg")
+
     def get_friends(self):
         user = self.user
-        friendships = Friendship.objects.filter(models.Q(creator=user)|models.Q(friend=user))
+        friendships = Friendship.objects.filter(models.Q(creator=user) | models.Q(friend=user))
         friends = []
         for x in friendships:
             if x.creator == user:
@@ -38,7 +42,9 @@ class Profile(models.Model):
                 friends.append(x.creator)
         return friends
 
+
 class FriendshipRequest(models.Model):
+
     from_user = models.ForeignKey(User, related_name="friendship_requests_sent")
     to_user = models.ForeignKey(User, related_name="friendship_requests_received")
     created = models.DateTimeField(auto_now_add=True)
@@ -74,5 +80,3 @@ class FriendshipRequest(models.Model):
         self.viewed = timezone.now()
         self.save()
         return True
-
-

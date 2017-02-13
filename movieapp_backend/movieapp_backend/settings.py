@@ -33,7 +33,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['testserver', '127.0.0.1', '*']
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -46,7 +45,6 @@ INSTALLED_APPS = [
     'movie_app',
     'utils',
 ]
-
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -78,18 +76,17 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'movieapp_backend.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/1.10/ref/settings/#databases
 
 
 DATABASES = {
-	'default': {
+    'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'movie_app',
         'TEST': {
-                    'NAME': 'test_movie_app',
-                },
+            'NAME': 'test_movie_app',
+        },
     }
 }
 
@@ -126,13 +123,11 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [STATIC_DIR,]
+STATICFILES_DIRS = [STATIC_DIR, ]
 
 MEDIA_URL = '/avatar_images/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'avatar_images/')
-
