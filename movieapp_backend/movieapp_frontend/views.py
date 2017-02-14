@@ -10,6 +10,7 @@ from django.db import IntegrityError  # create_user postgres custom exception
 from movie_app.models import MoviePost, Profile, FriendshipRequest
 from utils.scraper import get_image
 from utils.regex_matching import are_params_invalid, are_fields_invalid
+from utils.utils import get_friendship
 from .forms import ChangeNameForm, ChangePasswordForm, ChangeAvatarForm
 import re
 
@@ -26,6 +27,7 @@ def home_page(request):
 @login_required()
 def new_post_page(request):
     if request.method == 'GET':
+        print (request.META.get('HTTP_REFERER'))
         friends = request.user.profile.get_friends()
         return render(request, 'movieapp_frontend/newpost.html', {'friends': friends, })
     if request.method == 'POST':
@@ -279,3 +281,18 @@ def reject_friendship(request, friend_request_id):
         friendship_request.reject()
         messages.add_message(request, messages.SUCCESS, 'Friendship Rejected')
         return redirect(settings_page)
+
+@login_required()
+def delete_friend(request, friend_user_id):
+    if request.method == 'POST':
+        friend = get_object_or_404(username=friend_user_id)
+        if friend in request.user.profile.get_friends():
+            friendship = get_friendship(request.user, friend)
+            friendship.delete()
+            messages.add_message(request, messages.SUCCESS, '%s is not your friend anymore.' % (friend))
+            return redirect(request.META.get('HTTP_REFERER', '/'))
+        else:
+            messages.add_message(request, messages.ERROR, 'You and %s are not friends.' % (friend))
+            return redirect(request.META.get('HTTP_REFERER', '/'))
+
+
