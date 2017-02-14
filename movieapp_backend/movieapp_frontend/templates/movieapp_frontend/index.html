@@ -10,6 +10,12 @@
 {% block body %}
 <div class="main">
     <div id="sidenav_left" class="sidenav"></div>
+    <div class="input-group" id="filter_posts">
+        <span class="input-group-btn" id="filter_posts_field">
+            <button class="btn btn-default filter_posts_field" value="movie_title" type="button" ></button>
+        </span>
+        <input type="text" class="form-control" id="filter_posts_input" placeholder="Search for posts.." />
+    </div>
     {% for movie in my_movies %}
         <div class="movie_post">
             <img src="{{movie.image_url}}" id="movie_image" />

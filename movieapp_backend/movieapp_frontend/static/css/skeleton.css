@@ -119,10 +119,6 @@ Small devices - Tablets (<768px)
         background-color: #c96b0b;
       }
 
-    button {
-        border: 1px solid #333 !important;
-    }
-
     .errors {
         margin-top: 20px;
         margin-bottom: 20px;
