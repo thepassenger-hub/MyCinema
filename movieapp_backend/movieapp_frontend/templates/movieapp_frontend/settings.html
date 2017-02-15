@@ -56,6 +56,24 @@
             <div class="friend_profile">
                 <img class="friends_avatars" src="/avatar_images/{{friend.profile.avatar}}" />
                 <a href="{% url 'profile_page' user_id=friend.username %}">{{friend}}</a>
+                <button class="btn btn-danger" data-toggle="modal" data-target="#delete_friend_modal" type="button" id="show_delete_friend_modal">Remove</button>
+                <div id="delete_friend_modal" class="modal fade" tabindex="-1" role="dialog">
+                  <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                      <div class="modal-body">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4>Are you sure you want to remove {{friend.username}} from your friendlist?</h4>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-default" id="close_modal_button" data-dismiss="modal">No</button>
+                        <form id="delete_friend_form" method="post" action="{% url 'delete_friend' friend_user_id=friend.username %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger" id="delete_friend_button">Yes, I am sure</button>
+                        </form>
+                      </div>
+                    </div><!-- /.modal-content -->
+                  </div><!-- /.modal-dialog -->
+                </div><!-- /.modal -->
             </div>
         {% endfor %}
     </div>

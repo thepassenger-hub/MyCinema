@@ -42,9 +42,32 @@ Small devices - Tablets (<768px)
         float: left;
     }
     #add_friend_post{
-        width: calc(65vw - 10px);
-        float:right;
+        width: calc(65vw - 30px);
+        float: right;
+        margin-left: 20px;
+    }
+    #show_delete_friend_modal {
+        margin-left: 20px;
+    }
+
+    div.modal-body {
         text-align: center;
+    }
+    div.modal-body h4 {
+        width: initial !important;
+        display: initial !important;
+        float: initial !important;
+        margin-left: 20px !important;
+    }
+    #delete_friend_button {
+        margin-right: 10px;
+        float: right;
+    }
+
+    #close_modal_button {
+        float: left;
+        margin-left: 10px;
+        margin-bottom: 0;
     }
     .movie_post {
         border-radius: 10px;
@@ -106,6 +129,46 @@ Medium devices - Tablets (768px<=)
     #add_friend_post{
         width: calc(100% - 25vw - 30px);
         float:right;
+    }
+    #show_delete_friend_modal {
+        margin-left: 30px;
+    }
+
+    div.modal-body {
+        text-align: center;
+    }
+    div.modal-body h4 {
+        width: initial !important;
+        display: initial !important;
+        float: initial !important;
+        margin-left: 20px !important;
+    }
+    #close_modal_button {
+        float: left;
+        margin-left: 50px;
+        margin-bottom: 0;
+    }
+
+    #delete_friend_button {
+        margin-right: 50px;
+    }
+    .modal {
+      text-align: center;
+      padding: 0!important;
+    }
+
+    .modal:before {
+      content: '';
+      display: inline-block;
+      height: 100%;
+      vertical-align: middle;
+      margin-right: -4px;
+    }
+
+    .modal-dialog {
+      display: inline-block;
+      text-align: left;
+      vertical-align: middle;
     }
     /*****MoviePosts****/
 

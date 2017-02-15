@@ -66,6 +66,9 @@ Small devices - Tablets (<768px)
     .friend_profile{
         margin-bottom: 2px;
     }
+    .friend_profile .btn.btn-danger {
+        margin-left: 20%;
+    }
     .friends_avatars {
         width: 15vw;
         height: 15vw;
@@ -146,6 +149,12 @@ Medium devices - Tablets (768px<=)
     #change_name_form{
         width: calc(100% - 136px);
         float: right;
+    }
+    .friend_profile .btn.btn-danger {
+        margin-left: 20%;
+    }
+    .friend_profile .modal-body {
+        text-align: center;
     }
     .friends_avatars{
         width: 15vw;

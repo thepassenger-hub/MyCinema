@@ -52,6 +52,19 @@ def inherit_test_case(base_class):
             except:
                 pass
 
+        def aaa_sends_movie_post(self, send_to='bbb,ccc'):
+            movie_post = {
+                'title': 'Ip Man',
+                'image_url': 'url to image',
+                'url': 'http://www.imdb.com/title/tt1220719/',
+                'rating': 8,
+                'comment': 'One of the best fighting movies I have ever seen.',
+                'send_to': send_to,
+            }
+
+            response = self.c.post('/newpost', movie_post)
+            return response
+
         def tearDown(self):
             self.c.logout()
 
@@ -115,7 +128,7 @@ class SignUpPageTest(inherit_test_case(TransactionTestCase)):
 
     def test_sign_up_page_returns_correct_html(self):
         response = self.c.get('/signup')
-        expected_html = render_to_string('movieapp_frontend/signup.html')
+        render_to_string('movieapp_frontend/signup.html')
         self.assertTrue(response.content.startswith(b'<!DOCTYPE html>'))
         self.assertIn(b'<title>Signup</title>', response.content)
         self.assertTrue(response.content.endswith(b'</html>'))
@@ -215,19 +228,6 @@ class SendPostPageTest(inherit_test_case(TestCase)):
 
         return self.aaa, self.bbb, self.ccc
 
-    def aaa_sends_movie_post(self, send_to='bbb,ccc'):
-        movie_post = {
-            'title': 'Ip Man',
-            'image_url': 'url to image',
-            'url': 'http://www.imdb.com/title/tt1220719/',
-            'rating': 8,
-            'comment': 'One of the best fighting movies I have ever seen.',
-            'send_to': send_to,
-        }
-
-        response = self.c.post('/newpost', movie_post)
-        return response
-
     @staticmethod
     def remove_csrf(html_code):
         csrf_regex = r'<input[^>]+csrfmiddlewaretoken[^>]+>'
@@ -236,14 +236,6 @@ class SendPostPageTest(inherit_test_case(TestCase)):
     def test_new_post_url_resolves_to_new_post_page_view(self):
         found = resolve('/newpost')
         self.assertEqual(found.func, new_post_page)
-
-    # def test_new_post_url_returns_correct_template(self):
-    #     # c = Client()
-    #     # User.objects.create_user('aaa', password='aaa')
-    #     # c.login(username='aaa', password='aaa')
-    #     response = self.c.get('/newpost')
-    #     expected_html = render_to_string('movieapp_frontend/newpost.html')
-    #     self.assertEqual(self.remove_csrf(response.content.decode()), expected_html)
 
     def test_sending_post_to_view_creates_post_in_db_and_is_received(self):
         aaa, bbb, ccc = self.create_three_friends()
@@ -264,10 +256,14 @@ class SendPostPageTest(inherit_test_case(TestCase)):
         aaa, bbb, ccc = self.create_three_friends()
 
         self.assertEqual(aaa.profile.get_friends(), [bbb, ccc])
+        self.assertTrue(aaa.profile.is_friend(bbb))
         self.assertEqual(bbb.profile.get_friends(), [aaa, ccc])
+        self.assertTrue(aaa.profile.is_friend(ccc))
         self.assertEqual(ccc.profile.get_friends(), [bbb, aaa])
+        self.assertTrue(ccc.profile.is_friend(bbb))
         Friendship.objects.get(creator=bbb).delete()
         self.assertEqual(ccc.profile.get_friends(), [aaa])
+        self.assertFalse(bbb.profile.is_friend(ccc))
         User.objects.get(username='aaa').delete()
         self.assertEqual(len(ccc.profile.get_friends()), 0)
         self.assertEqual(0, len(Friendship.objects.all()))
@@ -480,9 +476,23 @@ class ProfilePageTest(inherit_test_case(TestCase)):
         self.assertIn('A friend request is already pending.', response.content.decode())
         self.assertEqual(1, len(FriendshipRequest.objects.all()))
 
+    def test_cannot_add_yourself(self):
+        response = self.c.post('/friend/add/aaa/', follow=True)
+        self.assertIn("You can&#39;t add yourself.", response.content.decode())
+        self.assertFalse(self.aaa.profile.is_friend(self.aaa))
+
     def test_cannot_send_friend_request_if_already_friends(self):
         self.create_third_user()
         self.create_friendship(self.aaa, self.ccc)
         response = self.c.post('/friend/add/ccc/', follow=True)
         self.assertIn('You are already friends.', response.content.decode())
         self.assertFalse(FriendshipRequest.objects.all())
+
+    def test_can_remove_users_from_friendlist_and_relation_are_deleted(self):
+        self.make_all_users_friends()
+        self.aaa_sends_movie_post()
+        self.assertEqual(1, len(self.bbb.received_posts.all()))
+        self.c.post('/friend/delete/bbb/', follow=True)
+        self.assertNotIn(self.bbb, self.aaa.profile.get_friends())
+        self.assertEqual(0, len(self.bbb.received_posts.all()))
+

@@ -27,7 +27,6 @@ def home_page(request):
 @login_required()
 def new_post_page(request):
     if request.method == 'GET':
-        print (request.META.get('HTTP_REFERER'))
         friends = request.user.profile.get_friends()
         return render(request, 'movieapp_frontend/newpost.html', {'friends': friends, })
     if request.method == 'POST':
@@ -231,9 +230,11 @@ def profile_page(request, user_id):
     if request.method == 'GET':
         profile_user = get_object_or_404(User, username=user_id)
         profile_movies = profile_user.received_posts.all().order_by("-created")
+        is_friend = profile_user.profile.is_friend(request.user)
         return render(request, 'movieapp_frontend/profile.html', {
             'profile_user': profile_user,
             'profile_movies': profile_movies,
+            'is_friend': is_friend,
         })
 
 
@@ -285,7 +286,7 @@ def reject_friendship(request, friend_request_id):
 @login_required()
 def delete_friend(request, friend_user_id):
     if request.method == 'POST':
-        friend = get_object_or_404(username=friend_user_id)
+        friend = get_object_or_404(User, username=friend_user_id)
         if friend in request.user.profile.get_friends():
             friendship = get_friendship(request.user, friend)
             friendship.delete()

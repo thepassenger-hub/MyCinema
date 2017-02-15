@@ -25,11 +25,23 @@ class Friendship(models.Model):
     creator = models.ForeignKey(User, related_name="friendship_creator_set")
     friend = models.ForeignKey(User, related_name="friend_set")
 
+    def delete(self):
+        user = self.creator
+        friend = self.friend
+        for post in user.received_posts.filter(user=friend):
+            post.send_to.remove(user)
+        for post in friend.received_posts.filter(user=user):
+            post.send_to.remove(friend)
+        super(Friendship, self).delete()
+
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=50, blank=True, null=True)
     avatar = models.ImageField(default="avatar.svg")
+
+    def is_friend(self, friend):
+        return friend in self.user.profile.get_friends()
 
     def get_friends(self):
         user = self.user

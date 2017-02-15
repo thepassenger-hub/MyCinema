@@ -19,10 +19,31 @@
                 Not set yet.
             {% endif %}
         </h4>
-        <form id="add_friend_post" action="{% url 'add_friend' friend_user_id=profile_user.username %}" method="post">
-            {% csrf_token %}
-            <button class="btn btn-default" type="submit" id="add_friend_button">ADD AS FRIEND</button>
-        </form>
+        {% if is_friend %}
+
+            <button class="btn btn-danger" data-toggle="modal" data-target="#delete_friend_modal" type="button" id="show_delete_friend_modal">Remove from friendlist</button>
+            <div id="delete_friend_modal" class="modal fade" tabindex="-1" role="dialog">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-body">
+                    <h4>Are you sure you want to remove {{profile_user.username}} from your friendlist?</h4>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-default" id="close_modal_button" data-dismiss="modal">No</button>
+                    <form id="delete_friend_form" method="post" action="{% url 'delete_friend' friend_user_id=profile_user.username %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger" id="delete_friend_button">Yes, I am sure</button>
+                    </form>
+                  </div>
+                </div><!-- /.modal-content -->
+              </div><!-- /.modal-dialog -->
+            </div><!-- /.modal -->
+        {% else %}
+            <form id="add_friend_post" action="{% url 'add_friend' friend_user_id=profile_user.username %}" method="post">
+                {% csrf_token %}
+                <button class="btn btn-default" type="submit" id="add_friend_button">ADD AS FRIEND</button>
+            </form>
+        {% endif %}
         {% if messages %}
             <div class="errors">
                 {% for message in messages %}
