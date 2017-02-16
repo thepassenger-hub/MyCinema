@@ -37,7 +37,9 @@ $(document).ready(function(){
     });
 
     var options = [];
-
+    $('.dropdown-menu').on('hide.bs.dropdown', function () {
+        return false;
+    });
     $( '.dropdown-menu a' ).on( 'click', function( event ) {
 
        var $target = $( event.currentTarget ),

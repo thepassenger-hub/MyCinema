@@ -97,6 +97,9 @@ Medium devices - Tablets (768px<=)
 Large devices  (1050px<=)
 ********************************/
 @media screen and (min-width: 1050px){
+    #search_friends_form_2 input {
+        margin-left: 0;
+    }
     img.avatar {
         width: 10vw;
         height: 10vw;

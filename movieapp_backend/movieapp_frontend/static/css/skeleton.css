@@ -153,6 +153,9 @@ Medium devices - Tablets (768px<=)
     #search_friends_bar{
         width: 20vw;
     }
+    /************
+        Footer
+    ************/
     footer {
         text-align: center;
         height: 100px;

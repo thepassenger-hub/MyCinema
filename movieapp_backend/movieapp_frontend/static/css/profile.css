@@ -11,7 +11,9 @@
 #movie_rating_int{
     display: none;
 }
-
+#no_posts_tag{
+    text-align: center;
+}
 /********************************
 Small devices - Tablets (<768px)
 ********************************/

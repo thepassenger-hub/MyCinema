@@ -20,3 +20,21 @@ def get_image(title):
         return res['items'][0]['link']
     except:
         return None
+
+def get_link(title):
+    # Build a service object for interacting with the API. Visit
+    # the Google APIs Console <http://code.google.com/apis/console>
+    # to get an API key for your own application.
+    service = build("customsearch", "v1",
+                    developerKey=API_KEY)
+
+    res = service.cse().list(
+        q=title + ' imdb',
+        cx=ENGINE_CX,
+        num=1
+    ).execute()
+
+    try:
+        return res['items'][0]['link']
+    except:
+        return None

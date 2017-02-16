@@ -8,7 +8,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db import IntegrityError  # create_user postgres custom exception
 
 from movie_app.models import MoviePost, Profile, FriendshipRequest
-from utils.scraper import get_image
+from utils.scraper import get_image, get_link
 from utils.regex_matching import are_params_invalid, are_fields_invalid
 from utils.utils import get_friendship
 from .forms import ChangeNameForm, ChangePasswordForm, ChangeAvatarForm
@@ -31,10 +31,11 @@ def new_post_page(request):
         return render(request, 'movieapp_frontend/newpost.html', {'friends': friends, })
     if request.method == 'POST':
         title = request.POST.get('title')
-        image_url = request.POST.get('image_url')
+        image_url = request.POST.get('img').strip()
         rating = request.POST.get('rating')
         content = request.POST.get('comment')
         send_to = request.POST.get('send_to')
+        url = request.POST.get('url').strip()
         user = request.user
 
         error = are_fields_invalid(title, rating)
@@ -49,11 +50,14 @@ def new_post_page(request):
         movie_post = MoviePost()
         movie_post.title = title
         movie_post.rating = int(rating)
-        if image_url is None:
+        if image_url == '':
             image_url = get_image(title)
         movie_post.image_url = image_url
         movie_post.content = content
         movie_post.user = user
+        if url == '':
+            url = get_link(title)
+        movie_post.url = url
         movie_post.save()
 
         # Choose which friends will receive the post.

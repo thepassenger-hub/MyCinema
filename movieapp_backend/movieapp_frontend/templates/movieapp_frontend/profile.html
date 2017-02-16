@@ -65,13 +65,17 @@
                     <div class='movie_rating' id="movie_rating">
                         <span class='movie_rating_int' id="movie_rating_int">{{movie.rating}}</span>
                     </div>
+                    {% if movie.url %}
+                        <hr>
+                        <h4 id="movie_link"><a href="{{movie.url}}">{{movie.url}}</a></h4>
+                    {% endif %}
                     <hr id="hr_rating_mobile">
                     <h4 id="movie_content">{{movie.content}}</h4>
                 </div>
             {% endfor %}
 
         {% else %}
-        <h4>This user never received a post.</h4>
+        <h4 id="no_posts_tag">This user never received a post.</h4>
         {% endif %}
     </div>
 </div>

@@ -10,6 +10,7 @@ class MoviePost(models.Model):
     title = models.CharField(max_length=100)
     image_url = models.CharField(max_length=255, blank=True, null=True)
     rating = models.IntegerField()
+    url = models.CharField(max_length=255, blank=True, null=True)
     user = models.ForeignKey(User, related_name='posts')
     send_to = models.ManyToManyField(User, related_name='received_posts')
     content = models.TextField(blank=True, null=True)

@@ -10,27 +10,36 @@
 {% block body %}
 <div class="main">
     <div id="sidenav_left" class="sidenav"></div>
-    <div class="input-group" id="filter_posts">
-        <span class="input-group-btn" id="filter_posts_field">
-            <button class="btn btn-default filter_posts_field" value="movie_title" type="button" ></button>
-        </span>
-        <input type="text" class="form-control" id="filter_posts_input" placeholder="Search for posts.." />
-    </div>
-    {% for movie in my_movies %}
-        <div class="movie_post">
-            <img src="{{movie.image_url}}" id="movie_image" />
-            <h6 id="movie_datetime">{{movie.created}}</h6>
-            <h4 id="from_user">From: {{movie.user}}</h4>
-            <hr id="hr_from_user">
-            <h4 id="movie_title">{{movie.title}}</h4>
-            <hr id="hr_title">
-            <div class='movie_rating' id="movie_rating">
-                <span class='movie_rating_int' id="movie_rating_int">{{movie.rating}}</span>
-            </div>
-            <hr id="hr_rating_mobile">
-            <h4 id="movie_content">{{movie.content}}</h4>
+    {% if my_movies %}
+        <div class="input-group" id="filter_posts">
+            <span class="input-group-btn" id="filter_posts_field">
+                <button class="btn btn-default filter_posts_field" value="movie_title" type="button" ></button>
+            </span>
+            <input type="text" class="form-control" id="filter_posts_input" placeholder="Search for posts.." />
         </div>
-    {% endfor %}
+
+        {% for movie in my_movies %}
+            <div class="movie_post">
+                <img src="{{movie.image_url}}" id="movie_image" />
+                <h6 id="movie_datetime">{{movie.created}}</h6>
+                <h4 id="from_user">From: {{movie.user}}</h4>
+                <hr id="hr_from_user">
+                <h4 id="movie_title">{{movie.title}}</h4>
+                <hr id="hr_title">
+                <div class='movie_rating' id="movie_rating">
+                    <span class='movie_rating_int' id="movie_rating_int">{{movie.rating}}</span>
+                </div>
+                {% if movie.url %}
+                    <hr>
+                    <h4 id="movie_link"><a href="{{movie.url}}">{{movie.url}}</a></h4>
+                {% endif %}
+                <hr id="hr_rating_mobile">
+                <h4 id="movie_content">{{movie.content}}</h4>
+            </div>
+        {% endfor %}
+        {% else %}
+            <div id="no_posts_img"></div>
+        {% endif %}
     <div id="sidenav_right" class="sidenav"></div>
 
 </div>
