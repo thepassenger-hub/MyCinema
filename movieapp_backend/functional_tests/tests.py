@@ -15,6 +15,22 @@ from movie_app.models import Profile
 
 
 class NewVisitorTest(LiveServerTestCase):
+    @classmethod
+    def setUpClass(cls):
+
+        for arg in sys.argv:
+            if 'liveserver' in arg:
+                cls.server_url = 'http://' + arg.split('=')[1]  #
+                return
+
+        LiveServerTestCase.setUpClass()
+        cls.server_url = cls.live_server_url
+
+    @classmethod
+    def tearDownClass(cls):
+        if cls.server_url == cls.live_server_url:
+            LiveServerTestCase.tearDownClass()
+
     def setUp(self):
         self.browser = webdriver.Firefox()
         self.browser.implicitly_wait(3)
@@ -23,7 +39,7 @@ class NewVisitorTest(LiveServerTestCase):
         self.browser.quit()
 
     def test_can_register_new_account(self):
-        self.browser.get('%s%s' % (self.live_server_url, '/signup'))
+        self.browser.get('%s%s' % (self.server_url, '/signup'))
         self.assertIn('Signup', self.browser.title)
         username = self.browser.find_element_by_id('username_input')
         password = self.browser.find_element_by_id('password_input')
@@ -48,7 +64,7 @@ class NewVisitorTest(LiveServerTestCase):
         bbbb.profile.save()
 
         # print (User.objects.all())
-        self.browser.get(self.live_server_url)
+        self.browser.get(self.server_url)
 
         username = self.browser.find_element_by_id('username_input')
         password = self.browser.find_element_by_id('password_input')
@@ -96,7 +112,7 @@ class NewVisitorTest(LiveServerTestCase):
         friend_list = self.browser.find_element_by_id('friends_list')
         self.assertIn('aaaa', friend_list.get_attribute('innerHTML'))
 
-        self.browser.get(self.live_server_url)
+        self.browser.get(self.server_url)
         send_post = self.browser.find_element_by_id('send_post')
         send_post.click()
         time.sleep(5)
