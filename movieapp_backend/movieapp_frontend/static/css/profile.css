@@ -1,238 +1,232 @@
 /******************
   Movie Posts
 ******************/
-.movie_post{
-    border-style: solid;
-    border-width: 5px;
+
+.movie_post {
+	border-style: solid;
+	border-width: 5px;
 }
 #hr_rating_mobile {
-    display: none;
+	display: none;
 }
-#movie_rating_int{
-    display: none;
+#movie_rating_int {
+	display: none;
 }
-#no_posts_tag{
-    text-align: center;
+#no_posts_tag {
+	text-align: center;
 }
 .glyphicon {
-    color: #CC3333;
+	color: #CC3333;
 }
+
 /********************************
 Small devices - Tablets (<768px)
 ********************************/
-@media screen and (max-width: 767px){
-    .main {
-        width: 100%;
-        min-height: calc(100vh - 172px);
-        font-size: 18px;
-        display: flex;
-        flex-wrap: wrap;
-        margin-left: 5px;
-        margin-right: 5px;
-    }
-    .sub_profile {
-        width: 100%;
-        margin-bottom: 40px;
-    }
-    #sub_profile_header h4{
-        width: calc(65vw - 30px);
-        display: inline-block;
-        float: right;
-        margin-left: 20px;
-    }
 
-    #avatar {
-        width: 35vw;
-        height: 35vw;
-        float: left;
-    }
-    #add_friend_post{
-        width: calc(65vw - 30px);
-        float: right;
-        margin-left: 20px;
-    }
-    #show_delete_friend_modal {
-        margin-left: 20px;
-    }
-
-    div.modal-body {
-        text-align: center;
-    }
-    div.modal-body h4 {
-        width: initial !important;
-        display: initial !important;
-        float: initial !important;
-        margin-left: 20px !important;
-    }
-    #delete_friend_button {
-        margin-right: 10px;
-        float: right;
-    }
-
-    #close_modal_button {
-        float: left;
-        margin-left: 10px;
-        margin-bottom: 0;
-    }
-    .movie_post {
-        border-radius: 10px;
-        margin-bottom: 20px;
-    }
-    #movie_image {
-        display: none;
-    }
-    .movie_post h4 {
-        margin-left: 5px;
-        margin-right: 5px;
-    }
-    #hr_rating_mobile {
-        display: block;
-    }
-    hr {
-        border-top: 2px solid black;
-    }
-    #movie_datetime {
-        float: right;
-        margin-bottom: 0;
-        margin-top: 1px;
-        margin-right: 1px;
-    }
-    .glyphicon{
-        font-size: 18px;
-    }
-    #movie_content {
-        margin-bottom: 20px;
-    }
-    #movie_rating {
-        text-align: center;
-    }
+@media screen and (max-width: 767px) {
+	.main {
+		width: 100%;
+		min-height: calc(100vh - 172px);
+		font-size: 18px;
+		display: flex;
+		flex-wrap: wrap;
+		margin-left: 5px;
+		margin-right: 5px;
+	}
+	.sub_profile {
+		width: 100%;
+		margin-bottom: 40px;
+	}
+	#sub_profile_header h4 {
+		width: calc(65vw - 30px);
+		display: inline-block;
+		float: right;
+		margin-left: 20px;
+	}
+	#avatar {
+		width: 35vw;
+		height: 35vw;
+		float: left;
+	}
+	#add_friend_post {
+		width: calc(65vw - 30px);
+		float: right;
+		margin-left: 20px;
+	}
+	#show_delete_friend_modal {
+		margin-left: 20px;
+	}
+	div.modal-body {
+		text-align: center;
+	}
+	div.modal-body h4 {
+		width: initial !important;
+		display: initial !important;
+		float: initial !important;
+		margin-left: 20px !important;
+	}
+	#delete_friend_button {
+		margin-right: 10px;
+		float: right;
+	}
+	#close_modal_button {
+		float: left;
+		margin-left: 10px;
+		margin-bottom: 0;
+	}
+	.movie_post {
+		border-radius: 10px;
+		margin-bottom: 20px;
+	}
+	#movie_image {
+		display: none;
+	}
+	.movie_post h4 {
+		margin-left: 5px;
+		margin-right: 5px;
+	}
+	#hr_rating_mobile {
+		display: block;
+	}
+	hr {
+		border-top: 2px solid black;
+	}
+	#movie_datetime {
+		float: right;
+		margin-bottom: 0;
+		margin-top: 1px;
+		margin-right: 1px;
+	}
+	.glyphicon {
+		font-size: 18px;
+	}
+	#movie_content {
+		margin-bottom: 20px;
+	}
+	#movie_rating {
+		text-align: center;
+	}
 }
 
 /********************************
 Medium devices - Tablets (768px<=)
 ********************************/
-@media screen and (min-width: 768px){
-    .main {
-        width: 70%;
-        min-height: calc(100vh - 172px);
-        font-size: 18px;
-        margin-left: auto;
-        margin-right: auto;
-    }
-    #avatar {
-        width: 25vw;
-        height: 25vw;
-        float: left;
-    }
-    #sub_profile_header {
-        overflow: hidden;
-        margin-bottom: 50px;
-    }
-    #sub_profile_header h4{
-        width: calc(100% - 25vw - 30px);
-        display: inline-block;
-        float: right;
-        margin-left: 20px;
-    }
-    #add_friend_post{
-        width: calc(100% - 25vw - 30px);
-        float:right;
-    }
-    #show_delete_friend_modal {
-        margin-left: 30px;
-    }
 
-    div.modal-body {
-        text-align: center;
-    }
-    div.modal-body h4 {
-        width: initial !important;
-        display: initial !important;
-        float: initial !important;
-        margin-left: 20px !important;
-    }
-    #close_modal_button {
-        float: left;
-        margin-left: 50px;
-        margin-bottom: 0;
-    }
-
-    #delete_friend_button {
-        margin-right: 50px;
-    }
-    .modal {
-      text-align: center;
-      padding: 0!important;
-    }
-
-    .modal:before {
-      content: '';
-      display: inline-block;
-      height: 100%;
-      vertical-align: middle;
-      margin-right: -4px;
-    }
-
-    .modal-dialog {
-      display: inline-block;
-      text-align: left;
-      vertical-align: middle;
-    }
-    /*****MoviePosts****/
-
-    .movie_post{
-
-        border-radius: 10px;
-        margin-bottom: 30px;
-        display: block;
-        overflow: auto;
-    }
-    .movie_post img {
-        float: right;
-        max-height: 350px;
-        max-width: 25%;
-    }
-    #movie_datetime{
-        float: right;
-    }
-
-    #hr_rating_mobile {
-        display: block;
-    }
-    hr {
-        border-top: 2px solid black;
-    }
-    #movie_rating{
-        text-align: center;
-    }
-    .glyphicon{
-        font-size: 18px;
-    }
-    .errors {
-        width: calc(100% - 25vw - 30px);
-        float: right;
-    }
-    .errors h4 {
-        width: initial !important;
-        display: initial !important;
-        float: initial !important;
-        margin-left: initial !important;
-    }
+@media screen and (min-width: 768px) {
+	.main {
+		width: 70%;
+		min-height: calc(100vh - 172px);
+		font-size: 18px;
+		margin-left: auto;
+		margin-right: auto;
+	}
+	#avatar {
+		width: 25vw;
+		height: 25vw;
+		float: left;
+	}
+	#sub_profile_header {
+		overflow: hidden;
+		margin-bottom: 50px;
+	}
+	#sub_profile_header h4 {
+		width: calc(100% - 25vw - 30px);
+		display: inline-block;
+		float: right;
+		margin-left: 20px;
+	}
+	#add_friend_post {
+		width: calc(100% - 25vw - 30px);
+		float: right;
+	}
+	#show_delete_friend_modal {
+		margin-left: 30px;
+	}
+	div.modal-body {
+		text-align: center;
+	}
+	div.modal-body h4 {
+		width: initial !important;
+		display: initial !important;
+		float: initial !important;
+		margin-left: 20px !important;
+	}
+	#close_modal_button {
+		float: left;
+		margin-left: 50px;
+		margin-bottom: 0;
+	}
+	#delete_friend_button {
+		margin-right: 50px;
+	}
+	.modal {
+		text-align: center;
+		padding: 0!important;
+	}
+	.modal:before {
+		content: '';
+		display: inline-block;
+		height: 100%;
+		vertical-align: middle;
+		margin-right: -4px;
+	}
+	.modal-dialog {
+		display: inline-block;
+		text-align: left;
+		vertical-align: middle;
+	}
+	/*****MoviePosts****/
+	.movie_post {
+		border-radius: 10px;
+		margin-bottom: 30px;
+		display: block;
+		overflow: auto;
+	}
+	.movie_post img {
+		float: right;
+		max-height: 350px;
+		max-width: 25%;
+	}
+	#movie_datetime {
+		float: right;
+	}
+	#hr_rating_mobile {
+		display: block;
+	}
+	hr {
+		border-top: 2px solid black;
+	}
+	#movie_rating {
+		text-align: center;
+	}
+	.glyphicon {
+		font-size: 18px;
+	}
+	.errors {
+		width: calc(100% - 25vw - 30px);
+		float: right;
+	}
+	.errors h4 {
+		width: initial !important;
+		display: initial !important;
+		float: initial !important;
+		margin-left: initial !important;
+	}
 }
+
 /********************************
 Large devices  (1050px<=)
 ********************************/
-@media screen and (min-width: 1050px){
-    #avatar {
-        width: 15vw;
-        height: 15vw;
-    }
 
-    #sub_profile_header h4{
-        width: calc(100% - 15vw - 30px);
-    }
-    #add_friend_post{
-        width: calc(100% - 15vw - 30px);
-    }
-
+@media screen and (min-width: 1050px) {
+	#avatar {
+		width: 15vw;
+		height: 15vw;
+	}
+	#sub_profile_header h4 {
+		width: calc(100% - 15vw - 30px);
+	}
+	#add_friend_post {
+		width: calc(100% - 15vw - 30px);
+	}
 }

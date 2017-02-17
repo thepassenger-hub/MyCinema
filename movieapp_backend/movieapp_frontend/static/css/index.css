@@ -17,10 +17,10 @@
 	display: none;
 }
 .glyphicon {
-    color: #CC3333;
+	color: #CC3333;
 }
 #movie_content {
-    overflow-wrap: break-word;
+	overflow-wrap: break-word;
 }
 
 /********************************
@@ -28,22 +28,22 @@ Small devices - Tablets (<768px)
 ********************************/
 
 @media screen and (max-width: 767px) {
-    .main {
-            width: 100%;
-            min-height: calc(100vh - 172px);
-            margin-left: 5px;
-            margin-right: 5px;
-        }
-    #no_posts_img {
-        height: 100%;
-        background: url('../images/no_posts_853x1280_grey.jpg') no-repeat center / contain;
-    }
+	.main {
+		width: 100%;
+		min-height: calc(100vh - 172px);
+		margin-left: 5px;
+		margin-right: 5px;
+	}
+	#no_posts_img {
+		height: 100%;
+		background: url('../images/no_posts_853x1280_grey.jpg') no-repeat center / contain;
+	}
 	/******************
       Movie Posts
     ******************/
 	#filter_posts {
-	    margin-top: 10px;
-	    margin-bottom: 20px;
+		margin-top: 10px;
+		margin-bottom: 20px;
 	}
 	.movie_post {
 		border-radius: 10px;
@@ -71,19 +71,18 @@ Small devices - Tablets (<768px)
 	.glyphicon {
 		font-size: 18px;
 	}
-	.movie_rating  {
-	    text-align: center;
+	.movie_rating {
+		text-align: center;
 	}
 	#movie_content {
 		margin-bottom: 20px;
 	}
 }
-
 @media (max-width: 767px) and (orientation:landscape) {
-    #no_posts_img {
-        height: 400px;
-        background-size: contain;
-    }
+	#no_posts_img {
+		height: 400px;
+		background-size: contain;
+	}
 }
 
 /********************************
@@ -94,16 +93,16 @@ Medium devices - Tablets (768px<=)
 	.main {
 		min-height: calc(100vh - 172px);
 	}
-    #no_posts_img {
-        height: 100%;
-        background: url('../images/no_posts_853x1280_grey.jpg') no-repeat center / contain;
-    }
+	#no_posts_img {
+		height: 100%;
+		background: url('../images/no_posts_853x1280_grey.jpg') no-repeat center / contain;
+	}
 	#filter_posts {
-	    margin-top: 10px;
-	    margin-bottom: 20px;
-        max-width: 70%;
-        margin-left: auto;
-        margin-right: auto;
+		margin-top: 10px;
+		margin-bottom: 20px;
+		max-width: 70%;
+		margin-left: auto;
+		margin-right: auto;
 	}
 	/*****MoviePosts****/
 	.movie_post {
@@ -140,11 +139,12 @@ Medium devices - Tablets (768px<=)
 /********************************
 Medium devices - Tablets (768px<=)
 ********************************/
+
 @media screen and (min-width: 768px) {
-    #filter_posts {
-        max-width: 50%;
-    }
-    #no_posts_img {
-        min-height: 800px;
-    }
+	#filter_posts {
+		max-width: 50%;
+	}
+	#no_posts_img {
+		min-height: 800px;
+	}
 }

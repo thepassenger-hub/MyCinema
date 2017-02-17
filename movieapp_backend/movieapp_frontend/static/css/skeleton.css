@@ -1,180 +1,184 @@
-html, body {
-    min-height: 100vh;
+html,
+body {
+	min-height: 100vh;
+}
+body {
+	display: flex;
+	flex-wrap: wrap;
+	background-color: #e6e6e6;
 }
 
-body {
-    display: flex;
-    flex-wrap: wrap;
-    background-color: #e6e6e6;
-}
 /********************
         Navbar
 ********************/
 
 .navbar-default {
-  background-color: orange;
-  border-color: #c96b0b;
-  width: 100%;
+	background-color: orange;
+	border-color: #c96b0b;
+	width: 100%;
 }
 .navbar-default .navbar-brand {
-  color: #000000;
+	color: #000000;
 }
 .navbar-default .navbar-brand:hover,
 .navbar-default .navbar-brand:focus {
-  color: #432405;
+	color: #432405;
 }
 .navbar-default .navbar-text {
-  color: #000000;
+	color: #000000;
 }
-.navbar-default .navbar-nav > li > a {
-  color: #000000;
+.navbar-default .navbar-nav>li>a {
+	color: #000000;
 }
-.navbar-default .navbar-nav > li > a:hover,
-.navbar-default .navbar-nav > li > a:focus {
-  color: #432405;
+.navbar-default .navbar-nav>li>a:hover,
+.navbar-default .navbar-nav>li>a:focus {
+	color: #432405;
 }
-.navbar-default .navbar-nav > li > .dropdown-menu {
-  background-color: #f0810f;
+.navbar-default .navbar-nav>li>.dropdown-menu {
+	background-color: #f0810f;
 }
-.navbar-default .navbar-nav > li > .dropdown-menu > li > a {
-  color: #000000;
+.navbar-default .navbar-nav>li>.dropdown-menu>li>a {
+	color: #000000;
 }
-.navbar-default .navbar-nav > li > .dropdown-menu > li > a:hover,
-.navbar-default .navbar-nav > li > .dropdown-menu > li > a:focus {
-  color: #432405;
-  background-color: #c96b0b;
+.navbar-default .navbar-nav>li>.dropdown-menu>li>a:hover,
+.navbar-default .navbar-nav>li>.dropdown-menu>li>a:focus {
+	color: #432405;
+	background-color: #c96b0b;
 }
-.navbar-default .navbar-nav > li > .dropdown-menu > li > .divider {
-  background-color: #c96b0b;
+.navbar-default .navbar-nav>li>.dropdown-menu>li>.divider {
+	background-color: #c96b0b;
 }
-.navbar-default .navbar-nav .open .dropdown-menu > .active > a,
-.navbar-default .navbar-nav .open .dropdown-menu > .active > a:hover,
-.navbar-default .navbar-nav .open .dropdown-menu > .active > a:focus {
-  color: #432405;
-  background-color: #c96b0b;
+.navbar-default .navbar-nav .open .dropdown-menu>.active>a,
+.navbar-default .navbar-nav .open .dropdown-menu>.active>a:hover,
+.navbar-default .navbar-nav .open .dropdown-menu>.active>a:focus {
+	color: #432405;
+	background-color: #c96b0b;
 }
-.navbar-default .navbar-nav > .active > a,
-.navbar-default .navbar-nav > .active > a:hover,
-.navbar-default .navbar-nav > .active > a:focus {
-  color: #432405;
-  background-color: #c96b0b;
+.navbar-default .navbar-nav>.active>a,
+.navbar-default .navbar-nav>.active>a:hover,
+.navbar-default .navbar-nav>.active>a:focus {
+	color: #432405;
+	background-color: #c96b0b;
 }
-.navbar-default .navbar-nav > .open > a,
-.navbar-default .navbar-nav > .open > a:hover,
-.navbar-default .navbar-nav > .open > a:focus {
-  color: #432405;
-  background-color: #c96b0b;
+.navbar-default .navbar-nav>.open>a,
+.navbar-default .navbar-nav>.open>a:hover,
+.navbar-default .navbar-nav>.open>a:focus {
+	color: #432405;
+	background-color: #c96b0b;
 }
 .navbar-default .navbar-toggle {
-  border-color: #c96b0b;
+	border-color: #c96b0b;
 }
 .navbar-default .navbar-toggle:hover,
 .navbar-default .navbar-toggle:focus {
-  background-color: #c96b0b;
+	background-color: #c96b0b;
 }
 .navbar-default .navbar-toggle .icon-bar {
-  background-color: #000000;
+	background-color: #000000;
 }
 .navbar-default .navbar-collapse,
 .navbar-default .navbar-form {
-  border-color: #000000;
+	border-color: #000000;
 }
 .navbar-default .navbar-link {
-  color: #000000;
+	color: #000000;
 }
 .navbar-default .navbar-link:hover {
-  color: #432405;
+	color: #432405;
 }
 
 /*******
 Footer
 ********/
+
 footer {
-    background-color: #333;
-    color: white;
-    width: 100%;
+	background-color: #333;
+	color: white;
+	width: 100%;
 }
+
 /********************************
 Small devices - Tablets (<768px)
 ********************************/
-@media screen and (max-width: 767px){
 
-    body {
-        background-color: #e6e6e6;
-    }
-    /******************
+@media screen and (max-width: 767px) {
+	body {
+		background-color: #e6e6e6;
+	}
+	/******************
            Navbar
     ******************/
-    .navbar-default .navbar-nav .open .dropdown-menu > li > a {
-        color: #000000;
-      }
-      .navbar-default .navbar-nav .open .dropdown-menu > li > a:hover,
-      .navbar-default .navbar-nav .open .dropdown-menu > li > a:focus {
-        color: #432405;
-      }
-      .navbar-default .navbar-nav .open .dropdown-menu > .active > a,
-      .navbar-default .navbar-nav .open .dropdown-menu > .active > a:hover,
-      .navbar-default .navbar-nav .open .dropdown-menu > .active > a:focus {
-        color: #432405;
-        background-color: #c96b0b;
-      }
-
-    .errors {
-        margin-top: 20px;
-        margin-bottom: 20px;
-        color: darkorange;
-    }
-    /************
+	.navbar-default .navbar-nav .open .dropdown-menu>li>a {
+		color: #000000;
+	}
+	.navbar-default .navbar-nav .open .dropdown-menu>li>a:hover,
+	.navbar-default .navbar-nav .open .dropdown-menu>li>a:focus {
+		color: #432405;
+	}
+	.navbar-default .navbar-nav .open .dropdown-menu>.active>a,
+	.navbar-default .navbar-nav .open .dropdown-menu>.active>a:hover,
+	.navbar-default .navbar-nav .open .dropdown-menu>.active>a:focus {
+		color: #432405;
+		background-color: #c96b0b;
+	}
+	.errors {
+		margin-top: 20px;
+		margin-bottom: 20px;
+		color: darkorange;
+	}
+	/************
         Footer
     ************/
-    footer {
-        height: 100px;
-        text-align: center;
-        display: flex;
-          flex-direction: column;
-          justify-content: center;
-    }
-    footer h4 {
-        margin-left: 10px;
-        margin-right: 10px;
-    }
+	footer {
+		height: 100px;
+		text-align: center;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+	}
+	footer h4 {
+		margin-left: 10px;
+		margin-right: 10px;
+	}
 }
 
 /********************************
 Medium devices - Tablets (768px<=)
 ********************************/
-@media screen and (min-width: 768px){
-    .errors {
-        margin-top: 20px;
-        margin-bottom: 20px;
-        color: darkorange;
-    }
-    /******Navbar*******/
-    #search_friends_bar{
-        width: 17vw;
-    }
-    /************
+
+@media screen and (min-width: 768px) {
+	.errors {
+		margin-top: 20px;
+		margin-bottom: 20px;
+		color: darkorange;
+	}
+	/******Navbar*******/
+	#search_friends_bar {
+		width: 17vw;
+	}
+	/************
         Footer
     ************/
-    footer {
-        text-align: center;
-        height: 100px;
-        display: flex;
-          flex-direction: column;
-          justify-content: center;
-    }
-    footer h4 {
-        margin-left: 10px;
-        margin-right: 10px;
-    }
-
+	footer {
+		text-align: center;
+		height: 100px;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+	}
+	footer h4 {
+		margin-left: 10px;
+		margin-right: 10px;
+	}
 }
+
 /********************************
 Large devices  (1050px<=)
 ********************************/
-@media screen and (min-width: 1050px){
-    #search_friends_bar {
-        width: 30vw;
-        margin-left: 100px;
-    }
+
+@media screen and (min-width: 1050px) {
+	#search_friends_bar {
+		width: 30vw;
+		margin-left: 100px;
+	}
 }
