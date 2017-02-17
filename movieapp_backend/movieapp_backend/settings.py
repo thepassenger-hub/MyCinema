@@ -48,15 +48,6 @@ INSTALLED_APPS = [
 
 ]
 
-# # Use nose to run all tests
-# TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
-#
-# # Tell nose to measure coverage on the 'foo' and 'bar' apps
-# NOSE_ARGS = [
-#     '--with-coverage',
-#     '--cover-package=movie_app,movieapp_frontend',
-# ]
-
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -142,3 +133,8 @@ STATICFILES_DIRS = [STATIC_DIR, ]
 
 MEDIA_URL = '/avatar_images/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'avatar_images/')
+
+try:
+    from .deploy_settings import *
+except ImportError:
+    pass

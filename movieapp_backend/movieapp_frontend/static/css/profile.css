@@ -14,6 +14,9 @@
 #no_posts_tag{
     text-align: center;
 }
+.glyphicon {
+    color: #CC3333;
+}
 /********************************
 Small devices - Tablets (<768px)
 ********************************/
@@ -99,6 +102,9 @@ Small devices - Tablets (<768px)
     }
     #movie_content {
         margin-bottom: 20px;
+    }
+    #movie_rating {
+        text-align: center;
     }
 }
 

@@ -12,7 +12,7 @@ body {
 ********************/
 
 .navbar-default {
-  background-color: #f0810f;
+  background-color: orange;
   border-color: #c96b0b;
   width: 100%;
 }
@@ -151,7 +151,7 @@ Medium devices - Tablets (768px<=)
     }
     /******Navbar*******/
     #search_friends_bar{
-        width: 20vw;
+        width: 17vw;
     }
     /************
         Footer

@@ -16,6 +16,9 @@
 #movie_rating_int {
 	display: none;
 }
+.glyphicon {
+    color: #CC3333;
+}
 #movie_content {
     overflow-wrap: break-word;
 }
