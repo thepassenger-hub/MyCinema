@@ -55,7 +55,7 @@ def inherit_test_case(base_class):
         def aaa_sends_movie_post(self, send_to='bbb,ccc'):
             movie_post = {
                 'title': 'Ip Man',
-                'image_url': 'url to image',
+                'img': 'url to image',
                 'url': 'http://www.imdb.com/title/tt1220719/',
                 'rating': 8,
                 'comment': 'One of the best fighting movies I have ever seen.',
