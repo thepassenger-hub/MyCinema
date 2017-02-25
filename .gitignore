@@ -1,8 +1,9 @@
 # This Project Specific files
 avatar_images/
 keys.json
-# Angular 2
+.vscode/
 node_modules/
+static/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
