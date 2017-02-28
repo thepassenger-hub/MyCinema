@@ -6,8 +6,9 @@ from django.contrib import messages
 from django.db.models import Q
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import IntegrityError  # create_user postgres custom exception
+from django.http import JsonResponse, HttpResponse
 
-from movie_app.models import MoviePost, Profile, FriendshipRequest
+from movie_app.models import MoviePost, Profile, FriendshipRequest, ChatMessage
 from utils.scraper import get_image, get_link
 from utils.regex_matching import are_params_invalid, are_fields_invalid
 from utils.utils import get_friendship
@@ -299,5 +300,28 @@ def delete_friend(request, friend_user_id):
         else:
             messages.add_message(request, messages.ERROR, 'You and %s are not friends.' % (friend))
             return redirect(request.META.get('HTTP_REFERER', '/'))
+
+@login_required()
+def chat(request, friend_user_id):
+    friend = get_object_or_404(User, username=friend_user_id)
+    if request.method == 'GET':
+        if friend in request.user.profile.get_friends():
+            chat_messages = request.user.profile.get_chat_messages(friend)
+            out = list(chat_messages)
+            return JsonResponse(out, safe=False)
+
+    if request.method == 'POST':
+        if friend in request.user.profile.get_friends():
+            message = request.POST.get('message')
+            if message:
+                new_message = ChatMessage()
+                new_message.creator = request.user
+                new_message.receiver = friend
+                new_message.message = message
+                new_message.save()
+                return HttpResponse(status=201)
+
+
+
 
 

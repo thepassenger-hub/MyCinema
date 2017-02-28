@@ -104,10 +104,16 @@ Small devices - Tablets (<768px)
 @media screen and (max-width: 767px) {
 	body {
 		background-color: #e6e6e6;
+		position: relative;
 	}
 	/******************
            Navbar
     ******************/
+    .collapsing {
+        -webkit-transition: height .35s ease;
+        -o-transition: height .35s ease;
+        transition: height .35s ease;
+    }
 	.navbar-default .navbar-nav .open .dropdown-menu>li>a {
 		color: #000000;
 	}
@@ -126,6 +132,64 @@ Small devices - Tablets (<768px)
 		margin-bottom: 20px;
 		color: darkorange;
 	}
+	/***********
+	    Chat
+    ***********/
+    #chat_popup {
+        position: absolute;
+        bottom: 100px;
+        z-index: 1;
+        left: -100vw;
+        width: 100vw;
+        height: calc(100vh - 172px);
+        background-color: orange;
+    }
+    #slider-content {
+        width:  100vw;
+        margin-left: 0px;
+        margin-right: 0px;
+    }
+    #slider-content > div {
+        height: 100%;
+    }
+    #friend_list {
+        margin-left: 0;
+        margin-right: 0;
+        overflow: scroll;
+        height: 100%;
+    }
+    #friend_list hr:last-child {
+        margin-bottom: 0;
+    }
+    #friend_list h4:first-child {
+        margin-top: 20px;
+    }
+    #friend_list h4 {
+        text-align: center;
+    }
+    .friends {
+        width: 100%;
+    }
+    .chat-window {
+        height: 100%;
+        display: none;
+    }
+    #chat_message {
+        width: initial;
+    }
+    .panel {
+        height: 100%;
+    }
+    .panel-body {
+        height: calc(100% - 91px);
+    }
+    .panel-heading {
+        height: 40px;
+    }
+    .panel-footer {
+
+    }
+
 	/************
         Footer
     ************/

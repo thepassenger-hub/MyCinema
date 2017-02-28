@@ -69,8 +69,6 @@ class NewVisitorTest(LiveServerTestCase):
         self.browser.get('/logout/')
         time.sleep(0.5)
         self.assertIn('Login', self.browser.title)
-        # self.browser_2.find_element_by_id('sign_in_url').click()
-        # self.browser_2.implicitly_wait(3)
         username = self.browser_2.find_element_by_id('username_input')
         password = self.browser_2.find_element_by_id('password_input')
         verify_password = self.browser_2.find_element_by_id(
@@ -194,6 +192,17 @@ class NewVisitorTest(LiveServerTestCase):
         time.sleep(1)
         self.assertIn('Ip Man', self.browser_2.find_element_by_class_name(
             "main").get_attribute("innerHTML"))
+        # Send chat message to friend. 
+        chat = self.browser_2.find_element_by_id("chat_popup")
+        chat.click()
+        friend = self.browser_2.find_element_by_id("chat_friend")
+        friend.click()
+        message_box = self.browser_2.find_element_by_id("chat_message")
+        message_box.send_keys('Cool stuff')
+        send_chat_message = self.browser_2.find_element_by_id("send_chat_message")
+        send_chat_message.click()
+        # Notification of chat message from user_2
+        # self.browser.assertIn()
         self.browser_2.get('/settings')
         self.browser_2.find_element_by_id('show_delete_account_modal').click()
         time.sleep(3)

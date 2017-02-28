@@ -11,10 +11,11 @@ from django.http import HttpRequest
 from django.template.loader import render_to_string
 from django.test import TestCase, TransactionTestCase, Client
 
-from movie_app.models import MoviePost, Profile, Friendship, FriendshipRequest
+from movie_app.models import MoviePost, Profile, Friendship, FriendshipRequest, ChatMessage
 from movieapp_frontend.views import home_page, signup, login_page, \
     new_post_page, settings_page, change_name, profile_page, search_friends_page
 
+import json
 # sys.path.append('/home/giulio/Desktop/Projects/movieapp/movieapp_backend')
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "movieapp_backend.settings")  # or whatever
 django.setup()
@@ -495,4 +496,40 @@ class ProfilePageTest(inherit_test_case(TestCase)):
         self.c.post('/friend/delete/bbb/', follow=True)
         self.assertNotIn(self.bbb, self.aaa.profile.get_friends())
         self.assertEqual(0, len(self.bbb.received_posts.all()))
+
+
+class LiveChatSystemTest(inherit_test_case(TestCase)):
+
+    def test_chat_message_filter_works_as_expcted(self):
+        self.create_third_user()
+        self.make_all_users_friends()
+        ChatMessage(creator=self.aaa, receiver=self.bbb, message='cool stuff').save()
+        ChatMessage(creator=self.ccc, receiver=self.aaa, message='cool stuff 2').save()
+        ChatMessage(creator=self.aaa, receiver=self.ccc, message='cool stuff 2').save()
+
+        self.assertEqual(self.aaa.profile.get_chat_messages(self.bbb).count(), 1)
+        self.assertEqual(self.bbb.profile.get_chat_messages(self.aaa).count(), 1)
+        self.assertEqual(self.aaa.profile.get_chat_messages(self.ccc).count(), 2)
+        self.assertEqual(self.ccc.profile.get_chat_messages(self.aaa).count(), 2)
+        self.assertEqual(self.ccc.profile.get_chat_messages(self.bbb).count(), 0)
+
+    def test_can_use_chat_between_friends(self):
+        self.make_all_users_friends()
+        ChatMessage(creator=self.aaa, receiver=self.bbb, message='cool stuff').save()
+        response = self.c.get('/chat/%s/' % (self.bbb))
+        self.assertEqual(response.get('Content-Type'), 'application/json')
+        self.assertEqual(200, response.status_code)
+        self.assertEqual(json.loads(response.content.decode())[0]["message"], "cool stuff")
+
+    def test_can_send_chat_message_to_friend(self):
+        self.make_all_users_friends()
+        response = self.c.post('/chat/%s/' % self.bbb, {
+            'message': 'Cool stuff'
+        })
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(len(ChatMessage.objects.all()), 1)
+        chat_object = ChatMessage.objects.all()[0]
+        self.assertEqual(chat_object.message, 'Cool stuff')
+        self.assertEqual(chat_object.creator, self.aaa)
+        self.assertEqual(chat_object.receiver, self.bbb)
 

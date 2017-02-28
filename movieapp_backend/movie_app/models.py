@@ -44,6 +44,15 @@ class Profile(models.Model):
     def is_friend(self, friend):
         return friend in self.user.profile.get_friends()
 
+    def get_chat_messages(self, friend):
+        user = self.user
+        chat_messages = ChatMessage.objects.filter(
+            models.Q(creator=user) & models.Q(receiver=friend) |
+            models.Q(receiver=user) & models.Q(creator=friend)
+        ).order_by('created').values()
+        return chat_messages
+
+
     def get_friends(self):
         user = self.user
         friendships = Friendship.objects.filter(models.Q(creator=user) | models.Q(friend=user))
@@ -93,3 +102,9 @@ class FriendshipRequest(models.Model):
         self.viewed = timezone.now()
         self.save()
         return True
+
+class ChatMessage(models.Model):
+    creator = models.ForeignKey(User, related_name='chat_message_sent')
+    receiver = models.ForeignKey(User, related_name='chat_message_received')
+    message = models.TextField()
+    created = models.DateTimeField(auto_now_add=True, editable=False)

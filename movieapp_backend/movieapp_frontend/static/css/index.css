@@ -44,6 +44,7 @@ Small devices - Tablets (<768px)
 	#filter_posts {
 		margin-top: 10px;
 		margin-bottom: 20px;
+		z-index: 0;
 	}
 	.movie_post {
 		border-radius: 10px;
