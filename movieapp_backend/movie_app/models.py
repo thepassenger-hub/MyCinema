@@ -40,6 +40,7 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=50, blank=True, null=True)
     avatar = models.ImageField(default="avatar.svg")
+    is_logged_in = models.BooleanField(default=False)
 
     def is_friend(self, friend):
         return friend in self.user.profile.get_friends()
@@ -108,3 +109,4 @@ class ChatMessage(models.Model):
     receiver = models.ForeignKey(User, related_name='chat_message_received')
     message = models.TextField()
     created = models.DateTimeField(auto_now_add=True, editable=False)
+

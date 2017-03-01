@@ -56,7 +56,7 @@
     <div id="chat_popup">
         <div class="row col-xs-12" id="friend_list">
             {% for friend in request.user.profile.get_friends %}
-            <h4 class="friends">{{friend}}</h4>
+            <h4 id="{{friend|escape}}" class="friends">{{friend|escape}}: {{friend.profile.is_logged_in}}</h4>
             <hr>
             {% endfor %}
         </div>

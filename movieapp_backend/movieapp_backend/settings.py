@@ -18,7 +18,6 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 TEMPLATES_DIR = os.path.join(BASE_DIR, 'movieapp_frontend/templates')
 STATIC_DIR = os.path.join(BASE_DIR, 'movieapp_frontend/static')
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
 
@@ -42,9 +41,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'channels',
     'movie_app',
     'movieapp_frontend',
     'utils',
+    'live_chat',
 
 ]
 
@@ -91,7 +92,16 @@ DATABASES = {
         },
     }
 }
-
+# Channels Configuration
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'asgi_redis.RedisChannelLayer',
+        'CONFIG': {
+            'hosts': [('localhost', 6379)],
+        },
+        'ROUTING': 'live_chat.routing.channel_routing',
+    }
+}
 # Password validation
 # https://docs.djangoproject.com/en/1.10/ref/settings/#auth-password-validators
 
