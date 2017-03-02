@@ -9,18 +9,17 @@ import json
 def new_chat_message_callback(sender, instance, **kwargs):
     Group("%s" % instance.receiver.username).send({
         "text": json.dumps({
-            "id": instance.id,
+            # "id": instance.id,
             "message": instance.message,
-            "creator": instance.creator.username,
-            "receiver": instance.receiver.username
+            "friend": instance.creator.username,
+            # "receiver": instance.receiver.username
         })
     })
     Group("%s" % instance.creator.username).send({
         "text": json.dumps({
-            "id": instance.id,
+            # "id": instance.id,
             "message": instance.message,
-            "creator": instance.creator.username,
-            "receiver": instance.receiver.username
+            "friend": instance.receiver.username
         })
     })
 

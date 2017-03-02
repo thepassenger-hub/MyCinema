@@ -56,7 +56,7 @@
     <div id="chat_popup">
         <div class="row col-xs-12" id="friend_list">
             {% for friend in request.user.profile.get_friends %}
-            <h4 id="{{friend|escape}}" class="friends">{{friend|escape}}: {{friend.profile.is_logged_in}}</h4>
+            <h4 data-value="{{friend|escape}}" class="friends">{{friend|escape}}: {{friend.profile.is_logged_in}}</h4>
             <hr>
             {% endfor %}
         </div>
@@ -80,7 +80,7 @@
                                 {% csrf_token %}
                                 <input name="message" id="chat_message" type="text" class="form-control input-sm chat_input" placeholder="Write your message here..." />
                                 <span class="input-group-btn">
-                                <button type="submit" class="btn btn-primary btn-sm" id="send_chat_message">Send</button>
+                                <button type="submit" class="btn btn-primary btn-sm" id="send_chat_message" disabled>Send</button>
                                 </span>
                             </form>
 

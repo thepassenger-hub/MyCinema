@@ -313,7 +313,7 @@ def chat(request, friend_user_id):
     if request.method == 'POST':
         if friend in request.user.profile.get_friends():
             message = request.POST.get('message')
-            if message:
+            if message and message.strip():
                 new_message = ChatMessage()
                 new_message.creator = request.user
                 new_message.receiver = friend
