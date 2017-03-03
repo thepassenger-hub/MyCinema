@@ -144,6 +144,12 @@ Small devices - Tablets (<768px)
         height: calc(100vh - 172px);
         background-color: orange;
     }
+    #open_chat {
+        float: right;
+        height: 100%;
+        width: 50px;
+        background-color: darkred;
+    }
     #slider-content {
         width:  100vw;
         margin-left: 0px;
@@ -189,7 +195,15 @@ Small devices - Tablets (<768px)
     .panel-footer {
 
     }
-
+    #notifications_bar {
+        width: 100%;
+        height: 60px;
+        background-color: orange;
+        position: fixed;
+        bottom: 0;
+        border-radius: 5px;
+        border: 2px solid #c96b0b;
+    }
 	/************
         Footer
     ************/

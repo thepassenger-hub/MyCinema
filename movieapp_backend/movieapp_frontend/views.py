@@ -302,12 +302,23 @@ def delete_friend(request, friend_user_id):
             return redirect(request.META.get('HTTP_REFERER', '/'))
 
 @login_required()
+def notifications(request):
+    if request.method == 'GET':
+        notifications = request.user.profile.get_not_viewed_messages()
+        out = list(notifications.values())
+        return JsonResponse(out, safe=False)
+
+@login_required()
 def chat(request, friend_user_id):
     friend = get_object_or_404(User, username=friend_user_id)
     if request.method == 'GET':
         if friend in request.user.profile.get_friends():
             chat_messages = request.user.profile.get_chat_messages(friend)
-            out = list(chat_messages)
+            for message in (x for x in chat_messages if x.receiver == request.user and x.viewed == False):
+                # if not message.viewed:
+                message.viewed = True
+                message.save()
+            out = list(chat_messages.values())
             return JsonResponse(out, safe=False)
 
     if request.method == 'POST':

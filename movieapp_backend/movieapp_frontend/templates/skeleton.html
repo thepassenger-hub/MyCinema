@@ -32,7 +32,7 @@
           <ul class="nav navbar-nav">
             <li><a class="navbar_item" id="home_link" href="/">Home<span class="sr-only">(current)</span></a></li>
             <li><a href="{% url 'new_post' %}" class="navbar_item" id="send_post">Send Post</a></li>
-            <li><a href="#" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" id="open_chat">Chat</a></li>
+            <!--<li><a href="#" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" id="open_chat">Chat</a></li>-->
           </ul>
           <form action="/search_friends/" method="get" id="search_friends_form" class="navbar-form navbar-left">
             <div class="form-group">
@@ -65,9 +65,9 @@
                 <div class="panel panel-default">
                     <div class="panel-heading top-bar">
                         <div class="col-md-8 col-xs-8">
-                            <h3 class="panel-title"><span class="glyphicon glyphicon-comment"></span></h3>
+                            <h3 data-value="" class="panel-title"><span class="glyphicon glyphicon-comment"></span></h3>
                         </div>
-                        <div class="col-md-4 col-xs-4" style="text-align: right;">
+                        <div class="col-md-4 col-xs-4">
                             <!--<a href="#"><span id="minim_chat_window" class="glyphicon glyphicon-minus icon_minim"></span></a>-->
                             <a id="close_chat_button"><span class="glyphicon glyphicon-remove icon_close"></span></a>
                         </div>
@@ -76,7 +76,7 @@
                     </div>
                     <div class="panel-footer">
                         <div class="input-group">
-                            <form action="/chat/Friend_id" method="post" id="chat_form">
+                            <form action="" method="post" id="chat_form">
                                 {% csrf_token %}
                                 <input name="message" id="chat_message" type="text" class="form-control input-sm chat_input" placeholder="Write your message here..." />
                                 <span class="input-group-btn">
@@ -92,7 +92,10 @@
     </div>
     {% block body %}
     {% endblock %}
-
+    <div id="notifications_bar">
+        <h4 id="notifications_counter"></h4>
+        <a href="#" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" id="open_chat">Chat</a>
+    </div>
     <footer>
         <h4>This site is under development.</h4>
         <h4>Contact me at sendtosgdev@gmail.com</h4>

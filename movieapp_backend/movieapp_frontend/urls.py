@@ -18,4 +18,5 @@ urlpatterns = [
     url(r'^friend/reject/(?P<friend_request_id>\d+)/$', views.reject_friendship, name='friendship_reject'),
     url(r'^friend/delete/(?P<friend_user_id>\w+)/$', views.delete_friend, name='delete_friend'),
     url(r'^chat/(?P<friend_user_id>\w+)/$', views.chat, name='chat'),
+    url(r'^notifications/$', views.notifications, name='notifications'),
 ]

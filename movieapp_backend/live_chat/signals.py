@@ -6,22 +6,24 @@ from channels import Group
 import json
 
 @receiver(post_save, sender=ChatMessage)
-def new_chat_message_callback(sender, instance, **kwargs):
-    Group("%s" % instance.receiver.username).send({
-        "text": json.dumps({
-            # "id": instance.id,
-            "message": instance.message,
-            "friend": instance.creator.username,
-            # "receiver": instance.receiver.username
+def new_chat_message_callback(sender, instance, created, **kwargs):
+    if created:
+        print ('ORA SI CHE VA')
+        Group("%s" % instance.receiver.username).send({
+            "text": json.dumps({
+                # "id": instance.id,
+                "message": instance.message,
+                "friend": instance.creator.username,
+                # "receiver": instance.receiver.username
+            })
         })
-    })
-    Group("%s" % instance.creator.username).send({
-        "text": json.dumps({
-            # "id": instance.id,
-            "message": instance.message,
-            "friend": instance.receiver.username
+        Group("%s" % instance.creator.username).send({
+            "text": json.dumps({
+                # "id": instance.id,
+                "message": instance.message,
+                "friend": instance.receiver.username
+            })
         })
-    })
 
 def set_user_online(sender, user, **kwargs):
     user.profile.is_logged_in = True
