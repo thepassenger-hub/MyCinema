@@ -66,8 +66,8 @@ def inherit_test_case(base_class):
             response = self.c.post('/newpost', movie_post)
             return response
 
-        def tearDown(self):
-            self.c.logout()
+        # def tearDown(self):
+            # self.c.logout()
 
         def create_friendship_request(self, user1, user2):
             f = FriendshipRequest.objects.create(from_user=user1, to_user=user2)
@@ -533,3 +533,13 @@ class LiveChatSystemTest(inherit_test_case(TestCase)):
         self.assertEqual(chat_object.creator, self.aaa)
         self.assertEqual(chat_object.receiver, self.bbb)
 
+    def test_can_view_notifications(self):
+        c = ChatMessage.objects.create(
+            creator=self.bbb,
+            receiver=self.aaa,
+            message='zep',
+        ).save()
+        response = self.c.get('/notifications/')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.get('Content-Type'), 'application/json')
+        self.assertEqual(len(json.loads(response.content.decode())), 1)

@@ -87,6 +87,17 @@ body {
 	color: #432405;
 }
 
+.notifications {
+    display: none;
+}
+#notifications_container {
+    display: none;
+    height: calc(100vh - 112px);
+    width: 100%;
+    position: fixed;
+    bottom: 60px;
+    background-color: darkorange;
+}
 /*******
 Footer
 ********/

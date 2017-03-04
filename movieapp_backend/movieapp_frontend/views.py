@@ -305,7 +305,7 @@ def delete_friend(request, friend_user_id):
 def notifications(request):
     if request.method == 'GET':
         notifications = request.user.profile.get_not_viewed_messages()
-        out = list(notifications.values())
+        out = list(notifications.values('creator__username'))
         return JsonResponse(out, safe=False)
 
 @login_required()
