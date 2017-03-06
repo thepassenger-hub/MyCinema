@@ -165,11 +165,20 @@ Small devices - Tablets (<768px)
     }
     #slider-content {
         width:  100vw;
+        padding: 0;
         margin-left: 0px;
         margin-right: 0px;
     }
+
+    #slider-content > div > div > div.panel-heading.top-bar > div.col-md-8.col-xs-8,
+    #slider-content > div > div > div.panel-heading.top-bar > div.col-md-4.col-xs-4{
+        padding: 0;
+    }
+
     #slider-content > div {
         height: 100%;
+        padding: 0;
+
     }
     #friend_list {
         margin-left: 0;
@@ -193,14 +202,15 @@ Small devices - Tablets (<768px)
         height: 100%;
         display: none;
     }
-    #chat_message {
-        width: initial;
+    #close_chat_button {
+        float: right;
     }
     .panel {
         height: 100%;
     }
     .panel-body {
         height: calc(100% - 91px);
+        overflow: scroll;
     }
     .panel-heading {
         height: 40px;
