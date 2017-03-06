@@ -29,7 +29,7 @@ Small devices - Tablets (<768px)
 
 @media screen and (max-width: 767px) {
 	.main {
-		width: 100%;
+		overflow: auto;
 		min-height: calc(100vh - 172px);
 		margin-left: 5px;
 		margin-right: 5px;

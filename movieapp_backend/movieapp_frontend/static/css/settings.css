@@ -67,7 +67,8 @@ Small devices - Tablets (<768px)
         margin-bottom: 2px;
     }
     .friend_profile .btn.btn-danger {
-        margin-left: 20%;
+        margin-right: 10%;
+        float: right;
     }
     .friends_avatars {
         width: 15vw;

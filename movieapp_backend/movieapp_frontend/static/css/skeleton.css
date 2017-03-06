@@ -89,6 +89,7 @@ body {
 
 .notifications {
     display: none;
+    height: 10%;
 }
 #notifications_container {
     display: none;
@@ -97,6 +98,7 @@ body {
     position: fixed;
     bottom: 60px;
     background-color: darkorange;
+    overflow: scroll;
 }
 /*******
 Footer
@@ -148,11 +150,11 @@ Small devices - Tablets (<768px)
     ***********/
     #chat_popup {
         position: absolute;
-        bottom: 100px;
+        bottom: 60px;
         z-index: 1;
         left: -100vw;
         width: 100vw;
-        height: calc(100vh - 172px);
+        height: calc(100vh - 112px);
         background-color: orange;
     }
     #open_chat {
