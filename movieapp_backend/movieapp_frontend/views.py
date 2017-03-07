@@ -318,7 +318,7 @@ def chat(request, friend_user_id):
                 # if not message.viewed:
                 message.viewed = True
                 message.save()
-            out = list(chat_messages.values())
+            out = list(chat_messages.values('creator__username', 'created', 'message'))
             return JsonResponse(out, safe=False)
 
     if request.method == 'POST':

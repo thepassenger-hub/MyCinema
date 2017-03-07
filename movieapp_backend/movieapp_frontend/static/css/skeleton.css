@@ -215,6 +215,18 @@ Small devices - Tablets (<768px)
     .panel-heading {
         height: 40px;
     }
+    .open_chat_messages.sent{
+    }
+    .open_chat_messages.sent{
+    }
+    .open_chat_messages.sent h4,
+    .open_chat_messages.sent p {
+        margin-left: 40%;
+    }
+    .open_chat_messages.received h4,
+    .open_chat_messages.received p{
+
+    }
     .panel-footer {
 
     }
