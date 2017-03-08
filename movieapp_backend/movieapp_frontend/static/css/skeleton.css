@@ -161,7 +161,12 @@ Small devices - Tablets (<768px)
         float: right;
         height: 100%;
         width: 50px;
-        background-color: darkred;
+    }
+    #open_chat span {
+        font-size: 30px;
+        float: right;
+        padding-top: 25%;
+        padding-right: 25%;
     }
     #slider-content {
         width:  100vw;
@@ -215,20 +220,28 @@ Small devices - Tablets (<768px)
     .panel-heading {
         height: 40px;
     }
-    .open_chat_messages.sent{
-    }
-    .open_chat_messages.sent{
-    }
-    .open_chat_messages.sent h4,
-    .open_chat_messages.sent p {
+
+    .messages_wrapper.sent {
         margin-left: 40%;
+        background-color: lightgray;
+        border-radius: 5px;
     }
-    .open_chat_messages.received h4,
-    .open_chat_messages.received p{
-
+    .messages_wrapper.received{
+        background-color: lightsteelblue;
+        border-radius: 5px;
+        margin-right: 40%;
     }
-    .panel-footer {
-
+    .messages_wrapper h4 {
+        padding-left: 10px;
+        padding-top: 10px;
+        padding-right: 10px;
+        padding-bottom: 0px;
+    }
+    .messages_wrapper p {
+        padding-left: 10px;
+        padding-right: 5px;
+        padding-bottom: 0px;
+        text-align: end;
     }
     #notifications_bar {
         width: 100%;
@@ -238,6 +251,14 @@ Small devices - Tablets (<768px)
         bottom: 0;
         border-radius: 5px;
         border: 2px solid #c96b0b;
+    }
+    #notifications_counter {
+        margin-top: 10px;
+        margin-left: 10px;
+        display: inline-block;
+        width: 40px;
+        height: 40px;
+        background: url('../images/notify_icon.png') no-repeat center / contain;
     }
 	/************
         Footer

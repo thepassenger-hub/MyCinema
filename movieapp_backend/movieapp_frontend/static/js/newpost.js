@@ -2,7 +2,7 @@ $(document).ready(function(){
     var send_to_value = ''
     $(".glyphicon-star-empty").hover( rating_hover_in, rating_hover_out );
 
-    $(".glyphicon").click(function () {
+    $("#rating_container .glyphicon").click(function () {
             $(this).addClass('glyphicon-star');
             $(this).addClass('clicked');
             $(this).removeClass('glyphicon-star-empty');
