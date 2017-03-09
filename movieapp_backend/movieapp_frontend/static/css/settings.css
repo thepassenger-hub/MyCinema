@@ -19,7 +19,7 @@ Small devices - Tablets (<768px)
 @media screen and (max-width: 767px){
     .main {
         width: 100%;
-        min-height: calc(100vh - 172px);
+        min-height: calc(100vh - 212px);
         display: flex;
         flex-wrap: wrap;
         font-size: 18px;
@@ -37,7 +37,7 @@ Small devices - Tablets (<768px)
     input {
         margin-bottom: 10px;
     }
-    .btn {
+    .main .btn {
         font-size: 18px;
         margin-bottom: 10px;
     }
@@ -126,7 +126,7 @@ Medium devices - Tablets (768px<=)
 @media screen and (min-width: 768px){
      .main {
         width: 70%;
-        min-height: calc(100vh - 172px);
+        min-height: calc(100vh - 212px);
         font-size: 18px;
         margin-left: auto;
         margin-right: auto;

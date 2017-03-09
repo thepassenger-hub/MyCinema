@@ -158,16 +158,20 @@ Small devices - Tablets (<768px)
         background-color: orange;
     }
     #open_chat {
+        margin-top: 10px;
+        margin-right: 10px;
         float: right;
         height: 100%;
-        width: 50px;
+        width: 40px;
+        height: 40px;
+        background: url('../images/chat_icon_3.png') no-repeat center / contain;
     }
-    #open_chat span {
+    /*#open_chat span {
         font-size: 30px;
         float: right;
         padding-top: 25%;
         padding-right: 25%;
-    }
+    }*/
     #slider-content {
         width:  100vw;
         padding: 0;
@@ -258,17 +262,14 @@ Small devices - Tablets (<768px)
         display: inline-block;
         width: 40px;
         height: 40px;
-        background: url('../images/notify_icon.png') no-repeat center / contain;
     }
 	/************
         Footer
     ************/
 	footer {
-		height: 100px;
+		height: 140px;
 		text-align: center;
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
+
 	}
 	footer h4 {
 		margin-left: 10px;

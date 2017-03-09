@@ -32,7 +32,7 @@ Small devices - Tablets (<768px)
 @media screen and (max-width: 767px) {
 	.main {
 		overflow: auto;
-		min-height: calc(100vh - 172px);
+		min-height: calc(100vh - 212px);
 		margin-left: 5px;
 		margin-right: 5px;
 	}
@@ -94,7 +94,7 @@ Medium devices - Tablets (768px<=)
 
 @media screen and (min-width: 768px) {
 	.main {
-		min-height: calc(100vh - 172px);
+		min-height: calc(100vh - 212px);
 	}
 	#no_posts_img {
 		height: 100%;

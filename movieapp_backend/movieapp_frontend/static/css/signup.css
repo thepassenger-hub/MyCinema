@@ -5,7 +5,7 @@ Small devices - Tablets (<768px)
 @media screen and (max-width: 767px){
     .main {
         width: 100%;
-        min-height: calc(100vh - 172px);
+        min-height: calc(100vh - 212px);
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -28,7 +28,7 @@ Medium devices - Tablets (768px<=)
 @media screen and (min-width: 768px){
     .main {
         width: 60%;
-        min-height: calc(100vh - 172px);
+        min-height: calc(100vh - 212px);
         font-size: 18px;
         margin-left: auto;
         margin-right: auto;
