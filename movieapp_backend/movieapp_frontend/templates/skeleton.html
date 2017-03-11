@@ -53,10 +53,19 @@
       </div><!-- /.container-fluid -->
     </nav>
 
-    <div id="chat_popup">
+    <div class="closed" id="chat_popup">
+        <a id="close_friend_list">
+            <span class="glyphicon glyphicon-remove"></span>
+        </a>
         <div class="row col-xs-12" id="friend_list">
             {% for friend in request.user.profile.get_friends %}
-            <h4 data-value="{{friend|escape}}" class="friends">{{friend|escape}}: {{friend.profile.is_logged_in}}</h4>
+            <h4 data-value="{{friend|escape}}" class="friends">{{friend|escape}}:
+                {% if friend.profile.is_logged_in %}
+                    Online
+                {% else %}
+                    Offline
+                {% endif %}
+            </h4>
             <hr>
             {% endfor %}
         </div>
@@ -94,6 +103,8 @@
     {% block body %}
     {% endblock %}
     <div id="notifications_container">
+        <a id="close_notifications_container"><span class="glyphicon glyphicon-remove"></span></a>
+        <div id="notifications_wrapper"></div>
         <button class="btn btn-default" id="clear_notifications_button">Clear All</button>
     </div>
     <div id="notifications_bar">

@@ -288,6 +288,7 @@ def reject_friendship(request, friend_request_id):
         messages.add_message(request, messages.SUCCESS, 'Friendship Rejected')
         return redirect(settings_page)
 
+
 @login_required()
 def delete_friend(request, friend_user_id):
     if request.method == 'POST':
@@ -301,12 +302,14 @@ def delete_friend(request, friend_user_id):
             messages.add_message(request, messages.ERROR, 'You and %s are not friends.' % (friend))
             return redirect(request.META.get('HTTP_REFERER', '/'))
 
+
 @login_required()
 def notifications(request):
     if request.method == 'GET':
         notifications = request.user.profile.get_not_viewed_messages()
         out = list(notifications.values('creator__username'))
         return JsonResponse(out, safe=False)
+
 
 @login_required()
 def chat(request, friend_user_id):
@@ -331,8 +334,3 @@ def chat(request, friend_user_id):
                 new_message.message = message
                 new_message.save()
                 return HttpResponse(status=201)
-
-
-
-
-
