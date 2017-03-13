@@ -13,78 +13,64 @@ body {
 ********************/
 
 .navbar-default {
-	background-color: orange;
-	border-color: #c96b0b;
-	width: 100%;
+  background-color: #111111;
+  border-color: #cc3333;
+  width: 100%;
 }
 .navbar-default .navbar-brand {
-	color: #000000;
+  color: #cc3333;
 }
 .navbar-default .navbar-brand:hover,
 .navbar-default .navbar-brand:focus {
-	color: #432405;
+  color: #ffffff;
 }
 .navbar-default .navbar-text {
-	color: #000000;
+  color: #cc3333;
 }
-.navbar-default .navbar-nav>li>a {
-	color: #000000;
+.navbar-default .navbar-nav > li > a {
+  color: #cc3333;
 }
-.navbar-default .navbar-nav>li>a:hover,
-.navbar-default .navbar-nav>li>a:focus {
-	color: #432405;
+.navbar-default .navbar-nav > li > a:hover,
+.navbar-default .navbar-nav > li > a:focus {
+  color: #ffffff;
 }
-.navbar-default .navbar-nav>li>.dropdown-menu {
-	background-color: #f0810f;
+
+.navbar-default .navbar-nav > .active > a,
+.navbar-default .navbar-nav > .active > a:hover,
+.navbar-default .navbar-nav > .active > a:focus {
+  color: #ffffff;
+  background-color: #cc3333;
 }
-.navbar-default .navbar-nav>li>.dropdown-menu>li>a {
-	color: #000000;
-}
-.navbar-default .navbar-nav>li>.dropdown-menu>li>a:hover,
-.navbar-default .navbar-nav>li>.dropdown-menu>li>a:focus {
-	color: #432405;
-	background-color: #c96b0b;
-}
-.navbar-default .navbar-nav>li>.dropdown-menu>li>.divider {
-	background-color: #c96b0b;
-}
-.navbar-default .navbar-nav .open .dropdown-menu>.active>a,
-.navbar-default .navbar-nav .open .dropdown-menu>.active>a:hover,
-.navbar-default .navbar-nav .open .dropdown-menu>.active>a:focus {
-	color: #432405;
-	background-color: #c96b0b;
-}
-.navbar-default .navbar-nav>.active>a,
-.navbar-default .navbar-nav>.active>a:hover,
-.navbar-default .navbar-nav>.active>a:focus {
-	color: #432405;
-	background-color: #c96b0b;
-}
-.navbar-default .navbar-nav>.open>a,
-.navbar-default .navbar-nav>.open>a:hover,
-.navbar-default .navbar-nav>.open>a:focus {
-	color: #432405;
-	background-color: #c96b0b;
+.navbar-default .navbar-nav > .open > a,
+.navbar-default .navbar-nav > .open > a:hover,
+.navbar-default .navbar-nav > .open > a:focus {
+  color: #ffffff;
+  background-color: #cc3333;
 }
 .navbar-default .navbar-toggle {
-	border-color: #c96b0b;
+  border-color: #cc3333;
 }
 .navbar-default .navbar-toggle:hover,
 .navbar-default .navbar-toggle:focus {
-	background-color: #c96b0b;
+  background-color: #cc3333;
 }
 .navbar-default .navbar-toggle .icon-bar {
-	background-color: #000000;
+  background-color: #cc3333;
+}
+.navbar-default .navbar-toggle:hover .icon-bar,
+.navbar-default .navbar-toggle:focus .icon-bar
+ {
+  background-color: white;
 }
 .navbar-default .navbar-collapse,
 .navbar-default .navbar-form {
-	border-color: #000000;
+  border-color: #cc3333;
 }
 .navbar-default .navbar-link {
-	color: #000000;
+  color: #cc3333;
 }
 .navbar-default .navbar-link:hover {
-	color: #432405;
+  color: #ffffff;
 }
 
 .notifications {
@@ -94,7 +80,7 @@ body {
     display: none;
     height: calc(100vh - 112px);
     width: 100%;
-    position: fixed;
+    position: absolute;
     bottom: 60px;
     background-color: rgba(0, 0, 0, 0.72);
 }
@@ -125,19 +111,19 @@ Small devices - Tablets (<768px)
         -o-transition: height .35s ease;
         transition: height .35s ease;
     }
-	.navbar-default .navbar-nav .open .dropdown-menu>li>a {
-		color: #000000;
-	}
-	.navbar-default .navbar-nav .open .dropdown-menu>li>a:hover,
-	.navbar-default .navbar-nav .open .dropdown-menu>li>a:focus {
-		color: #432405;
-	}
-	.navbar-default .navbar-nav .open .dropdown-menu>.active>a,
-	.navbar-default .navbar-nav .open .dropdown-menu>.active>a:hover,
-	.navbar-default .navbar-nav .open .dropdown-menu>.active>a:focus {
-		color: #432405;
-		background-color: #c96b0b;
-	}
+	.navbar-default .navbar-nav .open .dropdown-menu > li > a {
+        color: #cc3333;
+      }
+      .navbar-default .navbar-nav .open .dropdown-menu > li > a:hover,
+      .navbar-default .navbar-nav .open .dropdown-menu > li > a:focus {
+        color: #ffffff;
+      }
+      .navbar-default .navbar-nav .open .dropdown-menu > .active > a,
+      .navbar-default .navbar-nav .open .dropdown-menu > .active > a:hover,
+      .navbar-default .navbar-nav .open .dropdown-menu > .active > a:focus {
+        color: #ffffff;
+        background-color: #cc3333;
+      }
 	.errors {
 		margin-top: 20px;
 		margin-bottom: 20px;
@@ -277,11 +263,11 @@ Small devices - Tablets (<768px)
     #notifications_bar {
         width: 100%;
         height: 60px;
-        background-color: orange;
+        background-color: #111;
         position: fixed;
         bottom: 0;
         border-radius: 5px;
-        border: 2px solid #c96b0b;
+        /*border: 2px solid #c96b0b;*/
     }
     #notifications_counter {
         margin-top: 10px;
