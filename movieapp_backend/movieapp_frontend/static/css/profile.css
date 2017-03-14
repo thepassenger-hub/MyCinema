@@ -7,7 +7,8 @@
 	border-width: 5px;
 }
 .movie_post h4 {
-    overflow-wrap: break-word;
+    /*overflow-wrap: break-word;*/
+    word-wrap: break-word;
 }
 #hr_rating_mobile {
 	display: none;

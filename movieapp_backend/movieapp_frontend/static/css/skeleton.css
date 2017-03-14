@@ -394,7 +394,7 @@ Medium devices - Tablets (768px<=)
     #friend_list {
         margin-left: 0;
         margin-right: 0;
-        overflow: scroll;
+        overflow-y: scroll;
         max-height: calc(100% - 33px);
     }
     #friend_list hr:last-child {
@@ -424,7 +424,7 @@ Medium devices - Tablets (768px<=)
     }
     .panel-body {
         height: calc(100% - 91px);
-        overflow: scroll;
+        overflow-y: scroll;
     }
     .panel-heading {
         height: 40px;

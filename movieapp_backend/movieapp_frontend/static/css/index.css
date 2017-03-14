@@ -11,7 +11,8 @@
 	border-width: 5px;
 }
 .movie_post h4 {
-    overflow-wrap: break-word;
+    /*overflow-wrap: break-word;*/
+    word-wrap: break-word;
 
 }
 #hr_rating_mobile {
@@ -148,6 +149,10 @@ Medium devices - Tablets (768px<=)
 ********************************/
 
 @media screen and (min-width: 768px) {
+    .main {
+        overflow: auto;
+    }
+
 	#filter_posts {
 		max-width: 50%;
 	}
