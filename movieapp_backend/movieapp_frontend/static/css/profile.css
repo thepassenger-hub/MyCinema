@@ -92,7 +92,11 @@ Small devices - Tablets (<768px)
 	#hr_rating_mobile {
 		display: block;
 	}
-	hr {
+	#friend_list hr {
+        border-top: 2px solid white;
+        margin-top: 0px;
+	}
+	.main hr {
 		border-top: 2px solid black;
 	}
 	#movie_datetime {
@@ -197,7 +201,11 @@ Medium devices - Tablets (768px<=)
 	#hr_rating_mobile {
 		display: block;
 	}
-	hr {
+	#friend_list hr {
+        border-top: 2px solid white;
+        margin-top: 0px;
+	}
+	.main hr {
 		border-top: 2px solid black;
 	}
 	#movie_rating {

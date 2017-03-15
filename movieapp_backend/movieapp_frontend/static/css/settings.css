@@ -152,7 +152,9 @@ Medium devices - Tablets (768px<=)
         float: right;
     }
     .friend_profile .btn.btn-danger {
-        margin-left: 20%;
+        margin-right: 10%;
+        margin-top: 20px;
+        float: right;
     }
     .friend_profile .modal-body {
         text-align: center;
