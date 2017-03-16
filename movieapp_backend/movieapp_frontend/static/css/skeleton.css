@@ -249,7 +249,9 @@ Small devices - Tablets (<768px)
         padding-bottom: 0px;
         text-align: end;
     }
-
+    .open_chat_messages {
+        margin-bottom: 10px;
+    }
     /*****Notifications***/
     #notifications_wrapper {
         overflow: scroll;
@@ -396,7 +398,7 @@ Medium devices - Tablets (768px<=)
     #friend_list {
         margin-left: 0;
         margin-right: 0;
-        overflow-y: scroll;
+        overflow-y: auto;
         max-height: calc(100% - 33px);
     }
     #friend_list hr:last-child {
@@ -426,7 +428,7 @@ Medium devices - Tablets (768px<=)
     }
     .panel-body {
         height: calc(100% - 91px);
-        overflow-y: scroll;
+        overflow-y: auto;
     }
     .panel-heading {
         height: 40px;
@@ -453,6 +455,9 @@ Medium devices - Tablets (768px<=)
         padding-right: 5px;
         padding-bottom: 0px;
         text-align: end;
+    }
+    .open_chat_messages {
+        margin-bottom: 10px;
     }
 	/*****Notifications***/
     #notifications_wrapper {
@@ -528,19 +533,23 @@ Large devices  (1050px<=)
 ********************************/
 
 @media screen and (min-width: 1050px) {
+    body {
+        overflow-x: hidden;
+    }
 	#search_friends_bar {
 		width: 30vw;
 		margin-left: 100px;
 	}
 	#notifications_container {
 	    width: 30%;
+	    position: fixed;
 	}
 	#notifications_bar {
 	    visibility: hidden;
 	}
 	#notifications_wrapper {
 	    overflow-x: auto;
-	    overflow-y: scroll;
+	    overflow-y: auto;
 
 	}
 	#notifications_counter {
@@ -549,4 +558,23 @@ Large devices  (1050px<=)
 	#open_chat {
 	    visibility: visible;
 	}
+	#chat_popup {
+        position: fixed;
+        bottom: 60px;
+        z-index: 1;
+        left: initial;
+        right: -100vw;
+        width: 30%;
+        height: calc(100% - 112px);
+        background-color: rgba(0, 0, 0, 0.72);
+
+    }
+    #slider-content {
+        width: 100%;
+    }
+    footer {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
 }
