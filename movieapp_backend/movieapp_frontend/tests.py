@@ -10,11 +10,13 @@ from django.core.urlresolvers import resolve
 from django.http import HttpRequest
 from django.template.loader import render_to_string
 from django.test import TestCase, TransactionTestCase, Client
+from unittest.mock import MagicMock
 
 from movie_app.models import MoviePost, Profile, Friendship, FriendshipRequest, ChatMessage
 from movieapp_frontend.views import home_page, signup, login_page, \
     new_post_page, settings_page, change_name, profile_page, search_friends_page
 
+from live_chat.signals import user_online, user_offline
 import json
 # sys.path.append('/home/giulio/Desktop/Projects/movieapp/movieapp_backend')
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "movieapp_backend.settings")  # or whatever
@@ -533,7 +535,9 @@ class LiveChatSystemTest(inherit_test_case(TestCase)):
         self.assertEqual(chat_object.creator, self.aaa)
         self.assertEqual(chat_object.receiver, self.bbb)
 
+
     def test_can_view_notifications(self):
+
         c = ChatMessage.objects.create(
             creator=self.bbb,
             receiver=self.aaa,
@@ -543,3 +547,17 @@ class LiveChatSystemTest(inherit_test_case(TestCase)):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.get('Content-Type'), 'application/json')
         self.assertEqual(len(json.loads(response.content.decode())), 1)
+
+    def test_signals_gettin_sent_once(self):
+        handler = MagicMock()
+        user_online.connect(handler, sender=None)
+        # Post the form or do what it takes to send the signal
+        user_online.send(sender=None, user=self.aaa)
+        # Assert the signal was called only once with the args
+        handler.assert_called_once_with(signal=user_online, sender=None, user=self.aaa)
+        handler = MagicMock()
+        user_offline.connect(handler, sender=None)
+        # Post the form or do what it takes to send the signal
+        user_offline.send(sender=None, user=self.aaa)
+        # Assert the signal was called only once with the args
+        handler.assert_called_once_with(signal=user_offline, sender=None, user=self.aaa)
