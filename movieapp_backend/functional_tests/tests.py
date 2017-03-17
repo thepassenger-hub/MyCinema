@@ -63,7 +63,7 @@ class NewVisitorTest(LiveServerTestCase):
         email.send_keys('bbbb@mail.com')
         button = self.browser.find_element_by_id('signup_button')
         button.click()
-        time.sleep(2)
+        time.sleep(5)
         #Redirected to HomePage then logout and register friend user
         self.assertIn('Homepage', self.browser.title)
         self.browser.get('/logout/')
@@ -80,7 +80,7 @@ class NewVisitorTest(LiveServerTestCase):
         email.send_keys('aaaa@mail.com')
         button = self.browser_2.find_element_by_id('signup_button')
         button.click()
-        time.sleep(2)
+        time.sleep(5)
         #Search for friend profile
         self.browser_2.find_element_by_id('username')
         self.browser_2.find_element_by_id('dropdown_logout_url')
@@ -145,8 +145,8 @@ class NewVisitorTest(LiveServerTestCase):
         # self.browser.execute_script("document.getElementByClass")
         time.sleep(5)
         comment.send_keys('One of the best fighting movies I have ever seen.')
-        # send_post.click() # To avoid api usage
-        # time.sleep(10)
+        send_post.click() # To avoid api usage
+        time.sleep(10)
         # Check Settings page. No redirects because I'm still logged in.
         # Change name, avatar, password and friendlist.
         settings = self.browser.find_element_by_id('dropdown_settings_link')
@@ -191,8 +191,8 @@ class NewVisitorTest(LiveServerTestCase):
         # self.browser.find_element_by_id('login_button').click()
         self.browser_2.get(self.server_url)
         time.sleep(1)
-        # self.assertIn('Ip Man', self.browser_2.find_element_by_class_name(
-        #     "main").get_attribute("innerHTML"))
+        self.assertIn('Ip Man', self.browser_2.find_element_by_class_name(
+            "main").get_attribute("innerHTML"))
         # Send chat message to friend. 
         chat = self.browser_2.find_element_by_id("open_chat")
         chat.click()
@@ -218,6 +218,7 @@ class NewVisitorTest(LiveServerTestCase):
         time.sleep(2)
         self.browser.find_element_by_id('close_chat_button').click()
         # User 2 should receive message in chat
+        time.sleep(2)
         self.assertIn('Gotcha', self.browser_2.find_element_by_class_name('open_chat_messages').get_attribute('innerHTML'))
         # Delete user 2 account
         self.browser_2.get('/settings')

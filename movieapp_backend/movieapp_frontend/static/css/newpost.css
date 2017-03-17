@@ -13,6 +13,9 @@
 .glyphicon {
 	color: #CC3333;
 }
+#rating_container .glyphicon {
+    cursor: pointer;
+}
 /********************************
 Small devices - Tablets (<768px)
 ********************************/

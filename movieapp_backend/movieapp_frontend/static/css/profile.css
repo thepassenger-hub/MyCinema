@@ -79,6 +79,8 @@ Small devices - Tablets (<768px)
 		margin-bottom: 0;
 	}
 	.movie_post {
+	    padding-left: 5px;
+	    padding-right: 5px;
 		border-radius: 10px;
 		margin-bottom: 20px;
 	}
@@ -185,6 +187,8 @@ Medium devices - Tablets (768px<=)
 	}
 	/*****MoviePosts****/
 	.movie_post {
+	    padding-left: 10px;
+	    padding-right: 10px;
 		border-radius: 10px;
 		margin-bottom: 30px;
 		display: block;

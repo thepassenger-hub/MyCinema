@@ -16,6 +16,8 @@ Small devices - Tablets (<768px)
     }
 
     .user_profile {
+        margin-left: 10px;
+        margin-right: 10px;
         text-align: initial;
         border-radius: 10px;
         margin-bottom: 20px;
@@ -32,10 +34,15 @@ Small devices - Tablets (<768px)
         width: 30vw;
     }
     .add_friend_button {
-        background-color: #f0810f;
+        background-color: #CC3333;
         width: 100%;
         font-size: 18px;
         border: none;
+    }
+    .user_profile .add_friend_button:hover,
+    .user_profile .add_friend_button:active,
+    .user_profile .add_friend_button:focus {
+        background-color: #962626 !important;
     }
     #search_friends_button{
         margin-top: 20px;
@@ -76,11 +83,18 @@ Medium devices - Tablets (768px<=)
         width: 30vw;
     }
     .add_friend_button {
-        background-color: #f0810f;
+        background-color: #CC3333;
         width: 100%;
         font-size: 18px;
         border: none;
     }
+
+    .user_profile .add_friend_button:hover,
+    .user_profile .add_friend_button:active,
+    .user_profile .add_friend_button:focus {
+        background-color: #962626 !important;
+    }
+
     .avatar {
         width: 20vw;
         height: 20vw;

@@ -137,6 +137,7 @@ Small devices - Tablets (<768px)
         position: absolute;
         bottom: 60px;
         z-index: 1;
+        right: initial;
         left: -100vw;
         width: 100vw;
         height: calc(100% - 112px);
@@ -144,6 +145,7 @@ Small devices - Tablets (<768px)
 
     }
     #open_chat {
+        cursor: pointer;
         margin-top: 10px;
         margin-right: 10px;
         float: right;
@@ -153,6 +155,7 @@ Small devices - Tablets (<768px)
         background: url('../images/chat_icon_3.png') no-repeat center / contain;
     }
     #open_chat:active {
+	    cursor: pointer;
         transform: translateY(-2px);
     }
 
@@ -180,6 +183,7 @@ Small devices - Tablets (<768px)
 
     }
     #close_friend_list {
+        cursor: pointer;
         display: none;
         float: right;
         margin-right: 10px;
@@ -206,6 +210,7 @@ Small devices - Tablets (<768px)
         margin-bottom: 20px;
     }
     .friends {
+        cursor: pointer;
         width: 100%;
     }
     .chat-window {
@@ -213,6 +218,7 @@ Small devices - Tablets (<768px)
         display: none;
     }
     #close_chat_button {
+        cursor: pointer;
         float: right;
     }
     .panel {
@@ -254,7 +260,7 @@ Small devices - Tablets (<768px)
     }
     /*****Notifications***/
     #notifications_wrapper {
-        overflow: scroll;
+        overflow: auto;
         max-height: 100%;
 
     }
@@ -274,6 +280,7 @@ Small devices - Tablets (<768px)
         /*border: 2px solid #c96b0b;*/
     }
     #notifications_counter {
+        cursor: pointer;
         margin-top: 10px;
         margin-left: 10px;
         display: inline-block;
@@ -284,6 +291,7 @@ Small devices - Tablets (<768px)
         transform: translateY(-2px);
     }
     .notifications {
+        cursor: pointer;
         color: white;
         margin-left: 10px;
         margin-right: 10px;
@@ -301,6 +309,7 @@ Small devices - Tablets (<768px)
         transform: translateY(-2px);
     }
     #close_notifications_container {
+        cursor: pointer;
         float: right;
         margin-right: 20px;
         margin-top: 10px;
@@ -345,12 +354,14 @@ Medium devices - Tablets (768px<=)
         bottom: 60px;
         z-index: 1;
         left: -100vw;
+        right: initial;
         width: 100vw;
         height: calc(100% - 112px);
         background-color: rgba(0, 0, 0, 0.72);
 
     }
     #open_chat {
+	    cursor: pointer;
         margin-top: 10px;
         margin-right: 10px;
         float: right;
@@ -360,6 +371,7 @@ Medium devices - Tablets (768px<=)
         background: url('../images/chat_icon_3.png') no-repeat center / contain;
     }
     #open_chat:active {
+        cursor: pointer;
         transform: translateY(-2px);
     }
 
@@ -387,6 +399,7 @@ Medium devices - Tablets (768px<=)
 
     }
     #close_friend_list {
+        cursor: pointer;
         display: none;
         float: right;
         margin-right: 10px;
@@ -413,6 +426,7 @@ Medium devices - Tablets (768px<=)
         margin-bottom: 20px;
     }
     .friends {
+        cursor: pointer;
         width: 100%;
     }
     .chat-window {
@@ -420,6 +434,7 @@ Medium devices - Tablets (768px<=)
         display: none;
     }
     #close_chat_button {
+        cursor: pointer;
         float: right;
     }
     .panel {
@@ -461,7 +476,7 @@ Medium devices - Tablets (768px<=)
     }
 	/*****Notifications***/
     #notifications_wrapper {
-        overflow: scroll;
+        overflow: auto;
         max-height: 100%;
 
     }
@@ -480,6 +495,7 @@ Medium devices - Tablets (768px<=)
         border-radius: 5px;
     }
     #notifications_counter {
+        cursor: pointer;
         margin-top: 10px;
         margin-left: 10px;
         display: inline-block;
@@ -490,6 +506,7 @@ Medium devices - Tablets (768px<=)
         transform: translateY(-2px);
     }
     .notifications {
+        cursor: pointer;
         color: white;
         margin-left: 10px;
         margin-right: 10px;
@@ -507,6 +524,7 @@ Medium devices - Tablets (768px<=)
         transform: translateY(-2px);
     }
     #close_notifications_container {
+        cursor: pointer;
         float: right;
         margin-right: 20px;
         margin-top: 10px;
@@ -541,6 +559,7 @@ Large devices  (1050px<=)
 		margin-left: 100px;
 	}
 	#notifications_container {
+	    border-radius: 0 10px 10px 0;
 	    width: 30%;
 	    position: fixed;
 	}
@@ -553,12 +572,15 @@ Large devices  (1050px<=)
 
 	}
 	#notifications_counter {
+        cursor: pointer;
 	    visibility: visible;
 	}
 	#open_chat {
+	    cursor: pointer;
 	    visibility: visible;
 	}
 	#chat_popup {
+	    border-radius: 10px 0 0 10px;
         position: fixed;
         bottom: 60px;
         z-index: 1;

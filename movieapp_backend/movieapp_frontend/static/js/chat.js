@@ -75,10 +75,13 @@ $(document).ready(function(){
         if ($this.hasClass("closed")) {
             $(".navbar-collapse.collapse.in").collapse("hide");
             if ($width > 1050) {
+                $("#chat_popup").css("left", "initial");
+
                 $("#chat_popup").animate({ "right": 0 }, "fast");
             }
             else {
                 close_notifications();
+                $("#chat_popup").css("right", "initial");
                 $("#chat_popup").animate({ "left": 0 }, "fast");
                 $(".main").css("max-height", "calc("+$height+"px - 212px)");
                 $(".main").css("overflow", "auto");
@@ -272,9 +275,11 @@ var deleteNotifications = function(){
 var openChat = function(event) {
     close_notifications()
     if ($width > 1050) {
+        $("#chat_popup").css("left", "initial");
         $("#chat_popup").animate({ "right": 0 }, "fast");
     }
     else {
+        $("#chat_popup").css("right", "initial");
         $("#chat_popup").animate({ "left": 0 }, "fast");
         $(".main").css("max-height", "calc("+$height+"px - 212px)");
     }
@@ -312,10 +317,12 @@ var open_notifications = function(){
 
 var closeChat2 = function() {
     if ($width > 1050) {
-        $("#chat_popup").animate({ "right": "-100vw" }, "fast")
+        $("#chat_popup").css("left", "initial");
+        $("#chat_popup").animate({ "right": "-100vw" }, "fast");
     }
     else {
-        $("#chat_popup").animate({ "left": "-100vw" }, "fast")
+        $("#chat_popup").css("right", "initial");
+        $("#chat_popup").animate({ "left": "-100vw" }, "fast");
     }
     $(".main").css("max-height", "none");
     $(".panel-body").empty();
@@ -327,9 +334,11 @@ var closeChat2 = function() {
 }
 var closeChat = function() {
     if ($width > 1050) {
+        $("#chat_popup").css("left", "initial");
         $("#chat_popup").animate({ "right": "-100vw" }, "fast")
     }
     else {
+        $("#chat_popup").css("right", "initial");
         $("#chat_popup").animate({ "left": "-100vw" }, "fast", function(){
             $(".main").css("max-height", "none");
         });
