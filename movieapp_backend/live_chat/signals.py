@@ -62,11 +62,11 @@ def mark_notifications_as_viewed_callback(sender, user, **kwargs):
     for message in user.profile.get_not_viewed_messages():
         message.viewed = True
         message.save()
-        Group("%s" % user.username).send({
-            "text": json.dumps({
-                # "id": instance.id,
-                "viewed": True,
-            })
+    Group("%s" % user.username).send({
+        "text": json.dumps({
+            # "id": instance.id,
+            "viewed": True,
         })
+    })
 
 
