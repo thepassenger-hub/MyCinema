@@ -1,20 +1,20 @@
 # MyCinema
 
-Personal project made with Django. Very simple Social networking with live chat functionality.
+Personal project made with Django. Very simple mobile friendly Social Network with live chat functionality.
 Send a movie suggestion to your friends. A crawler will fetch the data from google to provide better information about the movie.
 Thanks to django channels package you can see who is online with live updates about your friends statuses and interact with them by using the live chat.
 
 #### Home Page
 
-![screenshot of home page](/movieapp_backend/static/images/home.png?raw=true "Home Page")
+![screenshot of home page](/movieapp_backend/movieapp_frontend/static/images/home.png?raw=true "Home Page")
 
 #### New Post Page
 
-![screenshot of profile page](/movieapp_backend/static/images/newpost.png?raw=true "Profile Page")
+![screenshot of profile page](/movieapp_backend/movieapp_frontend/static/images/newpost.png?raw=true "Profile Page")
 
-#### Lice Chat
+#### Live Chat
 
-![screenshot of admin page](/movieapp_backend/static/images/livechat.png?raw=true "Admin Page")
+![screenshot of admin page](/movieapp_backend/movieapp_frontend/static/images/livechat.png?raw=true "Admin Page")
 
 ### Features
 
